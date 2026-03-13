@@ -1,13 +1,35 @@
 import type { Mineral } from "./minerals"
+import type { System } from "./systems"
+import { systems } from "./systems"
+import { bodies } from "./bodies"
 
 export interface Rock {
   name: string
   primary: Mineral
   secondary: Mineral[]
   inert: boolean
+  system: System
+  body: string
+  quality: number
 }
 
-export const rocks: Rock[] = [
+// Quality ranges per system
+const qualityRanges: Record<System, [number, number]> = {
+  Stanton: [100, 400],
+  Nyx: [300, 700],
+  Pyro: [600, 1000],
+}
+
+// Seeded random for consistent generation
+function seededRandom(seed: number): () => number {
+  return () => {
+    seed = (seed * 9301 + 49297) % 233280
+    return seed / 233280
+  }
+}
+
+// Base rock definitions
+const baseRocks: Omit<Rock, "system" | "body" | "quality">[] = [
   {
     name: "Quantanium Rock",
     primary: "Quantanium",
@@ -129,3 +151,30 @@ export const rocks: Rock[] = [
     inert: true,
   },
 ]
+
+// Generate rocks for all systems
+function generateRocks(): Rock[] {
+  const generatedRocks: Rock[] = []
+  let seedCounter = 42
+
+  for (const baseRock of baseRocks) {
+    for (const system of systems) {
+      const random = seededRandom(seedCounter++)
+      const [minQuality, maxQuality] = qualityRanges[system]
+      const systemBodies = bodies[system]
+
+      const rock: Rock = {
+        ...baseRock,
+        system,
+        body: systemBodies[Math.floor(random() * systemBodies.length)],
+        quality: Math.floor(random() * (maxQuality - minQuality + 1)) + minQuality,
+      }
+
+      generatedRocks.push(rock)
+    }
+  }
+
+  return generatedRocks
+}
+
+export const rocks: Rock[] = generateRocks()

@@ -5,19 +5,30 @@ import { Header } from "@/components/Header"
 import { RockCard } from "@/components/RockCard"
 import { MineralFilter } from "@/components/MineralFilter"
 import { rocks } from "@/data/rocks"
+import type { Mineral } from "@/data/minerals"
 import { Mountain } from "lucide-react"
 
 export default function Home() {
   const [selectedMineral, setSelectedMineral] = useState("all")
+  const [selectedSystem, setSelectedSystem] = useState("all")
+  const [selectedBody, setSelectedBody] = useState("all")
   const [searchQuery, setSearchQuery] = useState("")
 
   const filteredRocks = useMemo(() => {
     return rocks.filter((rock) => {
-      // Filter by mineral
+      // Filter by mineral (primary OR secondary)
       const matchesMineral =
         selectedMineral === "all" ||
         rock.primary === selectedMineral ||
-        rock.secondary.includes(selectedMineral as typeof rock.secondary[number])
+        rock.secondary.includes(selectedMineral as Mineral)
+
+      // Filter by system
+      const matchesSystem =
+        selectedSystem === "all" || rock.system === selectedSystem
+
+      // Filter by body
+      const matchesBody =
+        selectedBody === "all" || rock.body === selectedBody
 
       // Filter by search query
       const matchesSearch =
@@ -26,11 +37,13 @@ export default function Home() {
         rock.primary.toLowerCase().includes(searchQuery.toLowerCase()) ||
         rock.secondary.some((mineral) =>
           mineral.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+        ) ||
+        rock.system.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        rock.body.toLowerCase().includes(searchQuery.toLowerCase())
 
-      return matchesMineral && matchesSearch
+      return matchesMineral && matchesSystem && matchesBody && matchesSearch
     })
-  }, [selectedMineral, searchQuery])
+  }, [selectedMineral, selectedSystem, selectedBody, searchQuery])
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -44,7 +57,7 @@ export default function Home() {
             </h1>
           </div>
           <p className="text-slate-400">
-            Browse and filter mineable rock types across the verse.
+            Browse and filter mineable rock types across the verse. Data updated for Star Citizen 4.7.
           </p>
         </div>
 
@@ -52,6 +65,10 @@ export default function Home() {
           <MineralFilter
             selectedMineral={selectedMineral}
             onMineralChange={setSelectedMineral}
+            selectedSystem={selectedSystem}
+            onSystemChange={setSelectedSystem}
+            selectedBody={selectedBody}
+            onBodyChange={setSelectedBody}
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
           />
@@ -63,8 +80,8 @@ export default function Home() {
 
         {filteredRocks.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filteredRocks.map((rock) => (
-              <RockCard key={rock.name} rock={rock} />
+            {filteredRocks.map((rock, index) => (
+              <RockCard key={`${rock.name}-${rock.system}-${index}`} rock={rock} />
             ))}
           </div>
         ) : (
