@@ -38,9 +38,10 @@ function getQualityTextColor(min: number, max: number): string {
 
 export function RockCard({ rock, secondaries }: RockCardProps) {
   const { t } = useTranslation()
-  const [minPrimary, maxPrimary] = [rock.min, rock.max]
+  const [minPrimary, maxPrimary, medPrimary] = [rock.min, rock.max, rock.med]
   const minPrimaryPercent = (minPrimary / 1000) * 100
   const maxPrimaryPercent = (maxPrimary / 1000) * 100
+  const medPrimaryPercent = (medPrimary / 1000) * 100
 
   return (
     <Card className="group relative overflow-hidden border-slate-800 bg-slate-900/50 transition-all duration-300 hover:border-cyan-700/50 hover:bg-slate-900 hover:shadow-lg hover:shadow-cyan-900/20">
@@ -74,8 +75,14 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
             </div>
             <div className="relative h-2 w-full max-w-xs overflow-hidden rounded-full bg-slate-800 mt-2">
               <div
+                id={`${rock.name}-primary-quality`}
                 className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 ${getQualityColor(minPrimary, maxPrimary)}`}
                 style={{ left: `${minPrimaryPercent}%`, width: `${maxPrimaryPercent - minPrimaryPercent}%` }}
+              />
+              <div
+                id={`${rock.name}-primary-median`}
+                className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 bg-white`}
+                style={{ left: `${medPrimaryPercent}%`, width: `4px` }}
               />
             </div>
             <div className="flex justify-between text-[10px] text-slate-500 px-1 mb-1 max-w-xs w-full">
@@ -94,9 +101,10 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
               )}
             </div>
             {secondaries.map((sec: { mineral: string; min: number; max: number; med: number }) => {
-              const { min: minSec, max: maxSec } = sec
+              const { min: minSec, max: maxSec, med: medSec } = sec
               const minSecPercent = (minSec / 1000) * 100
               const maxSecPercent = (maxSec / 1000) * 100
+              const medSecPercent = (medSec / 1000) * 100
               return (
                 <div key={sec.mineral} className="flex flex-col gap-0.5 w-full">
                   <div className="flex items-center gap-2">
@@ -110,8 +118,14 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
                   </div>
                   <div className="relative h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-slate-800 mt-2">
                     <div
+                      id={`${sec.mineral}-secondary-quality`}
                       className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 ${getQualityColor(minSec, maxSec)}`}
                       style={{ left: `${minSecPercent}%`, width: `${maxSecPercent - minSecPercent}%` }}
+                    />
+                    <div
+                      id={`${sec.mineral}-secondary-median`}
+                      className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 bg-white`}
+                      style={{ left: `${medSecPercent}%`, width: `4px` }}
                     />
                   </div>
                   <div className="flex justify-between text-[10px] text-slate-500 px-1 mb-1 max-w-xs w-full">
