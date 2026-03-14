@@ -1,35 +1,41 @@
 {
   "header": {
     "siteName": "Star Mine Atlas",
-    "rockTypes": "Types de Roches"
+    "rockTypes": "Types de Roches",
+    "marketPrice": "Prix du Marche"
   },
   "home": {
     "title": "Types de Roches",
-    "description": "Parcourez et filtrez les minerais exploitables dans l'univers. Données mises à jour pour Star Citizen 4.7.",
+    "description": "Parcourez et filtrez les minerais exploitables dans l'univers. Donnees mises a jour pour Star Citizen 4.7.",
     "showing": "Affichage de {{count}} sur {{total}} roches",
-    "noRocksFound": "Aucune roche trouvée",
+    "noRocksFound": "Aucune roche trouvee",
     "noRocksHint": "Essayez d'ajuster vos filtres ou votre recherche"
+  },
+  "marketPrice": {
+    "title": "Prix du Marche",
+    "description": "Suivez les prix des mineraux en temps reel dans les terminaux commerciaux de l'univers. Comparez les prix d'achat et de vente pour maximiser vos profits miniers.",
+    "wip": "En cours de developpement - Bientot disponible"
   },
   "filters": {
     "searchPlaceholder": "Recherche...",
     "filters": "Filtres :",
-    "allSystems": "Tous les systèmes",
+    "allSystems": "Tous les systemes",
     "allBodies": "Tous les astres",
-    "allMinerals": "Tous les minéraux"
+    "allMinerals": "Tous les mineraux"
   },
   "rockCard": {
     "primary": "Primaire :",
     "secondary": "Secondaire :",
     "none": "Aucun",
-    "inertMaterial": "Matériau inerte :",
+    "inertMaterial": "Materiau inerte :",
     "yes": "Oui",
     "no": "Non",
     "celestialBody": "Astre :",
-    "system": "Système :",
-    "quality": "Qualité :"
+    "system": "Systeme :",
+    "quality": "Qualite :"
   },
   "languages": {
     "en": "Anglais",
-    "fr": "Français"
+    "fr": "Francais"
   }
 }
