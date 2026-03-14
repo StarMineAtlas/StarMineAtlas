@@ -75,6 +75,7 @@ export default function Home() {
   }, []);
 
   function getSecondaryQualityStat(secondaries: string[], body: string): { mineral: string, min: number, max: number, med: number }[] {
+    if (secondaries.length === 0) return [];
     return secondaries.map((mineral) => ({
       mineral,
       min: rocks.find(r => r.body === body && (r.primary === mineral))?.min || 0,
@@ -102,7 +103,7 @@ export default function Home() {
             className="mt-6 rounded-xl border border-cyan-800 bg-gradient-to-br from-slate-900/80 to-cyan-950/80 p-5 shadow-lg flex items-center gap-3"
             style={{ backdropFilter: 'blur(4px)' }}
           >
-            <span className="text-cyan-100 text-xs font-medium tracking-wide">{t("home.infoZone")}</span>
+            <span className="text-cyan-100 text-xs font-medium tracking-wide" suppressHydrationWarning>{t("home.infoZone")}</span>
           </div>
         </div>
 

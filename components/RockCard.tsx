@@ -103,61 +103,63 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
           </div>
 
           {/* Secondaires */}
-          <div className="flex flex-col gap-1">
-            <div className="flex flex-wrap items-center gap-2 mb-1">
-              <Layers className="h-3.5 w-3.5 text-slate-500" />
-              <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.secondary")}</span>
-              {secondaries.length === 0 && (
-                <span className="text-slate-500" suppressHydrationWarning>{t("rockCard.none")}</span>
-              )}
-            </div>
-            {secondaries.map((sec: { mineral: string; min: number; max: number; med: number }) => {
-              const { min: minSec, max: maxSec, med: medSec } = sec
-              const minSecPercent = (minSec / 1000) * 100
-              const maxSecPercent = (maxSec / 1000) * 100
-              const medSecPercent = (medSec / 1000) * 100
-              return (
-                <div key={sec.mineral} className="flex flex-col gap-0.5 w-full">
-                  <div className="flex items-center gap-2">
-                    <Badge
-                      variant="outline"
-                      className="border-slate-700 text-slate-300 font-medium"
-                    >
-                      {sec.mineral}
-                    </Badge>
-                    <span className={`font-mono text-xs ${getQualityTextColor(minSec, maxSec)}`}>{minSec} – {maxSec}</span>
-                  </div>
-                  <div className="relative h-1.5 w-full max-w-xs overflow-visible rounded-full bg-slate-800 mt-2">
-                    <div className="relative h-full w-full">
-                      <div
-                        id={`${sec.mineral}-secondary-quality`}
-                        className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 ${getQualityColor(minSec, maxSec)} group/qualitybar-secondary`}
-                        style={{ left: `${minSecPercent}%`, width: `${maxSecPercent - minSecPercent}%` }}
+          {secondaries.length > 0 && (
+            <div className="flex flex-col gap-1">
+              <div className="flex flex-wrap items-center gap-2 mb-1">
+                <Layers className="h-3.5 w-3.5 text-slate-500" />
+                <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.secondary")}</span>
+                {secondaries.length === 0 && (
+                  <span className="text-slate-500" suppressHydrationWarning>{t("rockCard.none")}</span>
+                )}
+              </div>
+              {secondaries.map((sec: { mineral: string; min: number; max: number; med: number }) => {
+                const { min: minSec, max: maxSec, med: medSec } = sec
+                const minSecPercent = (minSec / 1000) * 100
+                const maxSecPercent = (maxSec / 1000) * 100
+                const medSecPercent = (medSec / 1000) * 100
+                return (
+                  <div key={sec.mineral} className="flex flex-col gap-0.5 w-full">
+                    <div className="flex items-center gap-2">
+                      <Badge
+                        variant="outline"
+                        className="border-slate-700 text-slate-300 font-medium"
                       >
-                        {/* Tooltip for median, only on bar hover */}
+                        {sec.mineral}
+                      </Badge>
+                      <span className={`font-mono text-xs ${getQualityTextColor(minSec, maxSec)}`}>{minSec} – {maxSec}</span>
+                    </div>
+                    <div className="relative h-1.5 w-full max-w-xs overflow-visible rounded-full bg-slate-800 mt-2">
+                      <div className="relative h-full w-full">
                         <div
-                          className="pointer-events-none absolute left-1/2 bottom-0 z-20 translate-y-full -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-xs text-cyan-200 opacity-0 shadow transition-opacity duration-200 group-hover/qualitybar-secondary:opacity-100"
-                          style={{ minWidth: '80px' }}
+                          id={`${sec.mineral}-secondary-quality`}
+                          className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 ${getQualityColor(minSec, maxSec)} group/qualitybar-secondary`}
+                          style={{ left: `${minSecPercent}%`, width: `${maxSecPercent - minSecPercent}%` }}
                         >
-                          {t("rockCard.median")} <span className="font-mono">{medSec}</span>
+                          {/* Tooltip for median, only on bar hover */}
+                          <div
+                            className="pointer-events-none absolute left-1/2 bottom-0 z-20 translate-y-full -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-xs text-cyan-200 opacity-0 shadow transition-opacity duration-200 group-hover/qualitybar-secondary:opacity-100"
+                            style={{ minWidth: '80px' }}
+                          >
+                            {t("rockCard.median")} <span className="font-mono">{medSec}</span>
+                          </div>
                         </div>
+                        <div
+                          id={`${sec.mineral}-secondary-median`}
+                          className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 bg-white`}
+                          style={{ left: `${medSecPercent}%`, width: `4px` }}
+                        />
                       </div>
-                      <div
-                        id={`${sec.mineral}-secondary-median`}
-                        className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 bg-white`}
-                        style={{ left: `${medSecPercent}%`, width: `4px` }}
-                      />
+                    </div>
+                    <div className="flex justify-between text-[10px] text-slate-500 px-1 mb-1 max-w-xs w-full">
+                      <span>0</span>
+                      <span className="text-white flex md:hidden">{t("rockCard.median")} {medSec}</span>
+                      <span>1000</span>
                     </div>
                   </div>
-                  <div className="flex justify-between text-[10px] text-slate-500 px-1 mb-1 max-w-xs w-full">
-                    <span>0</span>
-                    <span className="text-white flex md:hidden">{t("rockCard.median")} {medSec}</span>
-                    <span>1000</span>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+                )
+              })}
+            </div>
+          )}
         </div>
 
         {/* Location Info */}
