@@ -49,6 +49,18 @@ export default function Home() {
         rock.system.toLowerCase().includes(searchQuery.toLowerCase()) ||
         rock.body.toLowerCase().includes(searchQuery.toLowerCase())
       return matchesMineral && matchesSystem && matchesBody && matchesSearch
+    }).sort((a, b) => {
+      const aIsPrimary = a.primary === selectedMineral
+      const bIsPrimary = b.primary === selectedMineral
+      if (aIsPrimary && !bIsPrimary) return -1
+      if (!aIsPrimary && bIsPrimary) return 1
+
+      const aIsSecondary = a.secondary.some(sec => sec === selectedMineral)
+      const bIsSecondary = b.secondary.some(sec => sec === selectedMineral)
+      if (aIsSecondary && !bIsSecondary) return -1
+      if (!aIsSecondary && bIsSecondary) return 1
+
+      return a.name.localeCompare(b.name)
     })
   }, [rocks, selectedMineral, selectedSystem, selectedBody, searchQuery, isLoading])
 
