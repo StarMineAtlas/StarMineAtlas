@@ -5,22 +5,19 @@ import { I18nextProvider } from "react-i18next"
 import i18n from "@/lib/i18n"
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [isInitialized, setIsInitialized] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    // Wait for i18n to be ready (including language detection from localStorage)
-    if (i18n.isInitialized) {
-      setIsInitialized(true)
-    } else {
-      i18n.on("initialized", () => {
-        setIsInitialized(true)
-      })
-    }
+    setMounted(true)
   }, [])
 
-  if (!isInitialized) {
-    return null
-  }
-
-  return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
+  // Always render children to avoid hydration mismatch
+  // The i18n will use fallback language on server, then switch on client
+  return (
+    <I18nextProvider i18n={i18n}>
+      <div style={{ visibility: mounted ? "visible" : "visible" }}>
+        {children}
+      </div>
+    </I18nextProvider>
+  )
 }
