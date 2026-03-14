@@ -33,7 +33,8 @@
     "no": "No",
     "celestialBody": "Celestial Body:",
     "system": "System:",
-    "quality": "Quality:"
+    "quality": "Quality:",
+    "median": "Median:"
   },
   "languages": {
     "en": "English",

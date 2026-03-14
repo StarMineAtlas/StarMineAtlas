@@ -85,7 +85,7 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
                     className="pointer-events-none absolute left-1/2 bottom-0 z-20 translate-y-full -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-xs text-cyan-200 opacity-0 shadow transition-opacity duration-200 group-hover/qualitybar:opacity-100"
                     style={{ minWidth: '80px' }}
                   >
-                    Médiane: <span className="font-mono">{medPrimary}</span>
+                    {t("rockCard.median")} <span className="font-mono">{medPrimary}</span>
                   </div>
                 </div>
                 <div
@@ -97,6 +97,7 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
             </div>
             <div className="flex justify-between text-[10px] text-slate-500 px-1 mb-1 max-w-xs w-full">
               <span>0</span>
+              <span className="text-white flex md:hidden">{t("rockCard.median")} {medPrimary}</span>
               <span>1000</span>
             </div>
           </div>
@@ -138,7 +139,7 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
                           className="pointer-events-none absolute left-1/2 bottom-0 z-20 translate-y-full -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-xs text-cyan-200 opacity-0 shadow transition-opacity duration-200 group-hover/qualitybar-secondary:opacity-100"
                           style={{ minWidth: '80px' }}
                         >
-                          Médiane: <span className="font-mono">{medSec}</span>
+                          {t("rockCard.median")} <span className="font-mono">{medSec}</span>
                         </div>
                       </div>
                       <div
@@ -150,6 +151,7 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
                   </div>
                   <div className="flex justify-between text-[10px] text-slate-500 px-1 mb-1 max-w-xs w-full">
                     <span>0</span>
+                    <span className="text-white flex md:hidden">{t("rockCard.median")} {medSec}</span>
                     <span>1000</span>
                   </div>
                 </div>
