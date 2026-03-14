@@ -36,6 +36,7 @@ export function Header() {
                 href={link.href}
                 className={`text-sm font-medium transition-colors hover:text-cyan-400 ${pathname === link.href ? "text-cyan-400" : "text-slate-400"
                   }`}
+                suppressHydrationWarning
               >
                 {t(link.label)}
               </Link>
@@ -71,6 +72,7 @@ export function Header() {
                 onClick={() => setMobileMenuOpen(false)}
                 className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === link.href ? "text-cyan-400" : "text-slate-400"
                   }`}
+                suppressHydrationWarning
               >
                 {t(link.label)}
               </Link>

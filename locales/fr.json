@@ -21,9 +21,7 @@
     "filters": "Filtres :",
     "allSystems": "Tous les systemes",
     "allBodies": "Tous les astres",
-    "allMinerals": "Tous les mineraux",
-    "loadingMinerals": "Chargement des minéraux...",
-    "errorMinerals": "Erreur lors du chargement des minéraux"
+    "allMinerals": "Tous les mineraux"
   },
   "rockCard": {
     "primary": "Primaire :",

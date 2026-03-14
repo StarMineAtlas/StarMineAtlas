@@ -54,11 +54,11 @@ export default function Home() {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <Mountain className="h-8 w-8 text-cyan-400" />
-            <h1 className="text-3xl font-bold tracking-tight text-cyan-50">
+            <h1 className="text-3xl font-bold tracking-tight text-cyan-50" suppressHydrationWarning>
               {t("home.title")}
             </h1>
           </div>
-          <p className="text-slate-400">
+          <p className="text-slate-400" suppressHydrationWarning>
             {t("home.description")}
           </p>
         </div>
@@ -76,7 +76,7 @@ export default function Home() {
           />
         </div>
 
-        <div className="mb-4 text-sm text-slate-500">
+        <div className="mb-4 text-sm text-slate-500" suppressHydrationWarning>
           {t("home.showing", { count: filteredRocks.length, total: rocks.length })}
         </div>
 
@@ -89,8 +89,8 @@ export default function Home() {
         ) : (
           <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16">
             <Mountain className="mb-4 h-12 w-12 text-slate-700" />
-            <p className="text-lg text-slate-400">{t("home.noRocksFound")}</p>
-            <p className="text-sm text-slate-500">
+            <p className="text-lg text-slate-400" suppressHydrationWarning>{t("home.noRocksFound")}</p>
+            <p className="text-sm text-slate-500" suppressHydrationWarning>
               {t("home.noRocksHint")}
             </p>
           </div>

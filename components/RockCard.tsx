@@ -42,7 +42,7 @@ export function RockCard({ rock }: RockCardProps) {
         {/* Primary Mineral */}
         <div className="flex items-center gap-2">
           <CircleDot className="h-3.5 w-3.5 text-cyan-500" />
-          <span className="text-slate-400">{t("rockCard.primary")}</span>
+          <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.primary")}</span>
           <Badge
             variant="secondary"
             className="border-cyan-700/50 bg-cyan-950/50 text-cyan-300"
@@ -54,7 +54,7 @@ export function RockCard({ rock }: RockCardProps) {
         {/* Secondary Minerals */}
         <div className="flex flex-wrap items-center gap-2">
           <Layers className="h-3.5 w-3.5 text-slate-500" />
-          <span className="text-slate-400">{t("rockCard.secondary")}</span>
+          <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.secondary")}</span>
           {rock.secondary.length > 0 ? (
             rock.secondary.map((mineral) => (
               <Badge
@@ -66,7 +66,7 @@ export function RockCard({ rock }: RockCardProps) {
               </Badge>
             ))
           ) : (
-            <span className="text-slate-500">{t("rockCard.none")}</span>
+            <span className="text-slate-500" suppressHydrationWarning>{t("rockCard.none")}</span>
           )}
         </div>
 
@@ -76,8 +76,8 @@ export function RockCard({ rock }: RockCardProps) {
             className={`h-2 w-2 rounded-full ${rock.inert ? "bg-amber-500" : "bg-slate-600"
               }`}
           />
-          <span className="text-slate-400">{t("rockCard.inertMaterial")}</span>
-          <span className={rock.inert ? "text-amber-400" : "text-slate-500"}>
+          <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.inertMaterial")}</span>
+          <span className={rock.inert ? "text-amber-400" : "text-slate-500"} suppressHydrationWarning>
             {rock.inert ? t("rockCard.yes") : t("rockCard.no")}
           </span>
         </div>
@@ -86,14 +86,14 @@ export function RockCard({ rock }: RockCardProps) {
         <div className="border-t border-slate-800 pt-3 space-y-2">
           <div className="flex items-center gap-2">
             <MapPin className="h-3.5 w-3.5 text-slate-500" />
-            <span className="text-slate-400">{t("rockCard.celestialBody")}</span>
-            <span className="text-cyan-200">{rock.body}</span>
+            <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.celestialBody")}</span>
+            <span className="text-cyan-200" suppressHydrationWarning>{rock.body}</span>
           </div>
 
           <div className="flex items-center gap-2">
             <Globe className="h-3.5 w-3.5 text-slate-500" />
-            <span className="text-slate-400">{t("rockCard.system")}</span>
-            <span className="text-cyan-200">{rock.system}</span>
+            <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.system")}</span>
+            <span className="text-cyan-200" suppressHydrationWarning>{rock.system}</span>
           </div>
         </div>
 
@@ -102,9 +102,9 @@ export function RockCard({ rock }: RockCardProps) {
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <Activity className="h-3.5 w-3.5 text-slate-500" />
-              <span className="text-slate-400">{t("rockCard.quality")}</span>
+              <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.quality")}</span>
             </div>
-            <span className={`font-mono font-semibold ${getQualityTextColor(rock.quality)}`}>
+            <span className={`font-mono font-semibold ${getQualityTextColor(rock.quality)}`} suppressHydrationWarning>
               {rock.quality}
             </span>
           </div>

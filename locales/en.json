@@ -21,9 +21,7 @@
     "filters": "Filters:",
     "allSystems": "All Systems",
     "allBodies": "All Bodies",
-    "allMinerals": "All Minerals",
-    "loadingMinerals": "Loading minerals...",
-    "errorMinerals": "Error loading minerals"
+    "allMinerals": "All Minerals"
   },
   "rockCard": {
     "primary": "Primary:",

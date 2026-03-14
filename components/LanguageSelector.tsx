@@ -25,8 +25,8 @@ export function LanguageSelector() {
       <SelectTrigger className="w-24 md:w-18 border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
         <SelectValue>
           <span className="flex items-center gap-2">
-            <span className="flex md:hidden">{currentLanguage.flag}</span>
-            <span className="uppercase">{currentLanguage.code}</span>
+            <span className="flex md:hidden" suppressHydrationWarning>{currentLanguage.flag}</span>
+            <span className="uppercase" suppressHydrationWarning>{currentLanguage.code}</span>
           </span>
         </SelectValue>
       </SelectTrigger>

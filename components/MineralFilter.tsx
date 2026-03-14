@@ -60,6 +60,7 @@ export function MineralFilter({
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
         <Input
+          suppressHydrationWarning
           type="text"
           placeholder={t("filters.searchPlaceholder")}
           value={searchQuery}
@@ -72,7 +73,7 @@ export function MineralFilter({
       <div className="flex flex-col md:flex-row flex-wrap items-center gap-3">
         <div className="flex items-center gap-2 text-slate-400">
           <Filter className="h-4 w-4" />
-          <span className="text-sm">{t("filters.filters")}</span>
+          <span className="text-sm" suppressHydrationWarning>{t("filters.filters")}</span>
         </div>
 
         {/* System Filter */}
