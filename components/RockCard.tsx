@@ -42,8 +42,6 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
   const minPrimaryPercent = (minPrimary / 1000) * 100
   const maxPrimaryPercent = (maxPrimary / 1000) * 100
 
-  console.log('rock:', rock)
-
   return (
     <Card className="group relative overflow-hidden border-slate-800 bg-slate-900/50 transition-all duration-300 hover:border-cyan-700/50 hover:bg-slate-900 hover:shadow-lg hover:shadow-cyan-900/20">
       {/* Scanner line effect */}
@@ -64,6 +62,8 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
             <div className="flex items-center gap-2">
               <CircleDot className="h-3.5 w-3.5 text-cyan-500" />
               <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.primary")}</span>
+            </div>
+            <div className="flex items-center gap-2">
               <Badge
                 variant="secondary"
                 className="border-cyan-700/50 bg-cyan-950/50 text-cyan-300 font-semibold"
@@ -72,13 +72,13 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
               </Badge>
               <span className={`ml-2 font-mono text-xs ${getQualityTextColor(minPrimary, maxPrimary)}`}>{minPrimary} – {maxPrimary}</span>
             </div>
-            <div className="relative h-2 w-full max-w-xs overflow-hidden rounded-full bg-slate-800 mt-0.5 ml-7">
+            <div className="relative h-2 w-full max-w-xs overflow-hidden rounded-full bg-slate-800 mt-2">
               <div
                 className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 ${getQualityColor(minPrimary, maxPrimary)}`}
                 style={{ left: `${minPrimaryPercent}%`, width: `${maxPrimaryPercent - minPrimaryPercent}%` }}
               />
             </div>
-            <div className="flex justify-between text-[10px] text-slate-500 px-1 ml-7 -mt-1 mb-1 max-w-xs w-full">
+            <div className="flex justify-between text-[10px] text-slate-500 px-1 mb-1 max-w-xs w-full">
               <span>0</span>
               <span>1000</span>
             </div>
@@ -98,7 +98,7 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
               const minSecPercent = (minSec / 1000) * 100
               const maxSecPercent = (maxSec / 1000) * 100
               return (
-                <div key={sec.mineral} className="flex flex-col gap-0.5 ml-7 w-full">
+                <div key={sec.mineral} className="flex flex-col gap-0.5 w-full">
                   <div className="flex items-center gap-2">
                     <Badge
                       variant="outline"
@@ -108,13 +108,13 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
                     </Badge>
                     <span className={`font-mono text-xs ${getQualityTextColor(minSec, maxSec)}`}>{minSec} – {maxSec}</span>
                   </div>
-                  <div className="relative h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-slate-800 mt-0.5">
+                  <div className="relative h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-slate-800 mt-2">
                     <div
                       className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 ${getQualityColor(minSec, maxSec)}`}
                       style={{ left: `${minSecPercent}%`, width: `${maxSecPercent - minSecPercent}%` }}
                     />
                   </div>
-                  <div className="flex justify-between text-[10px] text-slate-500 px-1 -mt-1 mb-1 max-w-xs w-full">
+                  <div className="flex justify-between text-[10px] text-slate-500 px-1 mb-1 max-w-xs w-full">
                     <span>0</span>
                     <span>1000</span>
                   </div>
