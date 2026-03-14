@@ -5,7 +5,7 @@
   },
   "home": {
     "title": "Types de Roches",
-    "description": "Parcourez et filtrez les types de roches exploitables dans l'univers. Données mises à jour pour Star Citizen 4.7.",
+    "description": "Parcourez et filtrez les minerais exploitables dans l'univers. Données mises à jour pour Star Citizen 4.7.",
     "showing": "Affichage de {{count}} sur {{total}} roches",
     "noRocksFound": "Aucune roche trouvée",
     "noRocksHint": "Essayez d'ajuster vos filtres ou votre recherche"
