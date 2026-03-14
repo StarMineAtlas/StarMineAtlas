@@ -1,7 +1,8 @@
 {
   "header": {
     "siteName": "Star Mine Atlas",
-    "rockTypes": "Rock Types"
+    "rockTypes": "Rock Types",
+    "marketPrice": "Market Price"
   },
   "home": {
     "title": "Rock Types",
@@ -9,6 +10,11 @@
     "showing": "Showing {{count}} of {{total}} rocks",
     "noRocksFound": "No rocks found",
     "noRocksHint": "Try adjusting your filters or search query"
+  },
+  "marketPrice": {
+    "title": "Market Price",
+    "description": "Track real-time mineral prices across trading terminals in the verse. Compare buy and sell prices to maximize your mining profits.",
+    "wip": "Work in Progress - Coming Soon"
   },
   "filters": {
     "searchPlaceholder": "Search...",
