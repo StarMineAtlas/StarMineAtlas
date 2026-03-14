@@ -1,7 +1,6 @@
 "use client"
 
 import { useTranslation } from "react-i18next"
-import { minerals } from "@/data/minerals"
 import { systems } from "@/data/systems"
 import { bodies } from "@/data/bodies"
 import type { System } from "@/data/systems"
@@ -14,6 +13,8 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Filter, Search, Globe, MapPin, Gem } from "lucide-react"
+
+import { useEffect, useState } from "react"
 
 interface MineralFilterProps {
   selectedMineral: string
@@ -37,6 +38,15 @@ export function MineralFilter({
   onSearchChange,
 }: MineralFilterProps) {
   const { t } = useTranslation()
+
+  // State test
+  const [minerals, setMinerals] = useState<{ name: string }[]>([])
+
+  useEffect(() => {
+    fetch("https://opensheet.elk.sh/1O011Te_Gef5QkjmnYN_YqAqFih9oajtbyyB9YDHY0JM/test")
+      .then(res => res.json())
+      .then(data => setMinerals(data));
+  }, []);
 
   // Get available bodies based on selected system
   const availableBodies =
@@ -139,13 +149,13 @@ export function MineralFilter({
               >
                 {t("filters.allMinerals")}
               </SelectItem>
-              {minerals.map((mineral) => (
+              {minerals && minerals.length > 0 && minerals.map((mineral) => (
                 <SelectItem
-                  key={mineral}
-                  value={mineral}
+                  key={mineral.name}
+                  value={mineral.name}
                   className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
                 >
-                  {mineral}
+                  {mineral.name}
                 </SelectItem>
               ))}
             </SelectContent>
