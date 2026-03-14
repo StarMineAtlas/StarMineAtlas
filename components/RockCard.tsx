@@ -24,11 +24,12 @@ function getQualityTextColor(min: number, max: number): string {
   return "text-green-400"
 }
 
+
 export function RockCard({ rock }: RockCardProps) {
   const { t } = useTranslation()
-  const [minQuality, maxQuality] = rock.quality
-  const minPercent = (minQuality / 1000) * 100
-  const maxPercent = (maxQuality / 1000) * 100
+  const [minPrimary, maxPrimary] = rock.primaryQuality
+  const minPrimaryPercent = (minPrimary / 1000) * 100
+  const maxPrimaryPercent = (maxPrimary / 1000) * 100
 
   return (
     <Card className="group relative overflow-hidden border-slate-800 bg-slate-900/50 transition-all duration-300 hover:border-cyan-700/50 hover:bg-slate-900 hover:shadow-lg hover:shadow-cyan-900/20">
@@ -43,48 +44,72 @@ export function RockCard({ rock }: RockCardProps) {
       </CardHeader>
 
       <CardContent className="space-y-3 text-sm">
-        {/* Primary Mineral */}
-        <div className="flex items-center gap-2">
-          <CircleDot className="h-3.5 w-3.5 text-cyan-500" />
-          <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.primary")}</span>
-          <Badge
-            variant="secondary"
-            className="border-cyan-700/50 bg-cyan-950/50 text-cyan-300"
-          >
-            {rock.primary}
-          </Badge>
-        </div>
-
-        {/* Secondary Minerals */}
-        <div className="flex flex-wrap items-center gap-2">
-          <Layers className="h-3.5 w-3.5 text-slate-500" />
-          <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.secondary")}</span>
-          {rock.secondary.length > 0 ? (
-            rock.secondary.map((mineral: string) => (
+        {/* Ressources (primaire + secondaires) */}
+        <div className="flex flex-col gap-3">
+          {/* Primaire */}
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <CircleDot className="h-3.5 w-3.5 text-cyan-500" />
+              <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.primary")}</span>
               <Badge
-                key={mineral}
-                variant="outline"
-                className="border-slate-700 text-slate-300"
+                variant="secondary"
+                className="border-cyan-700/50 bg-cyan-950/50 text-cyan-300 font-semibold"
               >
-                {mineral}
+                {rock.primary}
               </Badge>
-            ))
-          ) : (
-            <span className="text-slate-500" suppressHydrationWarning>{t("rockCard.none")}</span>
-          )}
-        </div>
+              <span className={`ml-2 font-mono text-xs ${getQualityTextColor(minPrimary, maxPrimary)}`}>{minPrimary} – {maxPrimary}</span>
+            </div>
+            <div className="relative h-2 w-full max-w-xs overflow-hidden rounded-full bg-slate-800 mt-0.5 ml-7">
+              <div
+                className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 ${getQualityColor(minPrimary, maxPrimary)}`}
+                style={{ left: `${minPrimaryPercent}%`, width: `${maxPrimaryPercent - minPrimaryPercent}%` }}
+              />
+            </div>
+            <div className="flex justify-between text-[10px] text-slate-500 px-1 ml-7 -mt-1 mb-1 max-w-xs w-full">
+              <span>0</span>
+              <span>1000</span>
+            </div>
+          </div>
 
-        {/* Inert Material */}
-        {/* 
-          <div className="flex items-center gap-2">
-            <div
-              className={`h-2 w-2 rounded-full ${rock.inert ? "bg-amber-500" : "bg-slate-600"}`}
-            />
-            <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.inertMaterial")}</span>
-            <span className={rock.inert ? "text-amber-400" : "text-slate-500"} suppressHydrationWarning>
-              {rock.inert ? t("rockCard.yes") : t("rockCard.no")}
-            </span>
-          </div>*/}
+          {/* Secondaires */}
+          <div className="flex flex-col gap-1">
+            <div className="flex flex-wrap items-center gap-2 mb-1">
+              <Layers className="h-3.5 w-3.5 text-slate-500" />
+              <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.secondary")}</span>
+              {rock.secondary.length === 0 && (
+                <span className="text-slate-500" suppressHydrationWarning>{t("rockCard.none")}</span>
+              )}
+            </div>
+            {rock.secondary.map((sec: { mineral: string; quality: [number, number] }) => {
+              const [minSec, maxSec] = sec.quality
+              const minSecPercent = (minSec / 1000) * 100
+              const maxSecPercent = (maxSec / 1000) * 100
+              return (
+                <div key={sec.mineral} className="flex flex-col gap-0.5 ml-7 w-full">
+                  <div className="flex items-center gap-2">
+                    <Badge
+                      variant="outline"
+                      className="border-slate-700 text-slate-300 font-medium"
+                    >
+                      {sec.mineral}
+                    </Badge>
+                    <span className={`font-mono text-xs ${getQualityTextColor(minSec, maxSec)}`}>{minSec} – {maxSec}</span>
+                  </div>
+                  <div className="relative h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-slate-800 mt-0.5">
+                    <div
+                      className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 ${getQualityColor(minSec, maxSec)}`}
+                      style={{ left: `${minSecPercent}%`, width: `${maxSecPercent - minSecPercent}%` }}
+                    />
+                  </div>
+                  <div className="flex justify-between text-[10px] text-slate-500 px-1 -mt-1 mb-1 max-w-xs w-full">
+                    <span>0</span>
+                    <span>1000</span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
 
         {/* Location Info */}
         <div className="border-t border-slate-800 pt-3 space-y-2">
@@ -98,29 +123,6 @@ export function RockCard({ rock }: RockCardProps) {
             <Globe className="h-3.5 w-3.5 text-slate-500" />
             <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.system")}</span>
             <span className="text-cyan-200" suppressHydrationWarning>{rock.system}</span>
-          </div>
-        </div>
-
-        {/* Quality Section */}
-        <div className="border-t border-slate-800 pt-3">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2">
-              <Activity className="h-3.5 w-3.5 text-slate-500" />
-              <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.quality")}</span>
-            </div>
-            <span className={`font-mono font-semibold ${getQualityTextColor(minQuality, maxQuality)}`} suppressHydrationWarning>
-              {minQuality} – {maxQuality}
-            </span>
-          </div>
-          <div className="relative h-2 w-full overflow-hidden rounded-full bg-slate-800">
-            <div
-              className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 ${getQualityColor(minQuality, maxQuality)}`}
-              style={{ left: `${minPercent}%`, width: `${maxPercent - minPercent}%` }}
-            />
-          </div>
-          <div className="mt-1 flex justify-between text-xs text-slate-600">
-            <span>0</span>
-            <span>1000</span>
           </div>
         </div>
       </CardContent>

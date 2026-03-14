@@ -6,11 +6,11 @@ import { bodies } from "./bodies"
 export interface Rock {
   name: string
   primary: Mineral
-  secondary: Mineral[]
+  primaryQuality: [number, number]
+  secondary: { mineral: Mineral; quality: [number, number] }[]
   inert: boolean
   system: System
   body: string
-  quality: [number, number] // plage de qualité
 }
 
 // Quality ranges per system
@@ -29,7 +29,13 @@ function seededRandom(seed: number): () => number {
 }
 
 // Base rock definitions
-const baseRocks: Omit<Rock, "system" | "body" | "quality">[] = [
+type BaseRock = {
+  name: string
+  primary: Mineral
+  secondary: Mineral[]
+  inert: boolean
+}
+const baseRocks: BaseRock[] = [
   {
     name: "Quantanium Rock",
     primary: "Quantanium",
@@ -153,6 +159,15 @@ const baseRocks: Omit<Rock, "system" | "body" | "quality">[] = [
 ]
 
 // Generate rocks for all systems
+
+function randomQuality(random: () => number, minQuality: number, maxQuality: number): [number, number] {
+  // La différence doit être entre 100 et 500
+  const minRockQuality = Math.floor(random() * (maxQuality - minQuality - 100)) + minQuality
+  const maxDelta = Math.min(500, maxQuality - minRockQuality)
+  const maxRockQuality = minRockQuality + Math.floor(random() * (maxDelta - 100 + 1)) + 100
+  return [minRockQuality, maxRockQuality]
+}
+
 function generateRocks(): Rock[] {
   const generatedRocks: Rock[] = []
   let seedCounter = 42
@@ -163,19 +178,23 @@ function generateRocks(): Rock[] {
       const [minQuality, maxQuality] = qualityRanges[system]
       const systemBodies = bodies[system]
 
+      // Générer la plage de qualité pour le primaire
+      const primaryQuality = randomQuality(random, minQuality, maxQuality)
 
-
-      // Générer une plage de qualité comprise dans la plage système
-      // La différence doit être entre 100 et 500
-      const minRockQuality = Math.floor(random() * (maxQuality - minQuality - 100)) + minQuality
-      const maxDelta = Math.min(500, maxQuality - minRockQuality)
-      const maxRockQuality = minRockQuality + Math.floor(random() * (maxDelta - 100 + 1)) + 100
+      // Générer la plage de qualité pour chaque secondaire
+      const secondary = baseRock.secondary.map((mineral) => ({
+        mineral,
+        quality: randomQuality(random, minQuality, maxQuality),
+      }))
 
       const rock: Rock = {
-        ...baseRock,
+        name: baseRock.name,
+        primary: baseRock.primary,
+        primaryQuality,
+        secondary,
+        inert: baseRock.inert,
         system,
         body: systemBodies[Math.floor(random() * systemBodies.length)],
-        quality: [minRockQuality, maxRockQuality],
       }
 
       generatedRocks.push(rock)
