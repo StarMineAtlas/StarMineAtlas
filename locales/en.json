@@ -7,6 +7,7 @@
   "home": {
     "title": "Rock Types",
     "description": "Browse and filter mineable rock types across the verse. Data updated for Star Citizen 4.7.",
+    "infoZone": "Note: Mineral statistics are being collected and represent only a sample and averages. They may not perfectly reflect in-game reality, as you can find any quality of mineral on celestial bodies. This data may become obsolete in the future or be questioned based on game updates.",
     "showing": "Showing {{count}} of {{total}} rocks",
     "noRocksFound": "No rocks found",
     "noRocksHint": "Try adjusting your filters or search query"
@@ -32,7 +33,8 @@
     "no": "No",
     "celestialBody": "Celestial Body:",
     "system": "System:",
-    "quality": "Quality:"
+    "quality": "Quality:",
+    "median": "Median:"
   },
   "languages": {
     "en": "English",

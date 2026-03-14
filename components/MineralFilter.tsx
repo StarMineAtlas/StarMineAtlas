@@ -1,10 +1,6 @@
 "use client"
 
 import { useTranslation } from "react-i18next"
-import { minerals } from "@/data/minerals"
-import { systems } from "@/data/systems"
-import { bodies } from "@/data/bodies"
-import type { System } from "@/data/systems"
 import {
   Select,
   SelectContent,
@@ -14,6 +10,9 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Filter, Search, Globe, MapPin, Gem } from "lucide-react"
+
+import { useEffect, useState } from "react"
+import { set } from "date-fns"
 
 interface MineralFilterProps {
   selectedMineral: string
@@ -38,11 +37,48 @@ export function MineralFilter({
 }: MineralFilterProps) {
   const { t } = useTranslation()
 
+  // State filters
+  const [minerals, setMinerals] = useState<{ name: string }[]>([])
+  const [systems, setSystems] = useState<{ name: string }[]>([])
+  const [bodies, setBodies] = useState<{ name: string, system: string }[]>([])
+
+  // Debounced search state
+  const [debouncedSearch, setDebouncedSearch] = useState(searchQuery)
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (debouncedSearch !== searchQuery) {
+        onSearchChange(debouncedSearch)
+      }
+    }, 500)
+    return () => clearTimeout(handler)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch])
+
+  // Keep debouncedSearch in sync if searchQuery changes externally
+  useEffect(() => {
+    setDebouncedSearch(searchQuery)
+  }, [searchQuery])
+
+  useEffect(() => {
+    fetch("https://opensheet.elk.sh/1gf4hgqlLAYay5t28aKQ5uyRizWfIRfg7iLLLyPi-Uv4/minerals")
+      .then(res => res.json())
+      .then(data => setMinerals(data))
+
+    fetch("https://opensheet.elk.sh/1gf4hgqlLAYay5t28aKQ5uyRizWfIRfg7iLLLyPi-Uv4/systems")
+      .then(res => res.json())
+      .then(data => setSystems(data))
+
+    fetch("https://opensheet.elk.sh/1gf4hgqlLAYay5t28aKQ5uyRizWfIRfg7iLLLyPi-Uv4/bodies")
+      .then(res => res.json())
+      .then(data => setBodies(data))
+  }, []);
+
   // Get available bodies based on selected system
   const availableBodies =
     selectedSystem === "all"
-      ? Object.values(bodies).flat()
-      : bodies[selectedSystem as System] || []
+      ? bodies
+      : bodies.filter(body => body.system === selectedSystem)
 
   return (
     <div className="space-y-4">
@@ -50,10 +86,11 @@ export function MineralFilter({
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
         <Input
+          suppressHydrationWarning
           type="text"
           placeholder={t("filters.searchPlaceholder")}
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
+          value={debouncedSearch}
+          onChange={(e) => setDebouncedSearch(e.target.value)}
           className="border-slate-800 bg-slate-900/50 pl-10 text-cyan-50 placeholder:text-slate-500 focus:border-cyan-700 focus:ring-cyan-700/20"
         />
       </div>
@@ -62,7 +99,7 @@ export function MineralFilter({
       <div className="flex flex-col md:flex-row flex-wrap items-center gap-3">
         <div className="flex items-center gap-2 text-slate-400">
           <Filter className="h-4 w-4" />
-          <span className="text-sm">{t("filters.filters")}</span>
+          <span className="text-sm" suppressHydrationWarning>{t("filters.filters")}</span>
         </div>
 
         {/* System Filter */}
@@ -85,13 +122,13 @@ export function MineralFilter({
               >
                 {t("filters.allSystems")}
               </SelectItem>
-              {systems.map((system) => (
+              {systems && systems.length > 0 && systems.map((system) => (
                 <SelectItem
-                  key={system}
-                  value={system}
+                  key={system.name}
+                  value={system.name}
                   className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
                 >
-                  {system}
+                  {system.name}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -112,13 +149,13 @@ export function MineralFilter({
               >
                 {t("filters.allBodies")}
               </SelectItem>
-              {availableBodies.map((body) => (
+              {availableBodies && availableBodies.length > 0 && availableBodies.map((body) => (
                 <SelectItem
-                  key={body}
-                  value={body}
+                  key={body.name}
+                  value={body.name}
                   className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
                 >
-                  {body}
+                  {body.name}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -139,13 +176,13 @@ export function MineralFilter({
               >
                 {t("filters.allMinerals")}
               </SelectItem>
-              {minerals.map((mineral) => (
+              {minerals && minerals.length > 0 && minerals.map((mineral) => (
                 <SelectItem
-                  key={mineral}
-                  value={mineral}
+                  key={mineral.name}
+                  value={mineral.name}
                   className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
                 >
-                  {mineral}
+                  {mineral.name}
                 </SelectItem>
               ))}
             </SelectContent>
