@@ -71,6 +71,7 @@ export function RockCard({ rock }: RockCardProps) {
         </div>
 
         {/* Inert Material */}
+        {/* 
         <div className="flex items-center gap-2">
           <div
             className={`h-2 w-2 rounded-full ${rock.inert ? "bg-amber-500" : "bg-slate-600"
@@ -80,7 +81,7 @@ export function RockCard({ rock }: RockCardProps) {
           <span className={rock.inert ? "text-amber-400" : "text-slate-500"} suppressHydrationWarning>
             {rock.inert ? t("rockCard.yes") : t("rockCard.no")}
           </span>
-        </div>
+        </div>*/}
 
         {/* Location Info */}
         <div className="border-t border-slate-800 pt-3 space-y-2">
