@@ -126,17 +126,27 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
                     </Badge>
                     <span className={`font-mono text-xs ${getQualityTextColor(minSec, maxSec)}`}>{minSec} – {maxSec}</span>
                   </div>
-                  <div className="relative h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-slate-800 mt-2">
-                    <div
-                      id={`${sec.mineral}-secondary-quality`}
-                      className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 ${getQualityColor(minSec, maxSec)}`}
-                      style={{ left: `${minSecPercent}%`, width: `${maxSecPercent - minSecPercent}%` }}
-                    />
-                    <div
-                      id={`${sec.mineral}-secondary-median`}
-                      className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 bg-white`}
-                      style={{ left: `${medSecPercent}%`, width: `4px` }}
-                    />
+                  <div className="relative h-1.5 w-full max-w-xs overflow-visible rounded-full bg-slate-800 mt-2">
+                    <div className="relative h-full w-full">
+                      <div
+                        id={`${sec.mineral}-secondary-quality`}
+                        className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 ${getQualityColor(minSec, maxSec)} group/qualitybar-secondary`}
+                        style={{ left: `${minSecPercent}%`, width: `${maxSecPercent - minSecPercent}%` }}
+                      >
+                        {/* Tooltip for median, only on bar hover */}
+                        <div
+                          className="pointer-events-none absolute left-1/2 bottom-0 z-20 translate-y-full -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-xs text-cyan-200 opacity-0 shadow transition-opacity duration-200 group-hover/qualitybar-secondary:opacity-100"
+                          style={{ minWidth: '80px' }}
+                        >
+                          Médiane: <span className="font-mono">{medSec}</span>
+                        </div>
+                      </div>
+                      <div
+                        id={`${sec.mineral}-secondary-median`}
+                        className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 bg-white`}
+                        style={{ left: `${medSecPercent}%`, width: `4px` }}
+                      />
+                    </div>
                   </div>
                   <div className="flex justify-between text-[10px] text-slate-500 px-1 mb-1 max-w-xs w-full">
                     <span>0</span>
