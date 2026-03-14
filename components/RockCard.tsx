@@ -10,21 +10,25 @@ interface RockCardProps {
   rock: Rock
 }
 
-function getQualityColor(quality: number): string {
-  if (quality < 300) return "bg-red-500"
-  if (quality < 600) return "bg-yellow-500"
+function getQualityColor(min: number, max: number): string {
+  const avg = (min + max) / 2
+  if (avg < 300) return "bg-red-500"
+  if (avg < 600) return "bg-yellow-500"
   return "bg-green-500"
 }
 
-function getQualityTextColor(quality: number): string {
-  if (quality < 300) return "text-red-400"
-  if (quality < 600) return "text-yellow-400"
+function getQualityTextColor(min: number, max: number): string {
+  const avg = (min + max) / 2
+  if (avg < 300) return "text-red-400"
+  if (avg < 600) return "text-yellow-400"
   return "text-green-400"
 }
 
 export function RockCard({ rock }: RockCardProps) {
   const { t } = useTranslation()
-  const qualityPercent = (rock.quality / 1000) * 100
+  const [minQuality, maxQuality] = rock.quality
+  const minPercent = (minQuality / 1000) * 100
+  const maxPercent = (maxQuality / 1000) * 100
 
   return (
     <Card className="group relative overflow-hidden border-slate-800 bg-slate-900/50 transition-all duration-300 hover:border-cyan-700/50 hover:bg-slate-900 hover:shadow-lg hover:shadow-cyan-900/20">
@@ -56,7 +60,7 @@ export function RockCard({ rock }: RockCardProps) {
           <Layers className="h-3.5 w-3.5 text-slate-500" />
           <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.secondary")}</span>
           {rock.secondary.length > 0 ? (
-            rock.secondary.map((mineral) => (
+            rock.secondary.map((mineral: string) => (
               <Badge
                 key={mineral}
                 variant="outline"
@@ -72,16 +76,15 @@ export function RockCard({ rock }: RockCardProps) {
 
         {/* Inert Material */}
         {/* 
-        <div className="flex items-center gap-2">
-          <div
-            className={`h-2 w-2 rounded-full ${rock.inert ? "bg-amber-500" : "bg-slate-600"
-              }`}
-          />
-          <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.inertMaterial")}</span>
-          <span className={rock.inert ? "text-amber-400" : "text-slate-500"} suppressHydrationWarning>
-            {rock.inert ? t("rockCard.yes") : t("rockCard.no")}
-          </span>
-        </div>*/}
+          <div className="flex items-center gap-2">
+            <div
+              className={`h-2 w-2 rounded-full ${rock.inert ? "bg-amber-500" : "bg-slate-600"}`}
+            />
+            <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.inertMaterial")}</span>
+            <span className={rock.inert ? "text-amber-400" : "text-slate-500"} suppressHydrationWarning>
+              {rock.inert ? t("rockCard.yes") : t("rockCard.no")}
+            </span>
+          </div>*/}
 
         {/* Location Info */}
         <div className="border-t border-slate-800 pt-3 space-y-2">
@@ -105,14 +108,14 @@ export function RockCard({ rock }: RockCardProps) {
               <Activity className="h-3.5 w-3.5 text-slate-500" />
               <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.quality")}</span>
             </div>
-            <span className={`font-mono font-semibold ${getQualityTextColor(rock.quality)}`} suppressHydrationWarning>
-              {rock.quality}
+            <span className={`font-mono font-semibold ${getQualityTextColor(minQuality, maxQuality)}`} suppressHydrationWarning>
+              {minQuality} – {maxQuality}
             </span>
           </div>
           <div className="relative h-2 w-full overflow-hidden rounded-full bg-slate-800">
             <div
-              className={`h-full transition-all duration-500 ${getQualityColor(rock.quality)}`}
-              style={{ width: `${qualityPercent}%` }}
+              className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 ${getQualityColor(minQuality, maxQuality)}`}
+              style={{ left: `${minPercent}%`, width: `${maxPercent - minPercent}%` }}
             />
           </div>
           <div className="mt-1 flex justify-between text-xs text-slate-600">

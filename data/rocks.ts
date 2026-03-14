@@ -10,7 +10,7 @@ export interface Rock {
   inert: boolean
   system: System
   body: string
-  quality: number
+  quality: [number, number] // plage de qualité
 }
 
 // Quality ranges per system
@@ -163,11 +163,19 @@ function generateRocks(): Rock[] {
       const [minQuality, maxQuality] = qualityRanges[system]
       const systemBodies = bodies[system]
 
+
+
+      // Générer une plage de qualité comprise dans la plage système
+      // La différence doit être entre 100 et 500
+      const minRockQuality = Math.floor(random() * (maxQuality - minQuality - 100)) + minQuality
+      const maxDelta = Math.min(500, maxQuality - minRockQuality)
+      const maxRockQuality = minRockQuality + Math.floor(random() * (maxDelta - 100 + 1)) + 100
+
       const rock: Rock = {
         ...baseRock,
         system,
         body: systemBodies[Math.floor(random() * systemBodies.length)],
-        quality: Math.floor(random() * (maxQuality - minQuality + 1)) + minQuality,
+        quality: [minRockQuality, maxRockQuality],
       }
 
       generatedRocks.push(rock)
