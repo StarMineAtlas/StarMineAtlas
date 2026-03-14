@@ -1,0 +1,50 @@
+"use client"
+
+import { useTranslation } from "react-i18next"
+import { languages, type LanguageCode } from "@/lib/i18n"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+export function LanguageSelector() {
+  const { i18n } = useTranslation()
+
+  const handleLanguageChange = (langCode: LanguageCode) => {
+    i18n.changeLanguage(langCode)
+    localStorage.setItem("mining-atlas-language", langCode)
+  }
+
+  const currentLanguage = languages.find((l) => l.code === i18n.language) || languages[0]
+
+  return (
+    <Select value={i18n.language} onValueChange={handleLanguageChange}>
+      <SelectTrigger className="w-[100px] border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
+        <SelectValue>
+          <span className="flex items-center gap-2">
+            <span>{currentLanguage.flag}</span>
+            <span className="uppercase">{currentLanguage.code}</span>
+          </span>
+        </SelectValue>
+      </SelectTrigger>
+      <SelectContent className="border-slate-800 bg-slate-900">
+        {languages.map((lang) => (
+          <SelectItem
+            key={lang.code}
+            value={lang.code}
+            className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
+          >
+            <span className="flex items-center gap-2">
+              <span>{lang.flag}</span>
+              <span className="uppercase">{lang.code}</span>
+              <span className="text-slate-400">- {lang.name}</span>
+            </span>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  )
+}

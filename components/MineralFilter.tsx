@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslation } from "react-i18next"
 import { minerals } from "@/data/minerals"
 import { systems } from "@/data/systems"
 import { bodies } from "@/data/bodies"
@@ -35,6 +36,8 @@ export function MineralFilter({
   searchQuery,
   onSearchChange,
 }: MineralFilterProps) {
+  const { t } = useTranslation()
+
   // Get available bodies based on selected system
   const availableBodies =
     selectedSystem === "all"
@@ -48,7 +51,7 @@ export function MineralFilter({
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
         <Input
           type="text"
-          placeholder="Search rocks..."
+          placeholder={t("filters.searchPlaceholder")}
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           className="border-slate-800 bg-slate-900/50 pl-10 text-cyan-50 placeholder:text-slate-500 focus:border-cyan-700 focus:ring-cyan-700/20"
@@ -59,7 +62,7 @@ export function MineralFilter({
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-2 text-slate-400">
           <Filter className="h-4 w-4" />
-          <span className="text-sm">Filters:</span>
+          <span className="text-sm">{t("filters.filters")}</span>
         </div>
 
         {/* System Filter */}
@@ -80,7 +83,7 @@ export function MineralFilter({
                 value="all"
                 className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
               >
-                All Systems
+                {t("filters.allSystems")}
               </SelectItem>
               {systems.map((system) => (
                 <SelectItem
@@ -107,7 +110,7 @@ export function MineralFilter({
                 value="all"
                 className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
               >
-                All Bodies
+                {t("filters.allBodies")}
               </SelectItem>
               {availableBodies.map((body) => (
                 <SelectItem
@@ -134,7 +137,7 @@ export function MineralFilter({
                 value="all"
                 className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
               >
-                All Minerals
+                {t("filters.allMinerals")}
               </SelectItem>
               {minerals.map((mineral) => (
                 <SelectItem

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import { useTranslation } from "react-i18next"
 import { Header } from "@/components/Header"
 import { RockCard } from "@/components/RockCard"
 import { MineralFilter } from "@/components/MineralFilter"
@@ -9,6 +10,7 @@ import type { Mineral } from "@/data/minerals"
 import { Mountain } from "lucide-react"
 
 export default function Home() {
+  const { t } = useTranslation()
   const [selectedMineral, setSelectedMineral] = useState("all")
   const [selectedSystem, setSelectedSystem] = useState("all")
   const [selectedBody, setSelectedBody] = useState("all")
@@ -53,11 +55,11 @@ export default function Home() {
           <div className="flex items-center gap-3 mb-2">
             <Mountain className="h-8 w-8 text-cyan-400" />
             <h1 className="text-3xl font-bold tracking-tight text-cyan-50">
-              Rock Types
+              {t("home.title")}
             </h1>
           </div>
           <p className="text-slate-400">
-            Browse and filter mineable rock types across the verse. Data updated for Star Citizen 4.7.
+            {t("home.description")}
           </p>
         </div>
 
@@ -75,7 +77,7 @@ export default function Home() {
         </div>
 
         <div className="mb-4 text-sm text-slate-500">
-          Showing {filteredRocks.length} of {rocks.length} rocks
+          {t("home.showing", { count: filteredRocks.length, total: rocks.length })}
         </div>
 
         {filteredRocks.length > 0 ? (
@@ -87,9 +89,9 @@ export default function Home() {
         ) : (
           <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16">
             <Mountain className="mb-4 h-12 w-12 text-slate-700" />
-            <p className="text-lg text-slate-400">No rocks found</p>
+            <p className="text-lg text-slate-400">{t("home.noRocksFound")}</p>
             <p className="text-sm text-slate-500">
-              Try adjusting your filters or search query
+              {t("home.noRocksHint")}
             </p>
           </div>
         )}

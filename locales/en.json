@@ -1,0 +1,35 @@
+{
+  "header": {
+    "siteName": "Mining Atlas",
+    "rockTypes": "Rock Types"
+  },
+  "home": {
+    "title": "Rock Types",
+    "description": "Browse and filter mineable rock types across the verse. Data updated for Star Citizen 4.7.",
+    "showing": "Showing {{count}} of {{total}} rocks",
+    "noRocksFound": "No rocks found",
+    "noRocksHint": "Try adjusting your filters or search query"
+  },
+  "filters": {
+    "searchPlaceholder": "Search rocks...",
+    "filters": "Filters:",
+    "allSystems": "All Systems",
+    "allBodies": "All Bodies",
+    "allMinerals": "All Minerals"
+  },
+  "rockCard": {
+    "primary": "Primary:",
+    "secondary": "Secondary:",
+    "none": "None",
+    "inertMaterial": "Inert Material:",
+    "yes": "Yes",
+    "no": "No",
+    "celestialBody": "Celestial Body:",
+    "system": "System:",
+    "quality": "Quality:"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "French"
+  }
+}
