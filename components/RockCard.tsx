@@ -3,11 +3,22 @@
 import { useTranslation } from "react-i18next"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import type { Rock } from "@/data/rocks"
 import { Gem, Layers, CircleDot, Globe, MapPin, Activity } from "lucide-react"
+
+interface Rock {
+  name: string
+  system: string
+  body: string
+  primary: string
+  secondary: string[]
+  min: number
+  max: number
+  med: number
+}
 
 interface RockCardProps {
   rock: Rock
+  secondaries: { mineral: string; min: number; max: number; med: number }[]
 }
 
 function getQualityColor(min: number, max: number): string {
@@ -25,11 +36,13 @@ function getQualityTextColor(min: number, max: number): string {
 }
 
 
-export function RockCard({ rock }: RockCardProps) {
+export function RockCard({ rock, secondaries }: RockCardProps) {
   const { t } = useTranslation()
-  const [minPrimary, maxPrimary] = rock.primaryQuality
+  const [minPrimary, maxPrimary] = [rock.min, rock.max]
   const minPrimaryPercent = (minPrimary / 1000) * 100
   const maxPrimaryPercent = (maxPrimary / 1000) * 100
+
+  console.log('rock:', rock)
 
   return (
     <Card className="group relative overflow-hidden border-slate-800 bg-slate-900/50 transition-all duration-300 hover:border-cyan-700/50 hover:bg-slate-900 hover:shadow-lg hover:shadow-cyan-900/20">
@@ -39,7 +52,7 @@ export function RockCard({ rock }: RockCardProps) {
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-base text-cyan-50">
           <Gem className="h-4 w-4 text-cyan-400" />
-          <span className="truncate w-4/5">{rock.name} - {rock.body}</span>
+          <span className="truncate w-4/5">{rock.name}</span>
         </CardTitle>
       </CardHeader>
 
@@ -76,12 +89,12 @@ export function RockCard({ rock }: RockCardProps) {
             <div className="flex flex-wrap items-center gap-2 mb-1">
               <Layers className="h-3.5 w-3.5 text-slate-500" />
               <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.secondary")}</span>
-              {rock.secondary.length === 0 && (
+              {secondaries.length === 0 && (
                 <span className="text-slate-500" suppressHydrationWarning>{t("rockCard.none")}</span>
               )}
             </div>
-            {rock.secondary.map((sec: { mineral: string; quality: [number, number] }) => {
-              const [minSec, maxSec] = sec.quality
+            {secondaries.map((sec: { mineral: string; min: number; max: number; med: number }) => {
+              const { min: minSec, max: maxSec } = sec
               const minSecPercent = (minSec / 1000) * 100
               const maxSecPercent = (maxSec / 1000) * 100
               return (
