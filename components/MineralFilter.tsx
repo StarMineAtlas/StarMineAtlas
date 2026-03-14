@@ -61,15 +61,15 @@ export function MineralFilter({
   }, [searchQuery])
 
   useEffect(() => {
-    fetch("https://opensheet.elk.sh/1O011Te_Gef5QkjmnYN_YqAqFih9oajtbyyB9YDHY0JM/minerals")
+    fetch("https://opensheet.elk.sh/1gf4hgqlLAYay5t28aKQ5uyRizWfIRfg7iLLLyPi-Uv4/minerals")
       .then(res => res.json())
       .then(data => setMinerals(data))
 
-    fetch("https://opensheet.elk.sh/1O011Te_Gef5QkjmnYN_YqAqFih9oajtbyyB9YDHY0JM/systems")
+    fetch("https://opensheet.elk.sh/1gf4hgqlLAYay5t28aKQ5uyRizWfIRfg7iLLLyPi-Uv4/systems")
       .then(res => res.json())
       .then(data => setSystems(data))
 
-    fetch("https://opensheet.elk.sh/1O011Te_Gef5QkjmnYN_YqAqFih9oajtbyyB9YDHY0JM/bodies")
+    fetch("https://opensheet.elk.sh/1gf4hgqlLAYay5t28aKQ5uyRizWfIRfg7iLLLyPi-Uv4/bodies")
       .then(res => res.json())
       .then(data => setBodies(data))
   }, []);
@@ -122,7 +122,7 @@ export function MineralFilter({
               >
                 {t("filters.allSystems")}
               </SelectItem>
-              {systems.map((system) => (
+              {systems && systems.length > 0 && systems.map((system) => (
                 <SelectItem
                   key={system.name}
                   value={system.name}
@@ -149,7 +149,7 @@ export function MineralFilter({
               >
                 {t("filters.allBodies")}
               </SelectItem>
-              {availableBodies.map((body) => (
+              {availableBodies && availableBodies.length > 0 && availableBodies.map((body) => (
                 <SelectItem
                   key={body.name}
                   value={body.name}

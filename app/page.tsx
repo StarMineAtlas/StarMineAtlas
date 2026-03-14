@@ -69,9 +69,12 @@ export default function Home() {
     })
   }, [rocks, selectedMineral, selectedSystem, selectedBody, searchQuery, isLoading])
 
+  //https://docs.google.com/spreadsheets/d/1O011Te_Gef5QkjmnYN_YqAqFih9oajtbyyB9YDHY0JM/edit?gid=1663930457#gid=1663930457
+  //https://docs.google.com/spreadsheets/d/1gf4hgqlLAYay5t28aKQ5uyRizWfIRfg7iLLLyPi-Uv4/edit?gid=775399035#gid=775399035
+
   useEffect(() => {
     setIsLoading(true);
-    fetch("https://opensheet.elk.sh/1O011Te_Gef5QkjmnYN_YqAqFih9oajtbyyB9YDHY0JM/rocks")
+    fetch("https://opensheet.elk.sh/1gf4hgqlLAYay5t28aKQ5uyRizWfIRfg7iLLLyPi-Uv4/rocks")
       .then(res => res.json())
       .then(data => {
         const rocksData = data.map((item: any) => ({
