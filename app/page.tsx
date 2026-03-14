@@ -60,7 +60,12 @@ export default function Home() {
       if (aIsSecondary && !bIsSecondary) return -1
       if (!aIsSecondary && bIsSecondary) return 1
 
-      return a.name.localeCompare(b.name)
+      // if name exists, sort by name
+      if (a.name && b.name) {
+        return a.name.localeCompare(b.name)
+      }
+
+      return 0
     })
   }, [rocks, selectedMineral, selectedSystem, selectedBody, searchQuery, isLoading])
 
