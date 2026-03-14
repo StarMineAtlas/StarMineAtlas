@@ -1,6 +1,6 @@
 {
   "header": {
-    "siteName": "Mining Atlas",
+    "siteName": "Star Mine Atlas",
     "rockTypes": "Rock Types"
   },
   "home": {
@@ -11,7 +11,7 @@
     "noRocksHint": "Try adjusting your filters or search query"
   },
   "filters": {
-    "searchPlaceholder": "Search rocks...",
+    "searchPlaceholder": "Search...",
     "filters": "Filters:",
     "allSystems": "All Systems",
     "allBodies": "All Bodies",

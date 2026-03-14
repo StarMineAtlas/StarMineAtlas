@@ -1,35 +1,35 @@
 {
   "header": {
-    "siteName": "Atlas Minier",
+    "siteName": "Star Mine Atlas",
     "rockTypes": "Types de Roches"
   },
   "home": {
     "title": "Types de Roches",
-    "description": "Parcourez et filtrez les types de roches exploitables dans l'univers. Donnees mises a jour pour Star Citizen 4.7.",
+    "description": "Parcourez et filtrez les types de roches exploitables dans l'univers. Données mises à jour pour Star Citizen 4.7.",
     "showing": "Affichage de {{count}} sur {{total}} roches",
-    "noRocksFound": "Aucune roche trouvee",
+    "noRocksFound": "Aucune roche trouvée",
     "noRocksHint": "Essayez d'ajuster vos filtres ou votre recherche"
   },
   "filters": {
-    "searchPlaceholder": "Rechercher des roches...",
+    "searchPlaceholder": "Recherche...",
     "filters": "Filtres :",
-    "allSystems": "Tous les systemes",
-    "allBodies": "Tous les corps",
-    "allMinerals": "Tous les mineraux"
+    "allSystems": "Tous les systèmes",
+    "allBodies": "Tous les astres",
+    "allMinerals": "Tous les minéraux"
   },
   "rockCard": {
     "primary": "Primaire :",
     "secondary": "Secondaire :",
     "none": "Aucun",
-    "inertMaterial": "Materiau inerte :",
+    "inertMaterial": "Matériau inerte :",
     "yes": "Oui",
     "no": "Non",
-    "celestialBody": "Corps celeste :",
-    "system": "Systeme :",
-    "quality": "Qualite :"
+    "celestialBody": "Astre :",
+    "system": "Système :",
+    "quality": "Qualité :"
   },
   "languages": {
     "en": "Anglais",
-    "fr": "Francais"
+    "fr": "Français"
   }
 }

@@ -22,10 +22,10 @@ export function LanguageSelector() {
 
   return (
     <Select value={i18n.language} onValueChange={handleLanguageChange}>
-      <SelectTrigger className="w-[100px] border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
+      <SelectTrigger className="w-24 md:w-18 border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
         <SelectValue>
           <span className="flex items-center gap-2">
-            <span>{currentLanguage.flag}</span>
+            <span className="flex md:hidden">{currentLanguage.flag}</span>
             <span className="uppercase">{currentLanguage.code}</span>
           </span>
         </SelectValue>
@@ -38,9 +38,9 @@ export function LanguageSelector() {
             className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
           >
             <span className="flex items-center gap-2">
-              <span>{lang.flag}</span>
+              <span className="flex md:hidden">{lang.flag}</span>
               <span className="uppercase">{lang.code}</span>
-              <span className="text-slate-400">- {lang.name}</span>
+              <span className="text-slate-400 hidden md:flex">- {lang.name}</span>
             </span>
           </SelectItem>
         ))}

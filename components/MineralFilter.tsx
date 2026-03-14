@@ -59,7 +59,7 @@ export function MineralFilter({
       </div>
 
       {/* Filter Row */}
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-col md:flex-row flex-wrap items-center gap-3">
         <div className="flex items-center gap-2 text-slate-400">
           <Filter className="h-4 w-4" />
           <span className="text-sm">{t("filters.filters")}</span>
