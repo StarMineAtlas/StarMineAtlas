@@ -39,7 +39,7 @@ export function MineralFilter({
   const { t } = useTranslation()
 
   // State filters
-  const [minerals, setMinerals] = useState<{ name: string }[]>([])
+  const [minerals, setMinerals] = useState<{ name: string; type: string }[]>([])
   const [systems, setSystems] = useState<{ name: string }[]>([])
   const [bodies, setBodies] = useState<{ name: string, system: string }[]>([])
 
@@ -74,6 +74,13 @@ export function MineralFilter({
       .then(res => res.json())
       .then(data => setBodies(data))
   }, []);
+
+  // Regroup minerals by type
+  const mineralsByType = minerals.reduce<{ [key: string]: { name: string; type: string }[] }>((acc, mineral) => {
+    if (!acc[mineral.type]) acc[mineral.type] = [];
+    acc[mineral.type].push(mineral);
+    return acc;
+  }, {});
 
   // Get available bodies based on selected system
   const availableBodies =
@@ -150,15 +157,30 @@ export function MineralFilter({
               >
                 {t("filters.allBodies")}
               </SelectItem>
-              {availableBodies && availableBodies.length > 0 && availableBodies.map((body) => (
-                <SelectItem
-                  key={body.name}
-                  value={body.name}
-                  className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
-                >
-                  {body.name}
-                </SelectItem>
-              ))}
+              {/* Group bodies by system */}
+              {(() => {
+                const bodiesBySystem = availableBodies.reduce<{ [key: string]: { name: string; system: string }[] }>((acc, body) => {
+                  if (!acc[body.system]) acc[body.system] = [];
+                  acc[body.system].push(body);
+                  return acc;
+                }, {});
+                return Object.entries(bodiesBySystem).map(([system, bodiesList]) => (
+                  <div key={system}>
+                    <div className="px-2 py-1 text-xs font-semibold text-cyan-300/80 uppercase select-none">
+                      {system}
+                    </div>
+                    {bodiesList.map((body) => (
+                      <SelectItem
+                        key={body.name}
+                        value={body.name}
+                        className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
+                      >
+                        {body.name}
+                      </SelectItem>
+                    ))}
+                  </div>
+                ));
+              })()}
             </SelectContent>
           </Select>
         </div>
@@ -177,14 +199,22 @@ export function MineralFilter({
               >
                 {t("filters.allMinerals")}
               </SelectItem>
-              {minerals && minerals.length > 0 && minerals.map((mineral) => (
-                <SelectItem
-                  key={mineral.name}
-                  value={mineral.name}
-                  className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
-                >
-                  {mineral.name}
-                </SelectItem>
+              {/* Group minerals by type */}
+              {Object.entries(mineralsByType).map(([type, mineralsList]) => (
+                <div key={type}>
+                  <div className="px-2 py-1 text-xs font-semibold text-cyan-300/80 uppercase select-none">
+                    {type}
+                  </div>
+                  {mineralsList.map((mineral) => (
+                    <SelectItem
+                      key={mineral.name}
+                      value={mineral.name}
+                      className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
+                    >
+                      {mineral.name}
+                    </SelectItem>
+                  ))}
+                </div>
               ))}
             </SelectContent>
           </Select>
