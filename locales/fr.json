@@ -10,7 +10,8 @@
     "infoZone": "Note : Les statistiques des minerais sont en cours de collecte et représentent seulement un échantillon et des moyennes. Il se peut que cela ne reflète pas parfaitement la réalité en jeu, car vous pouvez trouver n'importe quelle qualité de minerai sur les astres. Ces données pourraient devenir inutiles à l'avenir ou être remises en question en fonction des mises à jour du jeu.",
     "showing": "Affichage de {{count}} sur {{total}} roches",
     "noRocksFound": "Aucune roche trouvee",
-    "noRocksHint": "Essayez d'ajuster vos filtres ou votre recherche"
+    "noRocksHint": "Essayez d'ajuster vos filtres ou votre recherche",
+    "loading": "Chargement des roches..."
   },
   "marketPrice": {
     "title": "Prix du Marche",

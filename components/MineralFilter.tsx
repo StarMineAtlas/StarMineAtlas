@@ -13,6 +13,7 @@ import { Filter, Search, Globe, MapPin, Gem } from "lucide-react"
 
 import { useEffect, useState } from "react"
 import { set } from "date-fns"
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"
 
 interface MineralFilterProps {
   selectedMineral: string
@@ -61,15 +62,15 @@ export function MineralFilter({
   }, [searchQuery])
 
   useEffect(() => {
-    fetch("https://opensheet.elk.sh/1gf4hgqlLAYay5t28aKQ5uyRizWfIRfg7iLLLyPi-Uv4/minerals")
+    fetch(API_BASE_URL + API_ENDPOINTS.minerals)
       .then(res => res.json())
       .then(data => setMinerals(data))
 
-    fetch("https://opensheet.elk.sh/1gf4hgqlLAYay5t28aKQ5uyRizWfIRfg7iLLLyPi-Uv4/systems")
+    fetch(API_BASE_URL + API_ENDPOINTS.systems)
       .then(res => res.json())
       .then(data => setSystems(data))
 
-    fetch("https://opensheet.elk.sh/1gf4hgqlLAYay5t28aKQ5uyRizWfIRfg7iLLLyPi-Uv4/bodies")
+    fetch(API_BASE_URL + API_ENDPOINTS.bodies)
       .then(res => res.json())
       .then(data => setBodies(data))
   }, []);

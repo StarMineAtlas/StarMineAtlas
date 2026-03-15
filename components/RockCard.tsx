@@ -4,21 +4,11 @@ import { useTranslation } from "react-i18next"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Gem, Layers, CircleDot, Globe, MapPin, Activity } from "lucide-react"
-
-interface Rock {
-  name: string
-  system: string
-  body: string
-  primary: string
-  secondary: string[]
-  min: number
-  max: number
-  med: number
-}
+import { Rock, RockSecondaries } from "@/models/Rock"
 
 interface RockCardProps {
   rock: Rock
-  secondaries: { mineral: string; min: number; max: number; med: number }[]
+  secondaries: RockSecondaries[]
 }
 
 function getQualityColor(min: number, max: number): string {
