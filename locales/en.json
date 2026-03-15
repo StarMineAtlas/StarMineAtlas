@@ -22,7 +22,9 @@
     "filters": "Filters:",
     "allSystems": "All Systems",
     "allBodies": "All Bodies",
-    "allMinerals": "All Minerals"
+    "allMinerals": "All Minerals",
+    "expandAll": "Expand All",
+    "collapseAll": "Collapse All"
   },
   "rockCard": {
     "primary": "Primary:",

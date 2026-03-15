@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo, useEffect, useCallback } from "react"
 import { useTranslation } from "react-i18next"
 import { Header } from "@/components/Header"
 import { RockCard } from "@/components/RockCard"
@@ -27,6 +27,10 @@ export default function Home() {
 
   const [rocks, setRocks] = useState<Rock[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  
+  // Expand/collapse state
+  const [allExpanded, setAllExpanded] = useState(true)
+  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set())
 
   const filteredRocks = useMemo(() => {
     if (isLoading) return [];
@@ -69,6 +73,32 @@ export default function Home() {
     })
   }, [rocks, selectedMineral, selectedSystem, selectedBody, searchQuery, isLoading])
 
+  // Initialize expanded cards when rocks load or allExpanded changes
+  useEffect(() => {
+    if (allExpanded) {
+      const allKeys = rocks.map((rock, index) => `${rock.name}-${rock.system}-${index}`)
+      setExpandedCards(new Set(allKeys))
+    } else {
+      setExpandedCards(new Set())
+    }
+  }, [allExpanded, rocks])
+
+  const toggleCard = useCallback((cardKey: string) => {
+    setExpandedCards(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(cardKey)) {
+        newSet.delete(cardKey)
+      } else {
+        newSet.add(cardKey)
+      }
+      return newSet
+    })
+  }, [])
+
+  const handleToggleAllExpanded = useCallback((expanded: boolean) => {
+    setAllExpanded(expanded)
+  }, [])
+
   //https://docs.google.com/spreadsheets/d/1O011Te_Gef5QkjmnYN_YqAqFih9oajtbyyB9YDHY0JM/edit?gid=1663930457#gid=1663930457
   //https://docs.google.com/spreadsheets/d/1gf4hgqlLAYay5t28aKQ5uyRizWfIRfg7iLLLyPi-Uv4/edit?gid=775399035#gid=775399035
 
@@ -87,7 +117,6 @@ export default function Home() {
           max: parseInt(item.max, 10),
           med: parseInt(item.med, 10),
         }))
-        console.log("Fetched rocks data:", rocksData);
         setRocks(rocksData);
         setIsLoading(false);
       })
@@ -137,6 +166,8 @@ export default function Home() {
             onBodyChange={setSelectedBody}
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
+            allExpanded={allExpanded}
+            onToggleAllExpanded={handleToggleAllExpanded}
           />
         </div>
 
@@ -153,9 +184,18 @@ export default function Home() {
           </div>
         ) : rocks.length > 0 && filteredRocks.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredRocks.map((rock, index) => (
-              <RockCard key={`${rock.name}-${rock.system}-${index}`} rock={rock} secondaries={getSecondaryQualityStat(rock.secondary, rock.body)} />
-            ))}
+            {filteredRocks.map((rock, index) => {
+              const cardKey = `${rock.name}-${rock.system}-${index}`
+              return (
+                <RockCard 
+                  key={cardKey} 
+                  rock={rock} 
+                  secondaries={getSecondaryQualityStat(rock.secondary, rock.body)}
+                  isExpanded={expandedCards.has(cardKey)}
+                  onToggle={() => toggleCard(cardKey)}
+                />
+              )
+            })}
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16">
