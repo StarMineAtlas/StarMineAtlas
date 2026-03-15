@@ -22,9 +22,7 @@
     "filters": "Filtres :",
     "allSystems": "Tous les systemes",
     "allBodies": "Tous les astres",
-    "allMinerals": "Tous les mineraux",
-    "expandAll": "Tout deployer",
-    "collapseAll": "Tout replier"
+    "allMinerals": "Tous les mineraux"
   },
   "rockCard": {
     "primary": "Primaire :",

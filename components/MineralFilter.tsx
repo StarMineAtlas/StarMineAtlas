@@ -9,11 +9,10 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
-import { Filter, Search, Globe, MapPin, Gem, Maximize2, Minimize2 } from "lucide-react"
+import { Filter, Search, Globe, MapPin, Gem } from "lucide-react"
 
 import { useEffect, useState } from "react"
+import { set } from "date-fns"
 
 interface MineralFilterProps {
   selectedMineral: string
@@ -24,8 +23,6 @@ interface MineralFilterProps {
   onBodyChange: (body: string) => void
   searchQuery: string
   onSearchChange: (query: string) => void
-  allExpanded: boolean
-  onToggleAllExpanded: (expanded: boolean) => void
 }
 
 export function MineralFilter({
@@ -37,8 +34,6 @@ export function MineralFilter({
   onBodyChange,
   searchQuery,
   onSearchChange,
-  allExpanded,
-  onToggleAllExpanded,
 }: MineralFilterProps) {
   const { t } = useTranslation()
 
@@ -192,24 +187,6 @@ export function MineralFilter({
               ))}
             </SelectContent>
           </Select>
-        </div>
-
-        {/* Expand/Collapse Toggle */}
-        <div className="flex items-center gap-2 ml-auto">
-          {allExpanded ? (
-            <Minimize2 className="h-4 w-4 text-slate-500" />
-          ) : (
-            <Maximize2 className="h-4 w-4 text-slate-500" />
-          )}
-          <Label htmlFor="expand-toggle" className="text-sm text-slate-400 cursor-pointer" suppressHydrationWarning>
-            {allExpanded ? t("filters.collapseAll") : t("filters.expandAll")}
-          </Label>
-          <Switch
-            id="expand-toggle"
-            checked={allExpanded}
-            onCheckedChange={onToggleAllExpanded}
-            className="data-[state=checked]:bg-cyan-600"
-          />
         </div>
       </div>
     </div>
