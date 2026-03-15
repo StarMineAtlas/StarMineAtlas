@@ -13,8 +13,8 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const navLinks = [
-    { href: "/", label: t("header.rockTypes") },
-    { href: "/market-price", label: t("header.marketPrice") },
+    { href: "/", label: "header.rockTypes" },
+    { href: "/market-price", label: "header.marketPrice" },
   ]
 
   return (
@@ -30,15 +30,15 @@ export function Header() {
         {/* Desktop Navigation */}
         <div className="hidden items-center gap-6 md:flex">
           <nav className="flex items-center gap-6">
-            {navLinks.map((link) => (
+            {navLinks && navLinks.length > 0 && navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-medium transition-colors hover:text-cyan-400 ${
-                  pathname === link.href ? "text-cyan-400" : "text-slate-400"
-                }`}
+                className={`text-sm font-medium transition-colors hover:text-cyan-400 ${pathname === link.href ? "text-cyan-400" : "text-slate-400"
+                  }`}
+                suppressHydrationWarning
               >
-                {link.label}
+                {t(link.label)}
               </Link>
             ))}
           </nav>
@@ -65,16 +65,16 @@ export function Header() {
       {mobileMenuOpen && (
         <div className="border-t border-cyan-900/50 bg-slate-950/95 backdrop-blur-md md:hidden">
           <nav className="flex flex-col px-4 py-4">
-            {navLinks.map((link) => (
+            {navLinks && navLinks.length > 0 && navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${
-                  pathname === link.href ? "text-cyan-400" : "text-slate-400"
-                }`}
+                className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === link.href ? "text-cyan-400" : "text-slate-400"
+                  }`}
+                suppressHydrationWarning
               >
-                {link.label}
+                {t(link.label)}
               </Link>
             ))}
           </nav>
