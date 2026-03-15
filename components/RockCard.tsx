@@ -37,7 +37,6 @@ function getQualityTextColor(min: number, max: number): string {
   return "text-green-400"
 }
 
-
 export function RockCard({ rock, secondaries, isExpanded, onToggle }: RockCardProps) {
   const { t } = useTranslation()
   const [minPrimary, maxPrimary, medPrimary] = [rock.min, rock.max, rock.med]
@@ -67,6 +66,31 @@ export function RockCard({ rock, secondaries, isExpanded, onToggle }: RockCardPr
         </CardTitle>
       </CardHeader>
 
+      {/* Collapsed: Show summary info */}
+      {!isExpanded && (
+        <CardContent className="pt-0 pb-3">
+          <div className="flex flex-wrap items-center gap-2 text-sm">
+            <Badge
+              variant="secondary"
+              className="border-cyan-700/50 bg-cyan-950/50 text-cyan-300 font-semibold"
+            >
+              {rock.primary}
+            </Badge>
+            <span className="text-slate-500">|</span>
+            <span className="text-slate-400 text-xs flex items-center gap-1">
+              <MapPin className="h-3 w-3" />
+              {rock.body}
+            </span>
+            <span className="text-slate-500">|</span>
+            <span className="text-slate-400 text-xs flex items-center gap-1">
+              <Globe className="h-3 w-3" />
+              {rock.system}
+            </span>
+          </div>
+        </CardContent>
+      )}
+
+      {/* Expanded: Full details */}
       {isExpanded && (
         <CardContent className="space-y-3 text-sm">
           {/* Ressources (primaire + secondaires) */}
