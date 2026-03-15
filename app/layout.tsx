@@ -8,25 +8,20 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Mining Atlas | Star Citizen Mining Helper',
+  title: 'Star Mine Atlas | Star Citizen Mining Helper',
   description: 'Your comprehensive guide to mining in Star Citizen. Browse rock types, minerals, and compositions.',
-  generator: 'v0.app',
   icons: {
     icon: [
       {
-        url: '/icon-light-32x32.png',
+        url: '/sma-logo.png',
         media: '(prefers-color-scheme: light)',
       },
       {
-        url: '/icon-dark-32x32.png',
+        url: '/sma-logo.png',
         media: '(prefers-color-scheme: dark)',
       },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
     ],
-    apple: '/apple-icon.png',
+    apple: '/sma-logo.png',
   },
 }
 
