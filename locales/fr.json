@@ -2,6 +2,7 @@
   "header": {
     "siteName": "Star Mine Atlas",
     "rockTypes": "Types de Roches",
+    "qualityDistribution": "Repartition qualite",
     "marketPrice": "Prix du Marche"
   },
   "home": {
@@ -12,6 +13,11 @@
     "noRocksFound": "Aucune roche trouvee",
     "noRocksHint": "Essayez d'ajuster vos filtres ou votre recherche",
     "loading": "Chargement des roches..."
+  },
+  "qualityDistribution": {
+    "title": "Repartition qualite",
+    "description": "Distribution des qualites de minerais par systeme stellaire.",
+    "legend": "Chaque barre represente le pourcentage de roches dont la qualite se situe dans cet intervalle pour un systeme donne."
   },
   "marketPrice": {
     "title": "Prix du Marche",

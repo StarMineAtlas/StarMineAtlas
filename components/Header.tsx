@@ -14,6 +14,7 @@ export function Header() {
 
   const navLinks = [
     { href: "/", label: "header.rockTypes" },
+    { href: "/quality-distribution", label: "header.qualityDistribution" },
     { href: "/market-price", label: "header.marketPrice" },
   ]
 
