@@ -61,35 +61,43 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
               >
                 {rock.primary}
               </Badge>
-              <span className={`ml-2 font-mono text-xs ${getQualityTextColor(minPrimary, maxPrimary)}`}>{minPrimary} – {maxPrimary}</span>
+              {rock.max > 0 && (
+                <span className={`ml-2 font-mono text-xs ${getQualityTextColor(minPrimary, maxPrimary)}`}>{minPrimary} – {maxPrimary}</span>
+              )}
             </div>
-            <div className="relative h-2 w-full max-w-xs overflow-visible rounded-full bg-slate-800 mt-2">
-              <div className="relative h-full w-full">
-                <div
-                  id={`${rock.name}-primary-quality`}
-                  className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 ${getQualityColor(minPrimary, maxPrimary)} group/qualitybar`}
-                  style={{ left: `${minPrimaryPercent}%`, width: `${maxPrimaryPercent - minPrimaryPercent}%` }}
-                >
-                  {/* Tooltip for median, only on bar hover */}
-                  <div
-                    className="pointer-events-none absolute left-1/2 bottom-0 z-20 translate-y-full -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-xs text-cyan-200 opacity-0 shadow transition-opacity duration-200 group-hover/qualitybar:opacity-100"
-                    style={{ minWidth: '80px' }}
-                  >
-                    {t("rockCard.median")} <span className="font-mono">{medPrimary}</span>
+            {rock.max > 0 ? (
+              <>
+                <div className="relative h-2 w-full max-w-xs overflow-visible rounded-full bg-slate-800 mt-2">
+                  <div className="relative h-full w-full">
+                    <div
+                      id={`${rock.name}-primary-quality`}
+                      className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 ${getQualityColor(minPrimary, maxPrimary)} group/qualitybar`}
+                      style={{ left: `${minPrimaryPercent}%`, width: `${maxPrimaryPercent - minPrimaryPercent}%` }}
+                    >
+                      {/* Tooltip for median, only on bar hover */}
+                      <div
+                        className="pointer-events-none absolute left-1/2 bottom-0 z-20 translate-y-full -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-xs text-cyan-200 opacity-0 shadow transition-opacity duration-200 group-hover/qualitybar:opacity-100"
+                        style={{ minWidth: '80px' }}
+                      >
+                        {t("rockCard.median")} <span className="font-mono">{medPrimary}</span>
+                      </div>
+                    </div>
+                    <div
+                      id={`${rock.name}-primary-median`}
+                      className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 bg-white`}
+                      style={{ left: `${medPrimaryPercent}%`, width: `4px` }} />
                   </div>
+                </div><div className="flex justify-between text-[10px] text-slate-500 px-1 mb-1 max-w-xs w-full">
+                  <span>0</span>
+                  <span className="text-white flex md:hidden">{t("rockCard.median")} {medPrimary}</span>
+                  <span>1000</span>
                 </div>
-                <div
-                  id={`${rock.name}-primary-median`}
-                  className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 bg-white`}
-                  style={{ left: `${medPrimaryPercent}%`, width: `4px` }}
-                />
+              </>
+            ) : (
+              <div className="rounded bg-slate-800/70 px-2 py-1 text-[11px] text-slate-400 max-w-xs w-fit border border-slate-700 mt-2">
+                {t("rockCard.notEnoughData")}
               </div>
-            </div>
-            <div className="flex justify-between text-[10px] text-slate-500 px-1 mb-1 max-w-xs w-full">
-              <span>0</span>
-              <span className="text-white flex md:hidden">{t("rockCard.median")} {medPrimary}</span>
-              <span>1000</span>
-            </div>
+            )}
           </div>
 
           {/* Secondaires */}
@@ -116,35 +124,45 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
                       >
                         {sec.mineral}
                       </Badge>
-                      <span className={`font-mono text-xs ${getQualityTextColor(minSec, maxSec)}`}>{minSec} – {maxSec}</span>
+                      {sec.max > 0 && (
+                        <span className={`font-mono text-xs ${getQualityTextColor(minSec, maxSec)}`}>{minSec} – {maxSec}</span>
+                      )}
                     </div>
-                    <div className="relative h-1.5 w-full max-w-xs overflow-visible rounded-full bg-slate-800 mt-2">
-                      <div className="relative h-full w-full">
-                        <div
-                          id={`${sec.mineral}-secondary-quality`}
-                          className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 ${getQualityColor(minSec, maxSec)} group/qualitybar-secondary`}
-                          style={{ left: `${minSecPercent}%`, width: `${maxSecPercent - minSecPercent}%` }}
-                        >
-                          {/* Tooltip for median, only on bar hover */}
-                          <div
-                            className="pointer-events-none absolute left-1/2 bottom-0 z-20 translate-y-full -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-xs text-cyan-200 opacity-0 shadow transition-opacity duration-200 group-hover/qualitybar-secondary:opacity-100"
-                            style={{ minWidth: '80px' }}
-                          >
-                            {t("rockCard.median")} <span className="font-mono">{medSec}</span>
+                    {sec.max > 0 ? (
+                      <>
+                        <div className="relative h-1.5 w-full max-w-xs overflow-visible rounded-full bg-slate-800 mt-2">
+                          <div className="relative h-full w-full">
+                            <div
+                              id={`${sec.mineral}-secondary-quality`}
+                              className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 ${getQualityColor(minSec, maxSec)} group/qualitybar-secondary`}
+                              style={{ left: `${minSecPercent}%`, width: `${maxSecPercent - minSecPercent}%` }}
+                            >
+                              {/* Tooltip for median, only on bar hover */}
+                              <div
+                                className="pointer-events-none absolute left-1/2 bottom-0 z-20 translate-y-full -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-xs text-cyan-200 opacity-0 shadow transition-opacity duration-200 group-hover/qualitybar-secondary:opacity-100"
+                                style={{ minWidth: '80px' }}
+                              >
+                                {t("rockCard.median")} <span className="font-mono">{medSec}</span>
+                              </div>
+                            </div>
+                            <div
+                              id={`${sec.mineral}-secondary-median`}
+                              className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 bg-white`}
+                              style={{ left: `${medSecPercent}%`, width: `4px` }}
+                            />
                           </div>
                         </div>
-                        <div
-                          id={`${sec.mineral}-secondary-median`}
-                          className={`absolute rounded-xl left-0 top-0 h-full transition-all duration-500 bg-white`}
-                          style={{ left: `${medSecPercent}%`, width: `4px` }}
-                        />
+                        <div className="flex justify-between text-[10px] text-slate-500 px-1 mb-1 max-w-xs w-full">
+                          <span>0</span>
+                          <span className="text-white flex md:hidden">{t("rockCard.median")} {medSec}</span>
+                          <span>1000</span>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="rounded bg-slate-800/70 px-2 py-1 text-[11px] text-slate-400 max-w-xs w-fit border border-slate-700 mt-2 mb-2">
+                        {t("rockCard.notEnoughData")}
                       </div>
-                    </div>
-                    <div className="flex justify-between text-[10px] text-slate-500 px-1 mb-1 max-w-xs w-full">
-                      <span>0</span>
-                      <span className="text-white flex md:hidden">{t("rockCard.median")} {medSec}</span>
-                      <span>1000</span>
-                    </div>
+                    )}
                   </div>
                 )
               })}
