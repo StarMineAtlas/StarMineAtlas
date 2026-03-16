@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useEffect, useState } from "react"
+import { useRef, useEffect, useCallback } from "react"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,70 +19,99 @@ interface QualityChartProps {
   data: QualityDistributionData
 }
 
-// Sci-fi themed colors for star systems with gradient stops
+// Sci-fi themed colors for star systems
 const systemColors: Record<string, { 
-  start: string
-  end: string
+  solid: string
   border: string
-  glow: string 
+  hover: string
 }> = {
   Stanton: {
-    start: "rgba(34, 211, 238, 0.95)",
-    end: "rgba(6, 182, 212, 0.6)",
+    solid: "rgba(34, 211, 238, 0.85)",
     border: "rgba(34, 211, 238, 1)",
-    glow: "rgba(34, 211, 238, 0.4)",
+    hover: "rgba(34, 211, 238, 1)",
   },
   Pyro: {
-    start: "rgba(251, 191, 36, 0.95)",
-    end: "rgba(245, 158, 11, 0.6)",
+    solid: "rgba(251, 191, 36, 0.85)",
     border: "rgba(251, 191, 36, 1)",
-    glow: "rgba(251, 191, 36, 0.4)",
+    hover: "rgba(251, 191, 36, 1)",
   },
   Nyx: {
-    start: "rgba(236, 72, 153, 0.95)",
-    end: "rgba(219, 39, 119, 0.6)",
+    solid: "rgba(236, 72, 153, 0.85)",
     border: "rgba(236, 72, 153, 1)",
-    glow: "rgba(236, 72, 153, 0.4)",
+    hover: "rgba(236, 72, 153, 1)",
   },
-}
-
-function createGradient(ctx: CanvasRenderingContext2D, chartArea: { top: number; bottom: number }, colors: { start: string; end: string }) {
-  const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top)
-  gradient.addColorStop(0, colors.end)
-  gradient.addColorStop(1, colors.start)
-  return gradient
 }
 
 export function QualityChart({ data }: QualityChartProps) {
   const chartRef = useRef<ChartJS<"bar">>(null)
-  const [gradients, setGradients] = useState<Record<string, CanvasGradient | string>>({})
+
+  const createGradients = useCallback(() => {
+    const chart = chartRef.current
+    if (!chart) return null
+
+    const ctx = chart.ctx
+    const chartArea = chart.chartArea
+    if (!chartArea) return null
+
+    const gradients: Record<string, CanvasGradient> = {}
+    
+    // Stanton - cyan gradient
+    const stantonGradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top)
+    stantonGradient.addColorStop(0, "rgba(6, 182, 212, 0.4)")
+    stantonGradient.addColorStop(0.5, "rgba(34, 211, 238, 0.7)")
+    stantonGradient.addColorStop(1, "rgba(34, 211, 238, 0.95)")
+    gradients["Stanton"] = stantonGradient
+
+    // Pyro - amber/gold gradient
+    const pyroGradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top)
+    pyroGradient.addColorStop(0, "rgba(245, 158, 11, 0.4)")
+    pyroGradient.addColorStop(0.5, "rgba(251, 191, 36, 0.7)")
+    pyroGradient.addColorStop(1, "rgba(251, 191, 36, 0.95)")
+    gradients["Pyro"] = pyroGradient
+
+    // Nyx - magenta/pink gradient
+    const nyxGradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top)
+    nyxGradient.addColorStop(0, "rgba(219, 39, 119, 0.4)")
+    nyxGradient.addColorStop(0.5, "rgba(236, 72, 153, 0.7)")
+    nyxGradient.addColorStop(1, "rgba(236, 72, 153, 0.95)")
+    gradients["Nyx"] = nyxGradient
+
+    return gradients
+  }, [])
 
   useEffect(() => {
     const chart = chartRef.current
     if (!chart) return
 
-    const ctx = chart.ctx
-    const chartArea = chart.chartArea
-    if (!chartArea) return
+    const updateGradients = () => {
+      const gradients = createGradients()
+      if (!gradients) return
 
-    const newGradients: Record<string, CanvasGradient> = {}
-    Object.entries(systemColors).forEach(([system, colors]) => {
-      newGradients[system] = createGradient(ctx, chartArea, colors)
-    })
-    setGradients(newGradients)
-  }, [])
+      chart.data.datasets.forEach((dataset, index) => {
+        const systemName = Object.keys(data.systems)[index]
+        if (gradients[systemName]) {
+          dataset.backgroundColor = gradients[systemName]
+        }
+      })
+      chart.update("none")
+    }
+
+    // Small delay to ensure chart is fully rendered
+    const timer = setTimeout(updateGradients, 50)
+    return () => clearTimeout(timer)
+  }, [createGradients, data.systems])
 
   const chartData = {
     labels: data.ranges,
     datasets: Object.entries(data.systems).map(([system, values]) => ({
       label: system,
       data: values,
-      backgroundColor: gradients[system] || systemColors[system]?.start || "rgba(100, 100, 100, 0.7)",
+      backgroundColor: systemColors[system]?.solid || "rgba(100, 100, 100, 0.7)",
       borderColor: systemColors[system]?.border || "rgba(100, 100, 100, 1)",
       borderWidth: 2,
       borderRadius: 6,
       borderSkipped: false,
-      hoverBackgroundColor: systemColors[system]?.border || "rgba(100, 100, 100, 1)",
+      hoverBackgroundColor: systemColors[system]?.hover || "rgba(100, 100, 100, 1)",
       hoverBorderColor: "#ffffff",
       hoverBorderWidth: 2,
     })),
@@ -97,7 +126,21 @@ export function QualityChart({ data }: QualityChartProps) {
     },
     plugins: {
       legend: {
-        display: false,
+        display: true,
+        position: "top" as const,
+        align: "center" as const,
+        labels: {
+          color: "rgba(203, 213, 225, 0.95)",
+          font: {
+            size: 13,
+            weight: 500 as const,
+          },
+          padding: 20,
+          usePointStyle: true,
+          pointStyle: "rectRounded" as const,
+          boxWidth: 16,
+          boxHeight: 16,
+        },
       },
       tooltip: {
         backgroundColor: "rgba(2, 6, 23, 0.95)",
@@ -174,35 +217,40 @@ export function QualityChart({ data }: QualityChartProps) {
       const chartArea = chart.chartArea
       if (!chartArea) return
 
-      const newGradients: Record<string, CanvasGradient> = {}
-      Object.entries(systemColors).forEach(([system, colors]) => {
-        newGradients[system] = createGradient(ctx, chartArea, colors)
+      // Recreate gradients on resize
+      const stantonGradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top)
+      stantonGradient.addColorStop(0, "rgba(6, 182, 212, 0.4)")
+      stantonGradient.addColorStop(0.5, "rgba(34, 211, 238, 0.7)")
+      stantonGradient.addColorStop(1, "rgba(34, 211, 238, 0.95)")
+
+      const pyroGradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top)
+      pyroGradient.addColorStop(0, "rgba(245, 158, 11, 0.4)")
+      pyroGradient.addColorStop(0.5, "rgba(251, 191, 36, 0.7)")
+      pyroGradient.addColorStop(1, "rgba(251, 191, 36, 0.95)")
+
+      const nyxGradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top)
+      nyxGradient.addColorStop(0, "rgba(219, 39, 119, 0.4)")
+      nyxGradient.addColorStop(0.5, "rgba(236, 72, 153, 0.7)")
+      nyxGradient.addColorStop(1, "rgba(236, 72, 153, 0.95)")
+
+      const gradientMap: Record<string, CanvasGradient> = {
+        Stanton: stantonGradient,
+        Pyro: pyroGradient,
+        Nyx: nyxGradient,
+      }
+
+      chart.data.datasets.forEach((dataset) => {
+        if (dataset.label && gradientMap[dataset.label]) {
+          dataset.backgroundColor = gradientMap[dataset.label]
+        }
       })
-      setGradients(newGradients)
     },
   }
 
   return (
     <div className="relative">
-      {/* Centered legend at top */}
-      <div className="flex justify-center gap-8 mb-6">
-        {Object.entries(systemColors).map(([system, colors]) => (
-          <div key={system} className="flex items-center gap-2">
-            <div 
-              className="w-4 h-4 rounded"
-              style={{ 
-                background: `linear-gradient(to top, ${colors.end}, ${colors.start})`,
-                border: `2px solid ${colors.border}`,
-                boxShadow: `0 0 8px ${colors.glow}`,
-              }}
-            />
-            <span className="text-sm text-slate-300 font-medium">{system}</span>
-          </div>
-        ))}
-      </div>
-
       {/* Subtle glow effect behind the chart */}
-      <div className="absolute inset-0 top-12 bg-gradient-to-b from-cyan-500/5 via-transparent to-pink-500/5 rounded-lg pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 via-transparent to-pink-500/5 rounded-lg pointer-events-none" />
       
       {/* Chart container */}
       <div className="relative h-[450px] w-full p-4">
