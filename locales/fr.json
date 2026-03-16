@@ -3,7 +3,10 @@
     "siteName": "Star Mine Atlas",
     "rockTypes": "Types de Roches",
     "qualityDistribution": "Repartition qualite",
-    "marketPrice": "Prix du Marche"
+    "marketPrice": "Prix du Marche",
+    "data": "Données",
+    "refineryBonusesTable": "Table des Bonus de Raffinerie",
+    "marketPricesTable": "Table des Prix du Marché"
   },
   "home": {
     "title": "Types de Roches",

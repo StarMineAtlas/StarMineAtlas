@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 import { Pickaxe, Menu, X } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { LanguageSelector } from "./LanguageSelector"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu"
 
 export function Header() {
   const { t } = useTranslation()
@@ -14,7 +15,6 @@ export function Header() {
 
   const navLinks = [
     { href: "/", label: "header.rockTypes" },
-    { href: "/quality-distribution", label: "header.qualityDistribution" },
     { href: "/market-price", label: "header.marketPrice" },
   ]
 
@@ -42,6 +42,33 @@ export function Header() {
                 {t(link.label)}
               </Link>
             ))}
+            {/* Dropdown Data */}
+            <div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="text-sm font-medium transition-colors hover:text-cyan-400 text-slate-400 px-2 py-1 rounded-md">
+                    {t("header.data")}
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem asChild>
+                    <Link href="/quality-distribution" className={pathname === "/quality-distribution" ? "text-cyan-400" : "text-slate-400"}>
+                      {t("header.qualityDistribution")}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/refinery-bonuses-table" className={pathname === "/refinery-bonuses-table" ? "text-cyan-400" : "text-slate-400"}>
+                      {t("header.refineryBonusesTable")}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/market-prices-table" className={pathname === "/market-prices-table" ? "text-cyan-400" : "text-slate-400"}>
+                      {t("header.marketPricesTable")}
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </nav>
           <LanguageSelector />
         </div>
@@ -78,6 +105,13 @@ export function Header() {
                 {t(link.label)}
               </Link>
             ))}
+            {/* Dropdown Data for mobile */}
+            <div className="mt-2">
+              <span className="text-base font-medium text-slate-400 mb-1">{t("header.data")}</span>
+              <Link href="/quality-distribution" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/quality-distribution" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.qualityDistribution")}</Link>
+              <Link href="/refinery-bonuses-table" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/refinery-bonuses-table" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.refineryBonusesTable")}</Link>
+              <Link href="/market-prices-table" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/market-prices-table" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.marketPricesTable")}</Link>
+            </div>
           </nav>
           <div className="border-t border-cyan-900/50 px-4 py-4">
             <LanguageSelector />

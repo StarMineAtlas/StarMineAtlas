@@ -18,6 +18,7 @@ export default function QualityDistributionPage() {
 
   useEffect(() => {
     setIsLoading(true);
+
     fetch(API_BASE_URL + API_ENDPOINTS.graph)
       .then(res => res.json())
       .then(data => {

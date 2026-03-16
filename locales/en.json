@@ -3,7 +3,10 @@
     "siteName": "Star Mine Atlas",
     "rockTypes": "Rock Types",
     "qualityDistribution": "Quality Distribution",
-    "marketPrice": "Market Price"
+    "marketPrice": "Market Price",
+    "data": "Data",
+    "refineryBonusesTable": "Refinery Bonuses Table",
+    "marketPricesTable": "Market Prices Table"
   },
   "home": {
     "title": "Rock Types",
