@@ -6,17 +6,8 @@ import { Header } from "@/components/Header"
 import { RockCard } from "@/components/RockCard"
 import { MineralFilter } from "@/components/MineralFilter"
 import { Mountain } from "lucide-react"
-
-interface Rock {
-  name: string
-  system: string
-  body: string
-  primary: string
-  secondary: string[]
-  min: number
-  max: number
-  med: number
-}
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"
+import { Rock } from "@/models/Rock"
 
 export default function Home() {
   const { t } = useTranslation()
@@ -66,15 +57,12 @@ export default function Home() {
       }
 
       return 0
-    })
+    }).filter(rock => !rock.isHidden)
   }, [rocks, selectedMineral, selectedSystem, selectedBody, searchQuery, isLoading])
-
-  //https://docs.google.com/spreadsheets/d/1O011Te_Gef5QkjmnYN_YqAqFih9oajtbyyB9YDHY0JM/edit?gid=1663930457#gid=1663930457
-  //https://docs.google.com/spreadsheets/d/1gf4hgqlLAYay5t28aKQ5uyRizWfIRfg7iLLLyPi-Uv4/edit?gid=775399035#gid=775399035
 
   useEffect(() => {
     setIsLoading(true);
-    fetch("https://opensheet.elk.sh/1gf4hgqlLAYay5t28aKQ5uyRizWfIRfg7iLLLyPi-Uv4/rocks")
+    fetch(API_BASE_URL + API_ENDPOINTS.rocks)
       .then(res => res.json())
       .then(data => {
         const rocksData = data.map((item: any) => ({
@@ -85,22 +73,22 @@ export default function Home() {
           secondary: item.secondary ? item.secondary.split(",").map((s: string) => s.trim()) : [],
           min: parseInt(item.min, 10),
           max: parseInt(item.max, 10),
-          med: parseInt(item.med, 10),
+          median: parseInt(item.median, 10),
+          isHidden: item.isHidden === "TRUE" || item.isHidden === true,
         }))
-        console.log("Fetched rocks data:", rocksData);
         setRocks(rocksData);
         setIsLoading(false);
       })
       .catch(() => setIsLoading(false));
   }, []);
 
-  function getSecondaryQualityStat(secondaries: string[], body: string): { mineral: string, min: number, max: number, med: number }[] {
+  function getSecondaryQualityStat(secondaries: string[], body: string): { mineral: string, min: number, max: number, median: number }[] {
     if (secondaries.length === 0) return [];
     return secondaries.map((mineral) => ({
       mineral,
       min: rocks.find(r => r.body === body && (r.primary === mineral))?.min || 0,
       max: rocks.find(r => r.body === body && (r.primary === mineral))?.max || 0,
-      med: rocks.find(r => r.body === body && (r.primary === mineral))?.med || 0,
+      median: rocks.find(r => r.body === body && (r.primary === mineral))?.median || 0,
     }))
   }
 

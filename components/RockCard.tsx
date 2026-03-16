@@ -4,21 +4,11 @@ import { useTranslation } from "react-i18next"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Gem, Layers, CircleDot, Globe, MapPin, Activity } from "lucide-react"
-
-interface Rock {
-  name: string
-  system: string
-  body: string
-  primary: string
-  secondary: string[]
-  min: number
-  max: number
-  med: number
-}
+import { Rock, RockSecondaries } from "@/models/Rock"
 
 interface RockCardProps {
   rock: Rock
-  secondaries: { mineral: string; min: number; max: number; med: number }[]
+  secondaries: RockSecondaries[]
 }
 
 function getQualityColor(min: number, max: number): string {
@@ -38,7 +28,7 @@ function getQualityTextColor(min: number, max: number): string {
 
 export function RockCard({ rock, secondaries }: RockCardProps) {
   const { t } = useTranslation()
-  const [minPrimary, maxPrimary, medPrimary] = [rock.min, rock.max, rock.med]
+  const [minPrimary, maxPrimary, medPrimary] = [rock.min, rock.max, rock.median]
   const minPrimaryPercent = (minPrimary / 1000) * 100
   const maxPrimaryPercent = (maxPrimary / 1000) * 100
   const medPrimaryPercent = (medPrimary / 1000) * 100
@@ -112,8 +102,8 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
                   <span className="text-slate-500" suppressHydrationWarning>{t("rockCard.none")}</span>
                 )}
               </div>
-              {secondaries.map((sec: { mineral: string; min: number; max: number; med: number }) => {
-                const { min: minSec, max: maxSec, med: medSec } = sec
+              {secondaries.map((sec: { mineral: string; min: number; max: number; median: number }) => {
+                const { min: minSec, max: maxSec, median: medSec } = sec
                 const minSecPercent = (minSec / 1000) * 100
                 const maxSecPercent = (maxSec / 1000) * 100
                 const medSecPercent = (medSec / 1000) * 100
