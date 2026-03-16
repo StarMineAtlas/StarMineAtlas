@@ -2,6 +2,7 @@
   "header": {
     "siteName": "Star Mine Atlas",
     "rockTypes": "Rock Types",
+    "qualityDistribution": "Quality Distribution",
     "marketPrice": "Market Price"
   },
   "home": {
@@ -12,6 +13,11 @@
     "noRocksFound": "No rocks found",
     "noRocksHint": "Try adjusting your filters or search query",
     "loading": "Loading rocks..."
+  },
+  "qualityDistribution": {
+    "title": "Quality Distribution",
+    "description": "Distribution of mineral qualities by star system.",
+    "legend": "Each bar represents the percentage of rocks whose quality falls within that range for a given system."
   },
   "marketPrice": {
     "title": "Market Price",
