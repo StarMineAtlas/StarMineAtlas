@@ -1,5 +1,6 @@
 "use client"
 
+import { useRef, useEffect, useState } from "react"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -18,35 +19,65 @@ interface QualityChartProps {
   data: QualityDistributionData
 }
 
-// Sci-fi themed colors for star systems
-// Stanton: Cool cyan/teal - representing a stable, corporate system
-// Pyro: Warm amber/gold - representing the fiery, lawless system
-// Nyx: Deep magenta/pink - representing the mysterious, shadowy system
-const systemColors: Record<string, { bg: string; border: string; glow: string }> = {
+// Sci-fi themed colors for star systems with gradient stops
+const systemColors: Record<string, { 
+  start: string
+  end: string
+  border: string
+  glow: string 
+}> = {
   Stanton: {
-    bg: "rgba(34, 211, 238, 0.75)",
+    start: "rgba(34, 211, 238, 0.95)",
+    end: "rgba(6, 182, 212, 0.6)",
     border: "rgba(34, 211, 238, 1)",
     glow: "rgba(34, 211, 238, 0.4)",
   },
   Pyro: {
-    bg: "rgba(251, 191, 36, 0.75)",
+    start: "rgba(251, 191, 36, 0.95)",
+    end: "rgba(245, 158, 11, 0.6)",
     border: "rgba(251, 191, 36, 1)",
     glow: "rgba(251, 191, 36, 0.4)",
   },
   Nyx: {
-    bg: "rgba(236, 72, 153, 0.75)",
+    start: "rgba(236, 72, 153, 0.95)",
+    end: "rgba(219, 39, 119, 0.6)",
     border: "rgba(236, 72, 153, 1)",
     glow: "rgba(236, 72, 153, 0.4)",
   },
 }
 
+function createGradient(ctx: CanvasRenderingContext2D, chartArea: { top: number; bottom: number }, colors: { start: string; end: string }) {
+  const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top)
+  gradient.addColorStop(0, colors.end)
+  gradient.addColorStop(1, colors.start)
+  return gradient
+}
+
 export function QualityChart({ data }: QualityChartProps) {
+  const chartRef = useRef<ChartJS<"bar">>(null)
+  const [gradients, setGradients] = useState<Record<string, CanvasGradient | string>>({})
+
+  useEffect(() => {
+    const chart = chartRef.current
+    if (!chart) return
+
+    const ctx = chart.ctx
+    const chartArea = chart.chartArea
+    if (!chartArea) return
+
+    const newGradients: Record<string, CanvasGradient> = {}
+    Object.entries(systemColors).forEach(([system, colors]) => {
+      newGradients[system] = createGradient(ctx, chartArea, colors)
+    })
+    setGradients(newGradients)
+  }, [])
+
   const chartData = {
     labels: data.ranges,
     datasets: Object.entries(data.systems).map(([system, values]) => ({
       label: system,
       data: values,
-      backgroundColor: systemColors[system]?.bg || "rgba(100, 100, 100, 0.7)",
+      backgroundColor: gradients[system] || systemColors[system]?.start || "rgba(100, 100, 100, 0.7)",
       borderColor: systemColors[system]?.border || "rgba(100, 100, 100, 1)",
       borderWidth: 2,
       borderRadius: 6,
@@ -66,27 +97,14 @@ export function QualityChart({ data }: QualityChartProps) {
     },
     plugins: {
       legend: {
-        position: "top" as const,
-        align: "end" as const,
-        labels: {
-          color: "rgba(226, 232, 240, 0.95)",
-          font: {
-            size: 13,
-            weight: 500,
-          },
-          padding: 24,
-          usePointStyle: true,
-          pointStyle: "rectRounded",
-          boxWidth: 16,
-          boxHeight: 16,
-        },
+        display: false,
       },
       tooltip: {
         backgroundColor: "rgba(2, 6, 23, 0.95)",
         titleColor: "#22d3ee",
         titleFont: {
           size: 14,
-          weight: 600,
+          weight: 600 as const,
         },
         bodyColor: "rgba(226, 232, 240, 0.95)",
         bodyFont: {
@@ -124,7 +142,7 @@ export function QualityChart({ data }: QualityChartProps) {
           color: "rgba(148, 163, 184, 0.95)",
           font: {
             size: 12,
-            weight: 500,
+            weight: 500 as const,
           },
           padding: 8,
         },
@@ -141,7 +159,7 @@ export function QualityChart({ data }: QualityChartProps) {
           color: "rgba(148, 163, 184, 0.95)",
           font: {
             size: 12,
-            weight: 500,
+            weight: 500 as const,
           },
           padding: 12,
           callback: (value: any) => `${value}%`,
@@ -151,32 +169,44 @@ export function QualityChart({ data }: QualityChartProps) {
         max: 50,
       },
     },
+    onResize: (chart: ChartJS) => {
+      const ctx = chart.ctx
+      const chartArea = chart.chartArea
+      if (!chartArea) return
+
+      const newGradients: Record<string, CanvasGradient> = {}
+      Object.entries(systemColors).forEach(([system, colors]) => {
+        newGradients[system] = createGradient(ctx, chartArea, colors)
+      })
+      setGradients(newGradients)
+    },
   }
 
   return (
     <div className="relative">
-      {/* Subtle glow effect behind the chart */}
-      <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 via-transparent to-pink-500/5 rounded-lg pointer-events-none" />
-      
-      {/* Chart container */}
-      <div className="relative h-[450px] w-full p-4">
-        <Bar data={chartData} options={options} />
-      </div>
-      
-      {/* System color legend with glow indicators */}
-      <div className="flex justify-center gap-8 mt-4 pb-2">
+      {/* Centered legend at top */}
+      <div className="flex justify-center gap-8 mb-6">
         {Object.entries(systemColors).map(([system, colors]) => (
           <div key={system} className="flex items-center gap-2">
             <div 
-              className="w-3 h-3 rounded-full"
+              className="w-4 h-4 rounded"
               style={{ 
-                backgroundColor: colors.border,
-                boxShadow: `0 0 8px ${colors.glow}, 0 0 16px ${colors.glow}`,
+                background: `linear-gradient(to top, ${colors.end}, ${colors.start})`,
+                border: `2px solid ${colors.border}`,
+                boxShadow: `0 0 8px ${colors.glow}`,
               }}
             />
             <span className="text-sm text-slate-300 font-medium">{system}</span>
           </div>
         ))}
+      </div>
+
+      {/* Subtle glow effect behind the chart */}
+      <div className="absolute inset-0 top-12 bg-gradient-to-b from-cyan-500/5 via-transparent to-pink-500/5 rounded-lg pointer-events-none" />
+      
+      {/* Chart container */}
+      <div className="relative h-[450px] w-full p-4">
+        <Bar ref={chartRef} data={chartData} options={options} />
       </div>
     </div>
   )
