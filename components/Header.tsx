@@ -58,17 +58,17 @@ export function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem asChild>
-                    <Link href="/quality-distribution" className={pathname === "/quality-distribution" ? "text-cyan-400" : "text-slate-400"}>
+                    <Link href="/data/quality-distribution" className={pathname === "/data/quality-distribution" ? "text-cyan-400" : "text-slate-400"}>
                       {t("header.qualityDistribution")}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/refinery-bonuses-table" className={pathname === "/refinery-bonuses-table" ? "text-cyan-400" : "text-slate-400"}>
+                    <Link href="/data/refinery-bonuses-table" className={pathname === "/data/refinery-bonuses-table" ? "text-cyan-400" : "text-slate-400"}>
                       {t("header.refineryBonusesTable")}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/market-prices-table" className={pathname === "/market-prices-table" ? "text-cyan-400" : "text-slate-400"}>
+                    <Link href="/data/market-prices-table" className={pathname === "/data/market-prices-table" ? "text-cyan-400" : "text-slate-400"}>
                       {t("header.marketPricesTable")}
                     </Link>
                   </DropdownMenuItem>
