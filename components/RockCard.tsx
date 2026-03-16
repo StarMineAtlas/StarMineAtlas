@@ -28,7 +28,7 @@ function getQualityTextColor(min: number, max: number): string {
 
 export function RockCard({ rock, secondaries }: RockCardProps) {
   const { t } = useTranslation()
-  const [minPrimary, maxPrimary, medPrimary] = [rock.min, rock.max, rock.med]
+  const [minPrimary, maxPrimary, medPrimary] = [rock.min, rock.max, rock.median]
   const minPrimaryPercent = (minPrimary / 1000) * 100
   const maxPrimaryPercent = (maxPrimary / 1000) * 100
   const medPrimaryPercent = (medPrimary / 1000) * 100
@@ -102,8 +102,8 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
                   <span className="text-slate-500" suppressHydrationWarning>{t("rockCard.none")}</span>
                 )}
               </div>
-              {secondaries.map((sec: { mineral: string; min: number; max: number; med: number }) => {
-                const { min: minSec, max: maxSec, med: medSec } = sec
+              {secondaries.map((sec: { mineral: string; min: number; max: number; median: number }) => {
+                const { min: minSec, max: maxSec, median: medSec } = sec
                 const minSecPercent = (minSec / 1000) * 100
                 const maxSecPercent = (maxSec / 1000) * 100
                 const medSecPercent = (medSec / 1000) * 100

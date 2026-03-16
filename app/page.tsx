@@ -73,7 +73,7 @@ export default function Home() {
           secondary: item.secondary ? item.secondary.split(",").map((s: string) => s.trim()) : [],
           min: parseInt(item.min, 10),
           max: parseInt(item.max, 10),
-          med: parseInt(item.med, 10),
+          median: parseInt(item.median, 10),
           isHidden: item.isHidden === "TRUE" || item.isHidden === true,
         }))
         setRocks(rocksData);
@@ -82,13 +82,13 @@ export default function Home() {
       .catch(() => setIsLoading(false));
   }, []);
 
-  function getSecondaryQualityStat(secondaries: string[], body: string): { mineral: string, min: number, max: number, med: number }[] {
+  function getSecondaryQualityStat(secondaries: string[], body: string): { mineral: string, min: number, max: number, median: number }[] {
     if (secondaries.length === 0) return [];
     return secondaries.map((mineral) => ({
       mineral,
       min: rocks.find(r => r.body === body && (r.primary === mineral))?.min || 0,
       max: rocks.find(r => r.body === body && (r.primary === mineral))?.max || 0,
-      med: rocks.find(r => r.body === body && (r.primary === mineral))?.med || 0,
+      median: rocks.find(r => r.body === body && (r.primary === mineral))?.median || 0,
     }))
   }
 

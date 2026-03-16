@@ -7,12 +7,13 @@ export interface Rock {
     isHidden?: boolean
     min: number
     max: number
-    med: number
+    median: number
+    average: number
 }
 
 export interface RockSecondaries {
     mineral: string
     min: number
     max: number
-    med: number
+    median: number
 }
