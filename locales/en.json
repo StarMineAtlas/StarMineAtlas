@@ -17,7 +17,9 @@
   "qualityDistribution": {
     "title": "Quality Distribution",
     "description": "Distribution of mineral qualities by star system.",
-    "legend": "Each bar represents the percentage of rocks whose quality falls within that range for a given system."
+    "legend": "Each bar represents the percentage of rocks whose quality falls within that range for a given system.",
+    "loading": "Loading quality distribution...",
+    "noData": "No data available for quality distribution"
   },
   "marketPrice": {
     "title": "Market Price",

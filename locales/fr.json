@@ -17,7 +17,9 @@
   "qualityDistribution": {
     "title": "Repartition qualite",
     "description": "Distribution des qualites de minerais par systeme stellaire.",
-    "legend": "Chaque barre represente le pourcentage de roches dont la qualite se situe dans cet intervalle pour un systeme donne."
+    "legend": "Chaque barre represente le pourcentage de roches dont la qualite se situe dans cet intervalle pour un systeme donne.",
+    "loading": "Chargement de la repartition de qualite...",
+    "noData": "Aucune donnée disponible pour la répartition de qualité"
   },
   "marketPrice": {
     "title": "Prix du Marche",
