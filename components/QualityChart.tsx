@@ -11,7 +11,7 @@ import {
   Legend,
 } from "chart.js"
 import { Bar } from "react-chartjs-2"
-import { QualityDistributionData } from "@/data/qualityDistribution"
+import { QualityDistributionData } from "@/models/QualityDistribution"
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -20,7 +20,7 @@ interface QualityChartProps {
 }
 
 // Sci-fi themed colors for star systems
-const systemColors: Record<string, { 
+const systemColors: Record<string, {
   solid: string
   border: string
   hover: string
@@ -54,7 +54,7 @@ export function QualityChart({ data }: QualityChartProps) {
     if (!chartArea) return null
 
     const gradients: Record<string, CanvasGradient> = {}
-    
+
     // Stanton - cyan gradient
     const stantonGradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top)
     stantonGradient.addColorStop(0, "rgba(6, 182, 212, 0.4)")
@@ -209,7 +209,7 @@ export function QualityChart({ data }: QualityChartProps) {
           stepSize: 10,
         },
         beginAtZero: true,
-        max: 50,
+        max: 100,
       },
     },
     onResize: (chart: ChartJS) => {
@@ -251,7 +251,7 @@ export function QualityChart({ data }: QualityChartProps) {
     <div className="relative">
       {/* Subtle glow effect behind the chart */}
       <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 via-transparent to-pink-500/5 rounded-lg pointer-events-none" />
-      
+
       {/* Chart container */}
       <div className="relative h-[450px] w-full p-4">
         <Bar ref={chartRef} data={chartData} options={options} />

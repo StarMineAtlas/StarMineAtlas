@@ -3,12 +3,37 @@
 import { useTranslation } from "react-i18next"
 import { Header } from "@/components/Header"
 import { QualityChart } from "@/components/QualityChart"
-import { qualityDistribution } from "@/data/qualityDistribution"
+import { QualityDistributionData } from "@/models/QualityDistribution"
 import { BarChart3, Info } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useEffect, useState } from "react"
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"
 
 export default function QualityDistributionPage() {
   const { t } = useTranslation()
+
+  const [data, setData] = useState<QualityDistributionData>({} as QualityDistributionData)
+  const [isLoading, setIsLoading] = useState(false)
+
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetch(API_BASE_URL + API_ENDPOINTS.graph)
+      .then(res => res.json())
+      .then(data => {
+        const transformedData = {
+          ranges: data.map((item: any) => item.quality),
+          systems: {
+            Stanton: data.map((item: any) => parseInt(item.stanton)),
+            Pyro: data.map((item: any) => parseInt(item.pyro)),
+            Nyx: data.map((item: any) => parseInt(item.nyx)),
+          }
+        }
+        setData(transformedData);
+        setIsLoading(false);
+      })
+      .catch(() => setIsLoading(false));
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -36,7 +61,23 @@ export default function QualityDistributionPage() {
             </div>
           </CardHeader>
           <CardContent className="pt-6">
-            <QualityChart data={qualityDistribution} />
+            {isLoading ? (
+              <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16">
+                <BarChart3 className="mb-4 h-12 w-12 text-slate-700 animate-spin" />
+                <p className="text-lg text-slate-400" suppressHydrationWarning>{t("qualityDistribution.loading")}</p>
+              </div>
+            ) : (
+              <>
+                {data.ranges && data.systems ? (
+                  <QualityChart data={data} />
+                ) : (
+                  <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16">
+                    <p className="text-lg text-slate-400" suppressHydrationWarning>{t("qualityDistribution.noData")}</p>
+                  </div>
+                )
+                }
+              </>
+            )}
           </CardContent>
         </Card>
       </main>
