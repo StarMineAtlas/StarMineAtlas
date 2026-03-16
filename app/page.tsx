@@ -131,7 +131,7 @@ export default function Home() {
         <div className="mb-4 text-sm text-slate-500" suppressHydrationWarning>
           {isLoading
             ? t("home.loading")
-            : t("home.showing", { count: filteredRocks.length, total: rocks.length })}
+            : t("home.showing", { count: filteredRocks.length, total: rocks.filter(r => !r.isHidden).length })}
         </div>
 
         {isLoading ? (
