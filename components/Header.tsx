@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Pickaxe, Menu, X } from "lucide-react"
+import { ChevronDown } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { LanguageSelector } from "./LanguageSelector"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu"
@@ -12,6 +13,7 @@ export function Header() {
   const { t } = useTranslation()
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  // Suppression de l'état openDropdown, retour au comportement par défaut
 
   const navLinks = [
     { href: "/", label: "header.rockTypes" },
@@ -43,11 +45,15 @@ export function Header() {
               </Link>
             ))}
             {/* Dropdown Data */}
-            <div>
+            <div className="relative">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="text-sm font-medium transition-colors hover:text-cyan-400 text-slate-400 px-2 py-1 rounded-md">
+                  <button
+                    className="flex items-center text-sm font-medium transition-colors hover:text-cyan-400 text-slate-400 px-2 py-1 rounded-md"
+                    tabIndex={0}
+                  >
                     {t("header.data")}
+                    <ChevronDown className="ml-2 h-4 w-4" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
