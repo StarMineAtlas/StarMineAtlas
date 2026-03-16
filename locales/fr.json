@@ -32,6 +32,7 @@
     "inertMaterial": "Materiau inerte :",
     "yes": "Oui",
     "no": "Non",
+    "notEnoughData": "Les données récoltées ne sont pas suffisantes pour fournir des statistiques fiables",
     "celestialBody": "Astre / Activité :",
     "system": "Systeme :",
     "quality": "Qualite :",
