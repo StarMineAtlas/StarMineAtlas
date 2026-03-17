@@ -104,47 +104,6 @@ export default function refinery() {
                     ) : (
                         <>
                             <div className="w-full mt-8 flex flex-col gap-4">
-                                <h2 className="text-xl font-bold text-cyan-200 mb-2 text-left w-full" suppressHydrationWarning>{t("refinery.methodTable.methodsTitle")}</h2>
-                                <p className="text-slate-400 mb-8" suppressHydrationWarning>
-                                    {t("refinery.methodTable.description")}
-                                </p>
-                                <div className="flex justify-center w-full">
-                                    <div className="overflow-x-auto w-full rounded-xl shadow-lg border border-slate-800 bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-md mt-0 lg:mx-20">
-                                        <table className="w-full table-auto border-collapse text-left">
-                                            <thead>
-                                                <tr className="bg-slate-900/80">
-                                                    <th className="px-6 py-4 text-cyan-300 font-semibold text-sm border border-slate-700" suppressHydrationWarning>{t("refinery.methodTable.methodName")}</th>
-                                                    <th className="px-6 py-4 text-cyan-300 font-semibold text-sm border border-slate-700 text-center" suppressHydrationWarning>{t("refinery.methodTable.yield.name")}</th>
-                                                    <th className="px-6 py-4 text-cyan-300 font-semibold text-sm border border-slate-700 text-center" suppressHydrationWarning>{t("refinery.methodTable.cost.name")}</th>
-                                                    <th className="px-6 py-4 text-cyan-300 font-semibold text-sm border border-slate-700 text-center" suppressHydrationWarning>{t("refinery.methodTable.speed.name")}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {refineriesMethods && refineriesMethods.map((method: RefineryMethod, idx: number) => (
-                                                    <tr
-                                                        key={method.id}
-                                                        className={
-                                                            `transition-colors duration-200 ${idx % 2 === 0 ? "bg-slate-950/70" : "bg-slate-900/60"} hover:bg-cyan-950/40 hover:shadow-md`
-                                                        }
-                                                    >
-                                                        <td className="px-6 py-4 border border-slate-700 font-medium text-cyan-100 text-sm">{method.name}</td>
-                                                        <td className={`px-6 py-4 border border-slate-700 font-semibold text-sm text-center ${getRatingColor(method.rating_yield)}`} suppressHydrationWarning>
-                                                            {t(RefineryRatingYield[method.rating_yield as keyof typeof RefineryRatingYield])}
-                                                        </td>
-                                                        <td className={`px-6 py-4 border border-slate-700 font-semibold text-sm text-center ${getRatingColor(method.rating_cost)}`} suppressHydrationWarning>
-                                                            {t(RefineryRatingCost[method.rating_cost as keyof typeof RefineryRatingCost])}
-                                                        </td>
-                                                        <td className={`px-6 py-4 border border-slate-700 font-semibold text-sm text-center ${getRatingColor(method.rating_speed)}`} suppressHydrationWarning>
-                                                            {t(RefineryRatingSpeed[method.rating_speed as keyof typeof RefineryRatingSpeed])}
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="w-full mt-8 flex flex-col gap-4">
                                 <h2 className="text-xl font-bold text-cyan-200 mb-2 text-left w-full" suppressHydrationWarning>{t("refinery.yieldTable.bonusesTitle")}</h2>
                                 <p className="text-slate-400 mb-8" suppressHydrationWarning>
                                     {t("refinery.yieldTable.description")}
@@ -215,7 +174,47 @@ export default function refinery() {
                                     </div>
                                 </div>
                             </div>
-
+                            <div className="w-full mt-20 flex flex-col gap-4">
+                                <h2 className="text-xl font-bold text-cyan-200 mb-2 text-left w-full" suppressHydrationWarning>{t("refinery.methodTable.methodsTitle")}</h2>
+                                <p className="text-slate-400 mb-8" suppressHydrationWarning>
+                                    {t("refinery.methodTable.description")}
+                                </p>
+                                <div className="flex justify-center w-full">
+                                    <div className="overflow-x-auto w-full rounded-xl shadow-lg border border-slate-800 bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-md mt-0 lg:mx-20">
+                                        <table className="w-full table-auto border-collapse text-left">
+                                            <thead>
+                                                <tr className="bg-slate-900/80">
+                                                    <th className="px-6 py-4 text-cyan-300 font-semibold text-sm border border-slate-700" suppressHydrationWarning>{t("refinery.methodTable.methodName")}</th>
+                                                    <th className="px-6 py-4 text-cyan-300 font-semibold text-sm border border-slate-700 text-center" suppressHydrationWarning>{t("refinery.methodTable.yield.name")}</th>
+                                                    <th className="px-6 py-4 text-cyan-300 font-semibold text-sm border border-slate-700 text-center" suppressHydrationWarning>{t("refinery.methodTable.cost.name")}</th>
+                                                    <th className="px-6 py-4 text-cyan-300 font-semibold text-sm border border-slate-700 text-center" suppressHydrationWarning>{t("refinery.methodTable.speed.name")}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {refineriesMethods && refineriesMethods.map((method: RefineryMethod, idx: number) => (
+                                                    <tr
+                                                        key={method.id}
+                                                        className={
+                                                            `transition-colors duration-200 ${idx % 2 === 0 ? "bg-slate-950/70" : "bg-slate-900/60"} hover:bg-cyan-950/40 hover:shadow-md`
+                                                        }
+                                                    >
+                                                        <td className="px-6 py-4 border border-slate-700 font-medium text-cyan-100 text-sm">{method.name}</td>
+                                                        <td className={`px-6 py-4 border border-slate-700 font-semibold text-sm text-center ${getRatingColor(method.rating_yield)}`} suppressHydrationWarning>
+                                                            {t(RefineryRatingYield[method.rating_yield as keyof typeof RefineryRatingYield])}
+                                                        </td>
+                                                        <td className={`px-6 py-4 border border-slate-700 font-semibold text-sm text-center ${getRatingColor(method.rating_cost)}`} suppressHydrationWarning>
+                                                            {t(RefineryRatingCost[method.rating_cost as keyof typeof RefineryRatingCost])}
+                                                        </td>
+                                                        <td className={`px-6 py-4 border border-slate-700 font-semibold text-sm text-center ${getRatingColor(method.rating_speed)}`} suppressHydrationWarning>
+                                                            {t(RefineryRatingSpeed[method.rating_speed as keyof typeof RefineryRatingSpeed])}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </>
                     )}
                 </div>
