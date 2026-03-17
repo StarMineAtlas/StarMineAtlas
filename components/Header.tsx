@@ -17,7 +17,7 @@ export function Header() {
 
   const navLinks = [
     { href: "/", label: "header.rockTypes" },
-    { href: "/market-price", label: "header.marketPrice" },
+    { href: "/sell-price", label: "header.sellPrice" },
   ]
 
   return (
@@ -51,6 +51,7 @@ export function Header() {
                   <button
                     className="flex items-center text-sm font-medium transition-colors hover:text-cyan-400 text-slate-400 px-2 py-1 rounded-md"
                     tabIndex={0}
+                    suppressHydrationWarning
                   >
                     {t("header.data")}
                     <ChevronDown className="ml-2 h-4 w-4" />
@@ -58,18 +59,18 @@ export function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem asChild>
-                    <Link href="/data/quality-distribution" className={pathname === "/data/quality-distribution" ? "text-cyan-400" : "text-slate-400"}>
+                    <Link href="/data/quality-distribution" className={pathname === "/data/quality-distribution" ? "text-cyan-400" : "text-slate-400"} suppressHydrationWarning>
                       {t("header.qualityDistribution")}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/data/refinery-bonuses-table" className={pathname === "/data/refinery-bonuses-table" ? "text-cyan-400" : "text-slate-400"}>
-                      {t("header.refineryBonusesTable")}
+                    <Link href="/data/refinery" className={pathname === "/data/refinery" ? "text-cyan-400" : "text-slate-400"} suppressHydrationWarning>
+                      {t("header.refinery")}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/data/market-prices-table" className={pathname === "/data/market-prices-table" ? "text-cyan-400" : "text-slate-400"}>
-                      {t("header.marketPricesTable")}
+                    <Link href="/data/market-prices" className={pathname === "/data/market-prices" ? "text-cyan-400" : "text-slate-400"} suppressHydrationWarning>
+                      {t("header.marketPrices")}
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -115,8 +116,8 @@ export function Header() {
             <div className="mt-2">
               <span className="text-base font-medium text-slate-400 mb-1">{t("header.data")}</span>
               <Link href="/quality-distribution" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/quality-distribution" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.qualityDistribution")}</Link>
-              <Link href="/refinery-bonuses-table" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/refinery-bonuses-table" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.refineryBonusesTable")}</Link>
-              <Link href="/market-prices-table" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/market-prices-table" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.marketPricesTable")}</Link>
+              <Link href="/refinery-bonuses-table" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/refinery-bonuses-table" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.refinery")}</Link>
+              <Link href="/market-prices-table" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/market-prices-table" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.marketPrices")}</Link>
             </div>
           </nav>
           <div className="border-t border-cyan-900/50 px-4 py-4">

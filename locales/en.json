@@ -3,10 +3,10 @@
     "siteName": "Star Mine Atlas",
     "rockTypes": "Rock Types",
     "qualityDistribution": "Quality Distribution",
-    "marketPrice": "Market Price",
+    "sellPrice": "Sell Price",
     "data": "Data",
-    "refineryBonusesTable": "Refinery Bonuses Table",
-    "marketPricesTable": "Market Prices Table"
+    "refinery": "Refinery",
+    "marketPrices": "Market Prices"
   },
   "home": {
     "title": "Rock Types",
@@ -24,10 +24,32 @@
     "loading": "Loading quality distribution...",
     "noData": "No data available for quality distribution"
   },
-  "marketPrice": {
+  "sellPrice": {
     "title": "Market Price",
-    "description": "Track real-time mineral prices across trading terminals in the verse. Compare buy and sell prices to maximize your mining profits.",
-    "wip": "Work in Progress - Coming Soon"
+    "description": "Track real-time mineral prices across trading terminals in the verse. Compare buy and sell prices to maximize your mining profits."
+  },
+  "refinery": {
+    "title": "Refinery",
+    "description": "Discover the available refining methods to transform your raw minerals into more valuable materials. Compare different refining options to optimize your yields and maximize your profits.",
+    "methodName": "Method Name",
+    "yield": {
+      "name": "Yield",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "cost": {
+      "name": "Cost",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "speed": {
+      "name": "Speed",
+      "low": "Slow",
+      "medium": "Medium",
+      "high": "Fast"
+    }
   },
   "filters": {
     "searchPlaceholder": "Search...",
@@ -48,6 +70,9 @@
     "system": "System:",
     "quality": "Quality:",
     "median": "Median:"
+  },
+  "utils": {
+    "wip": "Work in Progress - Coming Soon"
   },
   "languages": {
     "en": "English",
