@@ -35,6 +35,14 @@
     "methodTable": {
       "methodsTitle": "Méthodes de raffinage",
       "description": "Découvrez les méthodes de raffinage disponibles pour transformer vos minerais bruts en matériaux plus précieux. Comparez les différentes options de raffinage pour optimiser vos rendements et maximiser vos profits.",
+      "filters": {
+        "title": "Filtres",
+        "mineral": "Minerai",
+        "allMinerals": "Tous les minéraux",
+        "location": "Site de raffinage",
+        "allLocations": "Tous les sites de raffinage",
+        "oneResult": "Résultat unique"
+      },
       "methodName": "Nom de la méthode",
       "yield": {
         "name": "Rendement",
@@ -56,6 +64,7 @@
       }
     },
     "yieldTable": {
+      "noResultForFilter": "Aucun résultat pour ce filtre. Essayez d'autres critères.",
       "bonusesTitle": "Bonus de raffinage",
       "description": "Découvrez les bonus de raffinage disponibles pour améliorer vos rendements et maximiser vos profits. Comparez les différents bonus pour optimiser votre processus de raffinage.",
       "mineral": "Minerai"

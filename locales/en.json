@@ -35,6 +35,14 @@
     "methodTable": {
       "methodsTitle": "Refinery Methods",
       "description": "Discover the available refining methods to transform your raw minerals into more valuable materials. Compare different refining options to optimize your yields and maximize your profits.",
+      "filters": {
+        "title": "Filters",
+        "mineral": "Mineral",
+        "allMinerals": "All Minerals",
+        "location": "Refining Location",
+        "allLocations": "All Refining Locations",
+        "oneResult": "Single Result"
+      },
       "methodName": "Method Name",
       "yield": {
         "name": "Yield",
@@ -56,6 +64,7 @@
       }
     },
     "yieldTable": {
+      "noResultForFilter": "No result for this filter. Try other criteria.",
       "bonusesTitle": "Refinery Bonuses",
       "description": "Discover the available refinery bonuses to improve your yields and maximize your profits. Compare different bonuses to optimize your refining process.",
       "mineral": "Mineral"

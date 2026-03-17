@@ -4,8 +4,10 @@ import { Header } from "@/components/Header"
 import { useTranslation } from "react-i18next"
 import { Factory } from "lucide-react"
 import { useEffect, useState, useMemo } from "react"
+import { RefineryFilter } from "@/components/RefineryFilter"
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
 import { RefineryMethod, RefineryRatingCost, RefineryRatingSpeed, RefineryRatingYield, RefineryYield } from "@/models/Refinery"
+import { RefinerySingleResult } from "@/components/RefinerySingleResult"
 
 function getRatingColor(rating: number) {
     switch (rating) {
@@ -28,6 +30,10 @@ function formatMineralName(name: string) {
     return name;
 }
 
+function mustBeFormatted(name: string) {
+    return name.includes("(Ore)") || name.includes("(Raw)") || name.includes("Raw") || name.includes("Ore");
+}
+
 export default function refinery() {
     const { t } = useTranslation()
 
@@ -48,19 +54,41 @@ export default function refinery() {
 
     const formattedYields = useMemo(() => {
         if (!refineriesYields || refineriesYields.length === 0) return [];
-        return refineriesYields.map(yieldData => ({
-            id: yieldData.id,
-            name: yieldData.space_station_name || yieldData.terminal_name || "Unknown",
-            mineral: formatMineralName(yieldData.commodity_name),
-            yield: yieldData.value,
-            system: yieldData.star_system_name,
-        }));
+        // if mustBeFormatted === false, dont add the data
+        return refineriesYields.map(yieldData => {
+            if (!mustBeFormatted(yieldData.commodity_name)) return null;
+            return {
+                id: yieldData.id,
+                name: yieldData.space_station_name || yieldData.terminal_name || "Unknown",
+                mineral: formatMineralName(yieldData.commodity_name),
+                yield: yieldData.value,
+                system: yieldData.star_system_name,
+            };
+        }).filter(Boolean);
     }, [refineriesYields]);
 
+    // Déclarer d'abord les minerais et locations uniques
+
+
+    // State pour les filtres
+    const [selectedMineral, setSelectedMineral] = useState("");
+    const [selectedLocation, setSelectedLocation] = useState("");
+
+    // Filtres appliqués sur les yields
+    const filteredYields = useMemo(() => {
+        return formattedYields.filter(yieldData => {
+            const mineralMatch = selectedMineral ? yieldData!.mineral === selectedMineral : true;
+            const locationMatch = selectedLocation ? yieldData!.name === selectedLocation : true;
+            return mineralMatch && locationMatch;
+        });
+    }, [formattedYields, selectedMineral, selectedLocation]);
+
+
+    // Pour la table, on veut les minerais et locations uniques filtrés (après déclaration des uniques)
     const uniqueMinerals = useMemo(() => {
         const mineralsSet = new Set<string>();
         refineriesYields.forEach(yieldData => {
-            if (yieldData.commodity_name && (yieldData.commodity_name.includes('Ore') || yieldData.commodity_name.includes('Raw'))) {
+            if (yieldData.commodity_name && mustBeFormatted(yieldData.commodity_name)) {
                 mineralsSet.add(formatMineralName(yieldData.commodity_name));
             }
         });
@@ -77,6 +105,21 @@ export default function refinery() {
         });
         return Array.from(locationsSet).sort();
     }, [refineriesYields]);
+
+    // Toujours ne garder que les valeurs présentes dans filteredYields
+    const filteredMinerals = useMemo(() => {
+        const mineralsSet = new Set<string>();
+        filteredYields.forEach(yieldData => mineralsSet.add(yieldData!.mineral));
+        return Array.from(mineralsSet).sort();
+    }, [filteredYields]);
+
+    const filteredLocations = useMemo(() => {
+        const locationsSet = new Set<string>();
+        filteredYields.forEach(yieldData => locationsSet.add(yieldData!.name));
+        return Array.from(locationsSet).sort();
+    }, [filteredYields]);
+
+
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-50">
@@ -108,7 +151,29 @@ export default function refinery() {
                                 <p className="text-slate-400 mb-8" suppressHydrationWarning>
                                     {t("refinery.yieldTable.description")}
                                 </p>
-                                <div className="flex justify-center w-full">
+                                <RefineryFilter
+                                    minerals={uniqueMinerals}
+                                    locations={uniqueLocations}
+                                    selectedMineral={selectedMineral}
+                                    selectedLocation={selectedLocation}
+                                    onMineralChange={setSelectedMineral}
+                                    onLocationChange={setSelectedLocation}
+                                />
+                                {(selectedMineral && selectedLocation && filteredYields.length === 0) ? (
+                                    <div className="flex flex-col items-center justify-center w-full px-12">
+                                        <div className="rounded-xl border border-cyan-800 bg-slate-900/80 px-6 py-8 text-center text-cyan-200 text-lg font-semibold">
+                                            {t("refinery.yieldTable.noResultForFilter")}
+                                        </div>
+                                    </div>
+                                ) : filteredMinerals.length === 1 && filteredLocations.length === 1 ? (
+                                    (() => {
+                                        const mineral = filteredMinerals[0];
+                                        const location = filteredLocations[0];
+                                        const yieldData = filteredYields.find(y => y!.mineral === mineral && y!.name === location);
+                                        const value = yieldData ? yieldData.yield : null;
+                                        return <RefinerySingleResult mineral={mineral} location={location} value={value} />;
+                                    })()
+                                ) : (
                                     <div className="overflow-x-auto w-full rounded-xl shadow-lg border border-slate-800 bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-md">
                                         <table className="w-full table-auto border-collapse text-left">
                                             <thead>
@@ -120,7 +185,7 @@ export default function refinery() {
                                                     >
                                                         {t("refinery.yieldTable.mineral")}
                                                     </th>
-                                                    {uniqueLocations.length > 0 && uniqueLocations.map((location, idx) => (
+                                                    {filteredLocations.length > 0 && filteredLocations.map((location, idx) => (
                                                         <th
                                                             key={idx}
                                                             className="px-6 py-4 text-cyan-300 font-semibold text-sm border border-slate-700 text-center"
@@ -133,7 +198,7 @@ export default function refinery() {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {uniqueMinerals.length > 0 && uniqueMinerals.map((mineral, idx) => (
+                                                {filteredMinerals.length > 0 && filteredMinerals.map((mineral, idx) => (
                                                     <tr
                                                         key={mineral}
                                                         className={
@@ -147,10 +212,10 @@ export default function refinery() {
                                                             {mineral}
                                                         </td>
                                                         {
-                                                            uniqueLocations.length > 0 && uniqueLocations.map((location, locIdx) => {
-                                                                const yieldData = formattedYields.find(yieldEntry => {
-                                                                    const locationName = yieldEntry.name;
-                                                                    return locationName === location && yieldEntry.mineral === mineral;
+                                                            filteredLocations.length > 0 && filteredLocations.map((location, locIdx) => {
+                                                                const yieldData = filteredYields.find(yieldEntry => {
+                                                                    const locationName = yieldEntry!.name;
+                                                                    return locationName === location && yieldEntry!.mineral === mineral;
                                                                 });
                                                                 let cellColor = "text-slate-600";
                                                                 if (yieldData) {
@@ -162,7 +227,7 @@ export default function refinery() {
                                                                 }
                                                                 return (
                                                                     <td key={locIdx} className={`px-6 py-4 border border-slate-700 font-semibold text-sm text-center ${cellColor}`} suppressHydrationWarning>
-                                                                        {yieldData ? yieldData.yield : "-"}
+                                                                        {yieldData ? yieldData.yield + '%' : "-"}
                                                                     </td>
                                                                 )
                                                             })
@@ -172,7 +237,7 @@ export default function refinery() {
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
+                                )}
                             </div>
                             <div className="w-full mt-20 flex flex-col gap-4">
                                 <h2 className="text-xl font-bold text-cyan-200 mb-2 text-left w-full" suppressHydrationWarning>{t("refinery.methodTable.methodsTitle")}</h2>
