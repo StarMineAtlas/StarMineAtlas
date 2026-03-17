@@ -3,51 +3,98 @@
     "siteName": "Star Mine Atlas",
     "rockTypes": "Types de Roches",
     "qualityDistribution": "Repartition qualite",
-    "marketPrice": "Prix du Marche"
+    "sellPrice": "Prix du Marché",
+    "data": "Données",
+    "refinery": "Raffinerie",
+    "marketPrices": "Prix du Marché - Tableau"
   },
   "home": {
     "title": "Types de Roches",
-    "description": "Parcourez et filtrez les minerais exploitables dans l'univers. Donnees mises a jour pour Star Citizen 4.7.",
+    "description": "Parcourez et filtrez les minerais exploitables dans l'univers. Données mises à jour pour Star Citizen 4.7.",
     "infoZone": "Note : Les statistiques des minerais sont en cours de collecte et représentent seulement un échantillon et des moyennes. Il se peut que cela ne reflète pas parfaitement la réalité en jeu, car vous pouvez trouver n'importe quelle qualité de minerai sur les astres. Ces données pourraient devenir inutiles à l'avenir ou être remises en question en fonction des mises à jour du jeu.",
     "showing": "Affichage de {{count}} sur {{total}} roches",
-    "noRocksFound": "Aucune roche trouvee",
+    "noRocksFound": "Aucune roche trouvée",
     "noRocksHint": "Essayez d'ajuster vos filtres ou votre recherche",
     "loading": "Chargement des roches..."
   },
   "qualityDistribution": {
-    "title": "Repartition qualite",
-    "description": "Distribution des qualites de minerais par systeme stellaire.",
-    "legend": "Chaque barre represente le pourcentage de roches dont la qualite se situe dans cet intervalle pour un systeme donne.",
-    "loading": "Chargement de la repartition de qualite...",
+    "title": "Répartition qualité",
+    "description": "Distribution des qualités de minerais par système stellaire.",
+    "legend": "Chaque barre représente le pourcentage de roches dont la qualité se situe dans cet intervalle pour un système donné.",
+    "loading": "Chargement de la répartition de qualité...",
     "noData": "Aucune donnée disponible pour la répartition de qualité"
   },
-  "marketPrice": {
-    "title": "Prix du Marche",
-    "description": "Suivez les prix des mineraux en temps reel dans les terminaux commerciaux de l'univers. Comparez les prix d'achat et de vente pour maximiser vos profits miniers.",
-    "wip": "En cours de developpement - Bientot disponible"
+  "sellPrice": {
+    "title": "Prix du Marché",
+    "description": "Suivez les prix des minéraux en temps réel dans les terminaux commerciaux de l'univers. Comparez les prix d'achat et de vente pour maximiser vos profits miniers."
+  },
+  "refinery": {
+    "title": "Raffinerie",
+    "infoZone": "Note : Toutes les données des tableaux proviennent de UEX, après la sortie d'une nouvelle version de Star Citizen, il peut s'écouler un certain temps avant que ces données ne soient mises à jour.",
+    "loading": "Chargement des données de raffinage...",
+    "methodTable": {
+      "methodsTitle": "Méthodes de raffinage",
+      "description": "Découvrez les méthodes de raffinage disponibles pour transformer vos minerais bruts en matériaux plus précieux. Comparez les différentes options de raffinage pour optimiser vos rendements et maximiser vos profits.",
+      "filters": {
+        "title": "Filtres",
+        "mineral": "Minerai",
+        "allMinerals": "Tous les minéraux",
+        "location": "Site de raffinage",
+        "allLocations": "Tous les sites de raffinage",
+        "oneResult": "Résultat unique"
+      },
+      "methodName": "Nom de la méthode",
+      "yield": {
+        "name": "Rendement",
+        "low": "Faible",
+        "medium": "Moyen",
+        "high": "Élevé"
+      },
+      "cost": {
+        "name": "Coût",
+        "low": "Faible",
+        "medium": "Moyen",
+        "high": "Élevé"
+      },
+      "speed": {
+        "name": "Vitesse",
+        "low": "Lent",
+        "medium": "Moyen",
+        "high": "Rapide"
+      }
+    },
+    "yieldTable": {
+      "noResultForFilter": "Aucun résultat pour ce filtre. Essayez d'autres critères.",
+      "bonusesTitle": "Bonus de raffinage",
+      "description": "Découvrez les bonus de raffinage disponibles pour améliorer vos rendements et maximiser vos profits. Comparez les différents bonus pour optimiser votre processus de raffinage.",
+      "mineral": "Minerai"
+    }
   },
   "filters": {
     "searchPlaceholder": "Recherche...",
     "filters": "Filtres :",
-    "allSystems": "Tous les systemes",
+    "allSystems": "Tous les systèmes",
     "allBodies": "Tous les astres",
-    "allMinerals": "Tous les mineraux"
+    "allMinerals": "Tous les minéraux"
   },
   "rockCard": {
     "primary": "Primaire :",
     "secondary": "Secondaire :",
     "none": "Aucun",
-    "inertMaterial": "Materiau inerte :",
+    "inertMaterial": "Matériau inerte :",
     "yes": "Oui",
     "no": "Non",
     "notEnoughData": "Les données récoltées ne sont pas suffisantes pour fournir des statistiques fiables",
     "celestialBody": "Astre / Activité :",
-    "system": "Systeme :",
-    "quality": "Qualite :",
-    "median": "Mediane :"
+    "system": "Système :",
+    "quality": "Qualité :",
+    "median": "Médiane :"
+  },
+  "utils": {
+    "wip": "En cours de développement - Bientôt disponible"
   },
   "languages": {
     "en": "Anglais",
-    "fr": "Francais"
+    "fr": "Français"
   }
 }

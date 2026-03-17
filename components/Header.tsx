@@ -4,18 +4,20 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Pickaxe, Menu, X } from "lucide-react"
+import { ChevronDown } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { LanguageSelector } from "./LanguageSelector"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu"
 
 export function Header() {
   const { t } = useTranslation()
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  // Suppression de l'état openDropdown, retour au comportement par défaut
 
   const navLinks = [
     { href: "/", label: "header.rockTypes" },
-    { href: "/quality-distribution", label: "header.qualityDistribution" },
-    { href: "/market-price", label: "header.marketPrice" },
+    { href: "/sell-price", label: "header.sellPrice" },
   ]
 
   return (
@@ -42,6 +44,38 @@ export function Header() {
                 {t(link.label)}
               </Link>
             ))}
+            {/* Dropdown Data */}
+            <div className="relative">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="flex items-center text-sm font-medium transition-colors hover:text-cyan-400 text-slate-400 px-2 py-1 rounded-md"
+                    tabIndex={0}
+                    suppressHydrationWarning
+                  >
+                    {t("header.data")}
+                    <ChevronDown className="ml-2 h-4 w-4" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem asChild>
+                    <Link href="/data/quality-distribution" className={pathname === "/data/quality-distribution" ? "text-cyan-400" : "text-slate-400"} suppressHydrationWarning>
+                      {t("header.qualityDistribution")}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/data/refinery" className={pathname === "/data/refinery" ? "text-cyan-400" : "text-slate-400"} suppressHydrationWarning>
+                      {t("header.refinery")}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/data/market-prices" className={pathname === "/data/market-prices" ? "text-cyan-400" : "text-slate-400"} suppressHydrationWarning>
+                      {t("header.marketPrices")}
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </nav>
           <LanguageSelector />
         </div>
@@ -78,6 +112,13 @@ export function Header() {
                 {t(link.label)}
               </Link>
             ))}
+            {/* Dropdown Data for mobile */}
+            <div className="mt-2">
+              <span className="text-base font-medium text-slate-400 mb-1">{t("header.data")}</span>
+              <Link href="/quality-distribution" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/quality-distribution" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.qualityDistribution")}</Link>
+              <Link href="/refinery-bonuses-table" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/refinery-bonuses-table" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.refinery")}</Link>
+              <Link href="/market-prices-table" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/market-prices-table" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.marketPrices")}</Link>
+            </div>
           </nav>
           <div className="border-t border-cyan-900/50 px-4 py-4">
             <LanguageSelector />

@@ -15,18 +15,18 @@ export default function MarketPricePage() {
           <div className="mb-6 flex items-center gap-3">
             <TrendingUp className="h-10 w-10 text-cyan-400" />
             <h1 className="text-3xl font-bold tracking-tight text-cyan-50 sm:text-4xl">
-              {t("marketPrice.title")}
+              {t("sellPrice.title")}
             </h1>
           </div>
-          
+
           <p className="mb-8 max-w-2xl text-lg text-slate-400">
-            {t("marketPrice.description")}
+            {t("sellPrice.description")}
           </p>
 
           <div className="flex items-center gap-2 rounded-lg border border-amber-500/50 bg-amber-500/10 px-4 py-3">
             <Construction className="h-5 w-5 text-amber-400" />
             <span className="text-sm font-medium text-amber-400">
-              {t("marketPrice.wip")}
+              {t("utils.wip")}
             </span>
           </div>
         </div>

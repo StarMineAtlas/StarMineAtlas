@@ -3,7 +3,10 @@
     "siteName": "Star Mine Atlas",
     "rockTypes": "Rock Types",
     "qualityDistribution": "Quality Distribution",
-    "marketPrice": "Market Price"
+    "sellPrice": "Sell Price",
+    "data": "Data",
+    "refinery": "Refinery",
+    "marketPrices": "Market Prices"
   },
   "home": {
     "title": "Rock Types",
@@ -21,10 +24,51 @@
     "loading": "Loading quality distribution...",
     "noData": "No data available for quality distribution"
   },
-  "marketPrice": {
+  "sellPrice": {
     "title": "Market Price",
-    "description": "Track real-time mineral prices across trading terminals in the verse. Compare buy and sell prices to maximize your mining profits.",
-    "wip": "Work in Progress - Coming Soon"
+    "description": "Track real-time mineral prices across trading terminals in the verse. Compare buy and sell prices to maximize your mining profits."
+  },
+  "refinery": {
+    "title": "Refinery",
+    "infoZone": "Note: All data from tables are sourced from UEX data, after a new version of Star Citizen is released, it may take some time to update those data.",
+    "loading": "Loading refinery data...",
+    "methodTable": {
+      "methodsTitle": "Refinery Methods",
+      "description": "Discover the available refining methods to transform your raw minerals into more valuable materials. Compare different refining options to optimize your yields and maximize your profits.",
+      "filters": {
+        "title": "Filters",
+        "mineral": "Mineral",
+        "allMinerals": "All Minerals",
+        "location": "Refining Location",
+        "allLocations": "All Refining Locations",
+        "oneResult": "Single Result"
+      },
+      "methodName": "Method Name",
+      "yield": {
+        "name": "Yield",
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "cost": {
+        "name": "Cost",
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "speed": {
+        "name": "Speed",
+        "low": "Slow",
+        "medium": "Medium",
+        "high": "Fast"
+      }
+    },
+    "yieldTable": {
+      "noResultForFilter": "No result for this filter. Try other criteria.",
+      "bonusesTitle": "Refinery Bonuses",
+      "description": "Discover the available refinery bonuses to improve your yields and maximize your profits. Compare different bonuses to optimize your refining process.",
+      "mineral": "Mineral"
+    }
   },
   "filters": {
     "searchPlaceholder": "Search...",
@@ -45,6 +89,9 @@
     "system": "System:",
     "quality": "Quality:",
     "median": "Median:"
+  },
+  "utils": {
+    "wip": "Work in Progress - Coming Soon"
   },
   "languages": {
     "en": "English",
