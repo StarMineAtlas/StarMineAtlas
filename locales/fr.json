@@ -30,25 +30,35 @@
   },
   "refinery": {
     "title": "Raffinerie",
-    "description": "Découvrez les méthodes de raffinage disponibles pour transformer vos minerais bruts en matériaux plus précieux. Comparez les différentes options de raffinage pour optimiser vos rendements et maximiser vos profits.",
-    "methodName": "Nom de la méthode",
-    "yield": {
-      "name": "Rendement",
-      "low": "Faible",
-      "medium": "Moyen",
-      "high": "Élevé"
+    "infoZone": "Note : Toutes les données des tableaux proviennent de UEX, après la sortie d'une nouvelle version de Star Citizen, il peut s'écouler un certain temps avant que ces données ne soient mises à jour.",
+    "loading": "Chargement des données de raffinage...",
+    "methodTable": {
+      "methodsTitle": "Méthodes de raffinage",
+      "description": "Découvrez les méthodes de raffinage disponibles pour transformer vos minerais bruts en matériaux plus précieux. Comparez les différentes options de raffinage pour optimiser vos rendements et maximiser vos profits.",
+      "methodName": "Nom de la méthode",
+      "yield": {
+        "name": "Rendement",
+        "low": "Faible",
+        "medium": "Moyen",
+        "high": "Élevé"
+      },
+      "cost": {
+        "name": "Coût",
+        "low": "Faible",
+        "medium": "Moyen",
+        "high": "Élevé"
+      },
+      "speed": {
+        "name": "Vitesse",
+        "low": "Lent",
+        "medium": "Moyen",
+        "high": "Rapide"
+      }
     },
-    "cost": {
-      "name": "Coût",
-      "low": "Faible",
-      "medium": "Moyen",
-      "high": "Élevé"
-    },
-    "speed": {
-      "name": "Vitesse",
-      "low": "Lent",
-      "medium": "Moyen",
-      "high": "Rapide"
+    "yieldTable": {
+      "bonusesTitle": "Bonus de raffinage",
+      "description": "Découvrez les bonus de raffinage disponibles pour améliorer vos rendements et maximiser vos profits. Comparez les différents bonus pour optimiser votre processus de raffinage.",
+      "mineral": "Minerai"
     }
   },
   "filters": {

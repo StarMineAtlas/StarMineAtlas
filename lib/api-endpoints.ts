@@ -14,5 +14,5 @@ export const API_ENDPOINTS = {
 
 export const UEX_API_ENDPOINTS = {
     refineriesMethods: "refineries_methods",
-    marketPrices: "market_prices",
+    refineriesYields: "refineries_yields",
 };

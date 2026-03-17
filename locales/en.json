@@ -30,25 +30,35 @@
   },
   "refinery": {
     "title": "Refinery",
-    "description": "Discover the available refining methods to transform your raw minerals into more valuable materials. Compare different refining options to optimize your yields and maximize your profits.",
-    "methodName": "Method Name",
-    "yield": {
-      "name": "Yield",
-      "low": "Low",
-      "medium": "Medium",
-      "high": "High"
+    "infoZone": "Note: All data from tables are sourced from UEX data, after a new version of Star Citizen is released, it may take some time to update those data.",
+    "loading": "Loading refinery data...",
+    "methodTable": {
+      "methodsTitle": "Refinery Methods",
+      "description": "Discover the available refining methods to transform your raw minerals into more valuable materials. Compare different refining options to optimize your yields and maximize your profits.",
+      "methodName": "Method Name",
+      "yield": {
+        "name": "Yield",
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "cost": {
+        "name": "Cost",
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "speed": {
+        "name": "Speed",
+        "low": "Slow",
+        "medium": "Medium",
+        "high": "Fast"
+      }
     },
-    "cost": {
-      "name": "Cost",
-      "low": "Low",
-      "medium": "Medium",
-      "high": "High"
-    },
-    "speed": {
-      "name": "Speed",
-      "low": "Slow",
-      "medium": "Medium",
-      "high": "Fast"
+    "yieldTable": {
+      "bonusesTitle": "Refinery Bonuses",
+      "description": "Discover the available refinery bonuses to improve your yields and maximize your profits. Compare different bonuses to optimize your refining process.",
+      "mineral": "Mineral"
     }
   },
   "filters": {
