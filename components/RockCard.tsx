@@ -52,7 +52,7 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
               <CircleDot className="h-3.5 w-3.5 text-cyan-500" />
-              <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.primary")}</span>
+              <span className="text-slate-400" suppressHydrationWarning>{t("home.rockCard.primary")}</span>
             </div>
             <div className="flex items-center gap-2">
               <Badge
@@ -79,7 +79,7 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
                         className="pointer-events-none absolute left-1/2 bottom-0 z-20 translate-y-full -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-xs text-cyan-200 opacity-0 shadow transition-opacity duration-200 group-hover/qualitybar:opacity-100"
                         style={{ minWidth: '80px' }}
                       >
-                        {t("rockCard.median")} <span className="font-mono">{medPrimary}</span>
+                        {t("home.rockCard.median")} <span className="font-mono">{medPrimary}</span>
                       </div>
                     </div>
                     <div
@@ -89,13 +89,13 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
                   </div>
                 </div><div className="flex justify-between text-[10px] text-slate-500 px-1 mb-1 max-w-xs w-full">
                   <span>0</span>
-                  <span className="text-white flex md:hidden">{t("rockCard.median")} {medPrimary}</span>
+                  <span className="text-white flex md:hidden">{t("home.rockCard.median")} {medPrimary}</span>
                   <span>1000</span>
                 </div>
               </>
             ) : (
               <div className="rounded bg-slate-800/70 px-2 py-1 text-[11px] text-slate-400 max-w-xs w-fit border border-slate-700 mt-2">
-                {t("rockCard.notEnoughData")}
+                {t("home.rockCard.notEnoughData")}
               </div>
             )}
           </div>
@@ -105,9 +105,9 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
             <div className="flex flex-col gap-1">
               <div className="flex flex-wrap items-center gap-2 mb-1">
                 <Layers className="h-3.5 w-3.5 text-slate-500" />
-                <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.secondary")}</span>
+                <span className="text-slate-400" suppressHydrationWarning>{t("home.rockCard.secondary")}</span>
                 {secondaries.length === 0 && (
-                  <span className="text-slate-500" suppressHydrationWarning>{t("rockCard.none")}</span>
+                  <span className="text-slate-500" suppressHydrationWarning>{t("home.rockCard.none")}</span>
                 )}
               </div>
               {secondaries.map((sec: { mineral: string; min: number; max: number; median: number }) => {
@@ -142,7 +142,7 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
                                 className="pointer-events-none absolute left-1/2 bottom-0 z-20 translate-y-full -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-xs text-cyan-200 opacity-0 shadow transition-opacity duration-200 group-hover/qualitybar-secondary:opacity-100"
                                 style={{ minWidth: '80px' }}
                               >
-                                {t("rockCard.median")} <span className="font-mono">{medSec}</span>
+                                {t("home.rockCard.median")} <span className="font-mono">{medSec}</span>
                               </div>
                             </div>
                             <div
@@ -154,13 +154,13 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
                         </div>
                         <div className="flex justify-between text-[10px] text-slate-500 px-1 mb-1 max-w-xs w-full">
                           <span>0</span>
-                          <span className="text-white flex md:hidden">{t("rockCard.median")} {medSec}</span>
+                          <span className="text-white flex md:hidden">{t("home.rockCard.median")} {medSec}</span>
                           <span>1000</span>
                         </div>
                       </>
                     ) : (
                       <div className="rounded bg-slate-800/70 px-2 py-1 text-[11px] text-slate-400 max-w-xs w-fit border border-slate-700 mt-2 mb-2">
-                        {t("rockCard.notEnoughData")}
+                        {t("home.rockCard.notEnoughData")}
                       </div>
                     )}
                   </div>
@@ -174,13 +174,13 @@ export function RockCard({ rock, secondaries }: RockCardProps) {
         <div className="border-t border-slate-800 pt-3 space-y-2">
           <div className="flex items-center gap-2">
             <MapPin className="h-3.5 w-3.5 text-slate-500" />
-            <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.celestialBody")}</span>
+            <span className="text-slate-400" suppressHydrationWarning>{t("home.rockCard.celestialBody")}</span>
             <span className="text-cyan-200" suppressHydrationWarning>{rock.body}</span>
           </div>
 
           <div className="flex items-center gap-2">
             <Globe className="h-3.5 w-3.5 text-slate-500" />
-            <span className="text-slate-400" suppressHydrationWarning>{t("rockCard.system")}</span>
+            <span className="text-slate-400" suppressHydrationWarning>{t("home.rockCard.system")}</span>
             <span className="text-cyan-200" suppressHydrationWarning>{rock.system}</span>
           </div>
         </div>

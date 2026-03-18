@@ -6,7 +6,8 @@
     "sellPrice": "Sell Price",
     "data": "Data",
     "refinery": "Refinery",
-    "marketPrices": "Market Prices"
+    "marketPrices": "Market Prices",
+    "miningLasers": "Mining Lasers"
   },
   "home": {
     "title": "Rock Types",
@@ -15,7 +16,24 @@
     "showing": "Showing {{count}} of {{total}} rocks",
     "noRocksFound": "No rocks found",
     "noRocksHint": "Try adjusting your filters or search query",
-    "loading": "Loading rocks..."
+    "loading": "Loading rocks...",
+    "filters": {
+      "searchPlaceholder": "Search...",
+      "filters": "Filters:",
+      "allSystems": "All Systems",
+      "allBodies": "All Bodies",
+      "allMinerals": "All Minerals"
+    },
+    "rockCard": {
+      "primary": "Primary:",
+      "secondary": "Secondary:",
+      "none": "None",
+      "notEnoughData": "Data collected is not sufficient to provide reliable statistics",
+      "celestialBody": "Celestial Body / Activity:",
+      "system": "System:",
+      "quality": "Quality:",
+      "median": "Median:"
+    }
   },
   "qualityDistribution": {
     "title": "Quality Distribution",
@@ -88,26 +106,6 @@
       "singleGemPrice": "Max Price per Gem",
       "oneScuPrice": "Max Price per SCU"
     }
-  },
-  "filters": {
-    "searchPlaceholder": "Search...",
-    "filters": "Filters:",
-    "allSystems": "All Systems",
-    "allBodies": "All Bodies",
-    "allMinerals": "All Minerals"
-  },
-  "rockCard": {
-    "primary": "Primary:",
-    "secondary": "Secondary:",
-    "none": "None",
-    "inertMaterial": "Inert Material:",
-    "yes": "Yes",
-    "no": "No",
-    "notEnoughData": "Data collected is not sufficient to provide reliable statistics",
-    "celestialBody": "Celestial Body / Activity:",
-    "system": "System:",
-    "quality": "Quality:",
-    "median": "Median:"
   },
   "utils": {
     "wip": "Work in Progress - Coming Soon"

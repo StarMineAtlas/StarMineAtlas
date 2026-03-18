@@ -6,7 +6,8 @@
     "sellPrice": "Prix du Marché",
     "data": "Données",
     "refinery": "Raffinerie",
-    "marketPrices": "Prix du Marché - Tableau"
+    "marketPrices": "Prix du Marché - Tableau",
+    "miningLasers": "Lasers de minage"
   },
   "home": {
     "title": "Types de Roches",
@@ -15,7 +16,24 @@
     "showing": "Affichage de {{count}} sur {{total}} roches",
     "noRocksFound": "Aucune roche trouvée",
     "noRocksHint": "Essayez d'ajuster vos filtres ou votre recherche",
-    "loading": "Chargement des roches..."
+    "loading": "Chargement des roches...",
+    "filters": {
+      "searchPlaceholder": "Recherche...",
+      "filters": "Filtres :",
+      "allSystems": "Tous les systèmes",
+      "allBodies": "Tous les astres",
+      "allMinerals": "Tous les minéraux"
+    },
+    "rockCard": {
+      "primary": "Primaire :",
+      "secondary": "Secondaire :",
+      "none": "Aucun",
+      "notEnoughData": "Les données récoltées ne sont pas suffisantes pour fournir des statistiques fiables",
+      "celestialBody": "Astre / Activité :",
+      "system": "Système :",
+      "quality": "Qualité :",
+      "median": "Médiane :"
+    }
   },
   "qualityDistribution": {
     "title": "Répartition qualité",
@@ -88,26 +106,6 @@
       "singleGemPrice": "Prix max par gemme",
       "oneScuPrice": "Prix max par SCU"
     }
-  },
-  "filters": {
-    "searchPlaceholder": "Recherche...",
-    "filters": "Filtres :",
-    "allSystems": "Tous les systèmes",
-    "allBodies": "Tous les astres",
-    "allMinerals": "Tous les minéraux"
-  },
-  "rockCard": {
-    "primary": "Primaire :",
-    "secondary": "Secondaire :",
-    "none": "Aucun",
-    "inertMaterial": "Matériau inerte :",
-    "yes": "Oui",
-    "no": "Non",
-    "notEnoughData": "Les données récoltées ne sont pas suffisantes pour fournir des statistiques fiables",
-    "celestialBody": "Astre / Activité :",
-    "system": "Système :",
-    "quality": "Qualité :",
-    "median": "Médiane :"
   },
   "utils": {
     "wip": "En cours de développement - Bientôt disponible"

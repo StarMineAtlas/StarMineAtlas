@@ -73,6 +73,11 @@ export function Header() {
                       <span className="hover:text-white w-full p-2">{t("header.marketPrices")}</span>
                     </Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="hover:bg-cyan-900/30 focus:bg-cyan-900/40 rounded transition-colors p-0">
+                    <Link href="/data/mining-lasers" className={pathname === "/data/mining-lasers" ? "text-cyan-400" : "text-slate-300"} suppressHydrationWarning>
+                      <span className="hover:text-white w-full p-2">{t("header.miningLasers")}</span>
+                    </Link>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -118,6 +123,7 @@ export function Header() {
               <Link href="/data/quality-distribution" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/data/quality-distribution" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.qualityDistribution")}</Link>
               <Link href="/data/refinery" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/data/refinery" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.refinery")}</Link>
               <Link href="/data/market-prices" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/data/market-prices" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.marketPrices")}</Link>
+              <Link href="/data/mining-lasers" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/data/mining-lasers" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.miningLasers")}</Link>
             </div>
           </nav>
           <div className="border-t border-cyan-900/50 px-4 py-4">
