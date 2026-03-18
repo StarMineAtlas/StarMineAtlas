@@ -107,6 +107,10 @@
       "oneScuPrice": "Prix max par SCU"
     }
   },
+  "miningLasers": {
+    "title": "Lasers de minage",
+    "description": "Découvrez les différents lasers de minage disponibles dans le verse, leurs caractéristiques et cas d'utilisation optimaux. Comparez les lasers de minage pour choisir le meilleur pour vos opérations minières."
+  },
   "utils": {
     "wip": "En cours de développement - Bientôt disponible"
   },
