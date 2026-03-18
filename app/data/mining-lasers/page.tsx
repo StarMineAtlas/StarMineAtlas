@@ -134,9 +134,8 @@ export default function MiningLasersPage() {
                                                     key={index}
                                                     className="px-6 py-4 text-cyan-300 font-semibold md:text-sm border border-slate-700 bg-slate-900 text-center"
                                                     style={{
-                                                        minWidth: col.length / 2 + 'rem',
-                                                        maxWidth: col.length * 2 + 'rem',
-                                                        width: col.length + 'rem',
+                                                        minWidth: col.length > 10 ? '12rem' : col.length + 'rem',
+                                                        width: col.length > 10 ? '12rem' : col.length + 'rem',
                                                         fontSize: '0.65rem'
                                                     }}
                                                 >
