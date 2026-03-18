@@ -70,6 +70,25 @@
       "mineral": "Mineral"
     }
   },
+  "marketPrices": {
+    "title": "Market Prices - Table",
+    "infoZone": "Note: All data from tables are sourced from UEX data, after a new version of Star Citizen is released, it may take some time to update those data.",
+    "loading": "Loading market prices...",
+    "shipMinerals": {
+      "title": "Ship Minerals",
+      "description": "Discorver the maximum price per SCU for minerals extracted by ship. Compare raw and refined prices to maximize your mining profits.",
+      "mineral": "Mineral",
+      "maxRawPrice": "Max Raw Price per SCU",
+      "maxRefinedPrice": "Max Refined Price per SCU"
+    },
+    "fpsMinerals": {
+      "title": "FPS Minerals",
+      "description": "Discover the maximum price per gem and per SCU for minerals extracted by hand (FPS). Compare prices to maximize your hand-mining profits.",
+      "mineral": "Mineral",
+      "singleGemPrice": "Max Price per Gem",
+      "oneScuPrice": "Max Price per SCU"
+    }
+  },
   "filters": {
     "searchPlaceholder": "Search...",
     "filters": "Filters:",
