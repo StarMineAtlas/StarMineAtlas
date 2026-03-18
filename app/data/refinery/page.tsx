@@ -179,7 +179,7 @@ export default function refinery() {
                                             <thead>
                                                 <tr className="bg-slate-900/80">
                                                     <th
-                                                        className="px-6 py-4 text-cyan-300 font-semibold text-sm border border-slate-700 bg-slate-900 sticky left-0 z-10"
+                                                        className="px-6 py-4 text-cyan-300 font-semibold text-xs md:text-sm border border-slate-700 bg-slate-900 sticky left-0 z-10"
                                                         style={{ minWidth: "10rem", maxWidth: "10rem", width: "10rem" }}
                                                         suppressHydrationWarning
                                                     >
@@ -188,7 +188,7 @@ export default function refinery() {
                                                     {filteredLocations.length > 0 && filteredLocations.map((location, idx) => (
                                                         <th
                                                             key={idx}
-                                                            className="px-6 py-4 text-cyan-300 font-semibold text-sm border border-slate-700 text-center"
+                                                            className="px-6 py-4 text-cyan-300 font-semibold text-xs md:text-sm border border-slate-700 text-center"
                                                             style={{ minWidth: "10rem", maxWidth: "10rem", width: "10rem" }}
                                                             suppressHydrationWarning
                                                         >
@@ -206,7 +206,7 @@ export default function refinery() {
                                                         }
                                                     >
                                                         <td
-                                                            className="px-6 py-4 border border-slate-700 font-medium text-cyan-100 text-sm bg-slate-950 sticky left-0 z-10"
+                                                            className="px-6 py-4 border border-slate-700 font-medium text-cyan-100 text-xs md:text-sm bg-slate-950 sticky left-0 z-10"
                                                             style={{ minWidth: "10rem", maxWidth: "10rem", width: "10rem", backgroundColor: '#0f172a' }}
                                                         >
                                                             {mineral}
@@ -226,7 +226,7 @@ export default function refinery() {
                                                                     }
                                                                 }
                                                                 return (
-                                                                    <td key={locIdx} className={`px-6 py-4 border border-slate-700 font-semibold text-sm text-center ${cellColor}`} suppressHydrationWarning>
+                                                                    <td key={locIdx} className={`px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center ${cellColor}`} suppressHydrationWarning>
                                                                         {yieldData ? yieldData.yield + '%' : "-"}
                                                                     </td>
                                                                 )
@@ -249,10 +249,16 @@ export default function refinery() {
                                         <table className="w-full table-auto border-collapse text-left">
                                             <thead>
                                                 <tr className="bg-slate-900/80">
-                                                    <th className="px-6 py-4 text-cyan-300 font-semibold text-sm border border-slate-700" suppressHydrationWarning>{t("refinery.methodTable.methodName")}</th>
-                                                    <th className="px-6 py-4 text-cyan-300 font-semibold text-sm border border-slate-700 text-center" suppressHydrationWarning>{t("refinery.methodTable.yield.name")}</th>
-                                                    <th className="px-6 py-4 text-cyan-300 font-semibold text-sm border border-slate-700 text-center" suppressHydrationWarning>{t("refinery.methodTable.cost.name")}</th>
-                                                    <th className="px-6 py-4 text-cyan-300 font-semibold text-sm border border-slate-700 text-center" suppressHydrationWarning>{t("refinery.methodTable.speed.name")}</th>
+                                                    <th
+                                                        className="px-6 py-4 text-cyan-300 font-semibold text-xs md:text-sm border border-slate-700 bg-slate-900 sticky left-0 z-10"
+                                                        style={{ minWidth: "10rem", maxWidth: "10rem", width: "10rem" }}
+                                                        suppressHydrationWarning
+                                                    >
+                                                        {t("refinery.methodTable.methodName")}
+                                                    </th>
+                                                    <th className="px-6 py-4 text-cyan-300 font-semibold text-xs md:text-sm border border-slate-700 text-center" suppressHydrationWarning>{t("refinery.methodTable.yield.name")}</th>
+                                                    <th className="px-6 py-4 text-cyan-300 font-semibold text-xs md:text-sm border border-slate-700 text-center" suppressHydrationWarning>{t("refinery.methodTable.cost.name")}</th>
+                                                    <th className="px-6 py-4 text-cyan-300 font-semibold text-xs md:text-sm border border-slate-700 text-center" suppressHydrationWarning>{t("refinery.methodTable.speed.name")}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -263,14 +269,19 @@ export default function refinery() {
                                                             `transition-colors duration-200 ${idx % 2 === 0 ? "bg-slate-950/70" : "bg-slate-900/60"} hover:bg-cyan-950/40 hover:shadow-md`
                                                         }
                                                     >
-                                                        <td className="px-6 py-4 border border-slate-700 font-medium text-cyan-100 text-sm">{method.name}</td>
-                                                        <td className={`px-6 py-4 border border-slate-700 font-semibold text-sm text-center ${getRatingColor(method.rating_yield)}`} suppressHydrationWarning>
+                                                        <td
+                                                            className="px-6 py-4 border border-slate-700 font-medium text-cyan-100 text-xs md:text-sm bg-slate-950 sticky left-0 z-10"
+                                                            style={{ minWidth: "10rem", maxWidth: "10rem", width: "10rem", backgroundColor: '#0f172a' }}
+                                                        >
+                                                            {method.name}
+                                                        </td>
+                                                        <td className={`px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center ${getRatingColor(method.rating_yield)}`} suppressHydrationWarning>
                                                             {t(RefineryRatingYield[method.rating_yield as keyof typeof RefineryRatingYield])}
                                                         </td>
-                                                        <td className={`px-6 py-4 border border-slate-700 font-semibold text-sm text-center ${getRatingColor(method.rating_cost)}`} suppressHydrationWarning>
+                                                        <td className={`px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center ${getRatingColor(method.rating_cost)}`} suppressHydrationWarning>
                                                             {t(RefineryRatingCost[method.rating_cost as keyof typeof RefineryRatingCost])}
                                                         </td>
-                                                        <td className={`px-6 py-4 border border-slate-700 font-semibold text-sm text-center ${getRatingColor(method.rating_speed)}`} suppressHydrationWarning>
+                                                        <td className={`px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center ${getRatingColor(method.rating_speed)}`} suppressHydrationWarning>
                                                             {t(RefineryRatingSpeed[method.rating_speed as keyof typeof RefineryRatingSpeed])}
                                                         </td>
                                                     </tr>
