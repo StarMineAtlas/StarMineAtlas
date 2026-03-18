@@ -17,4 +17,11 @@ export const UEX_API_ENDPOINTS = {
     refineriesYields: "refineries_yields",
     commoditiesPricesAll: "commodities_prices_all",
     commoditiesRawPricesAll: "commodities_raw_prices_all",
+    itemsCategory: "items?id_category=",
+    itemsPrices: "items_prices?id_item=",
+    itemsAttributes: "items_attributes?id_item=",
+};
+
+export const UEX_API_ITEM_CATEGORIES = {
+    miningLasers: 29,
 };

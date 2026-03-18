@@ -109,7 +109,22 @@
   },
   "miningLasers": {
     "title": "Mining Lasers",
-    "description": "Discover the different mining lasers available in the verse, their characteristics and optimal use cases. Compare mining lasers to choose the best one for your mining operations."
+    "description": "Discover the different mining lasers available in the verse, their characteristics and optimal use cases. Compare mining lasers to choose the best one for your mining operations.",
+    "table": {
+      "laser": "Laser",
+      "size": "Size",
+      "slots": "Slots",
+      "optimalRange": "Optimal Range",
+      "maxRange": "Max Range",
+      "minPower": "Min Power",
+      "maxPower": "Max Power",
+      "extractionPower": "Extraction Power",
+      "resistance": "Resistance",
+      "instability": "Instability",
+      "optimalChargeRate": "Optimal Charge Rate",
+      "optimalChargeWindow": "Optimal Charge Window",
+      "inertMaterials": "Inert Materials"
+    }
   },
   "utils": {
     "wip": "Work in Progress - Coming Soon"
