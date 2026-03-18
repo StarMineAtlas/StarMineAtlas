@@ -70,6 +70,25 @@
       "mineral": "Minerai"
     }
   },
+  "marketPrices": {
+    "title": "Prix du Marché - Tableau",
+    "infoZone": "Note : Toutes les données des tableaux proviennent de UEX, après la sortie d'une nouvelle version de Star Citizen, il peut s'écouler un certain temps avant que ces données ne soient mises à jour.",
+    "loading": "Chargement des prix du marché...",
+    "shipMinerals": {
+      "title": "Minéraux en vaisseau",
+      "description": "Découvrez le prix maximum par SCU pour les minéraux extraits en vaisseau. Comparez les prix bruts et raffinés pour maximiser vos profits de minage.",
+      "mineral": "Minerai",
+      "maxRawPrice": "Prix brut max par SCU",
+      "maxRefinedPrice": "Prix raffiné max par SCU"
+    },
+    "fpsMinerals": {
+      "title": "Minéraux FPS",
+      "description": "Découvrez le prix maximum par gemme et par SCU pour les minéraux extraits à la main (FPS). Comparez les prix pour maximiser vos profits de minage à la main.",
+      "mineral": "Minerai",
+      "singleGemPrice": "Prix max par gemme",
+      "oneScuPrice": "Prix max par SCU"
+    }
+  },
   "filters": {
     "searchPlaceholder": "Recherche...",
     "filters": "Filtres :",
