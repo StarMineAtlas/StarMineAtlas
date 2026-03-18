@@ -57,20 +57,20 @@ export function Header() {
                     <ChevronDown className="ml-2 h-4 w-4" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem asChild>
-                    <Link href="/data/quality-distribution" className={pathname === "/data/quality-distribution" ? "text-cyan-400" : "text-slate-400"} suppressHydrationWarning>
-                      {t("header.qualityDistribution")}
+                <DropdownMenuContent className="bg-slate-900 border border-cyan-900/50 shadow-lg rounded-md min-w-[200px]">
+                  <DropdownMenuItem asChild className="hover:bg-cyan-900/30 focus:bg-cyan-900/40 rounded transition-colors p-0">
+                    <Link href="/data/quality-distribution" className={pathname === "/data/quality-distribution" ? "text-cyan-400" : "text-slate-300"} suppressHydrationWarning>
+                      <span className="hover:text-white w-full p-2">{t("header.qualityDistribution")}</span>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/data/refinery" className={pathname === "/data/refinery" ? "text-cyan-400" : "text-slate-400"} suppressHydrationWarning>
-                      {t("header.refinery")}
+                  <DropdownMenuItem asChild className="hover:bg-cyan-900/30 focus:bg-cyan-900/40 rounded transition-colors p-0">
+                    <Link href="/data/refinery" className={pathname === "/data/refinery" ? "text-cyan-400" : "text-slate-300"} suppressHydrationWarning>
+                      <span className="hover:text-white w-full p-2">{t("header.refinery")}</span>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/data/market-prices" className={pathname === "/data/market-prices" ? "text-cyan-400" : "text-slate-400"} suppressHydrationWarning>
-                      {t("header.marketPrices")}
+                  <DropdownMenuItem asChild className="hover:bg-cyan-900/30 focus:bg-cyan-900/40 rounded transition-colors p-0">
+                    <Link href="/data/market-prices" className={pathname === "/data/market-prices" ? "text-cyan-400" : "text-slate-300"} suppressHydrationWarning>
+                      <span className="hover:text-white w-full p-2">{t("header.marketPrices")}</span>
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -113,11 +113,11 @@ export function Header() {
               </Link>
             ))}
             {/* Dropdown Data for mobile */}
-            <div className="mt-2">
-              <span className="text-base font-medium text-slate-400 mb-1">{t("header.data")}</span>
-              <Link href="/quality-distribution" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/quality-distribution" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.qualityDistribution")}</Link>
-              <Link href="/refinery-bonuses-table" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/refinery-bonuses-table" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.refinery")}</Link>
-              <Link href="/market-prices-table" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/market-prices-table" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.marketPrices")}</Link>
+            <div className="mt-2 flex flex-col">
+              <span className="text-base font-medium text-slate-500 border-b border-slate-700 pb-2 mb-1">{t("header.data")}</span>
+              <Link href="/data/quality-distribution" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/data/quality-distribution" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.qualityDistribution")}</Link>
+              <Link href="/data/refinery" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/data/refinery" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.refinery")}</Link>
+              <Link href="/data/market-prices" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/data/market-prices" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.marketPrices")}</Link>
             </div>
           </nav>
           <div className="border-t border-cyan-900/50 px-4 py-4">
