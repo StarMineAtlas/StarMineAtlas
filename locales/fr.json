@@ -9,8 +9,8 @@
       "marketPrices": "Prix du Marché",
       "miningLasers": "Lasers de Minage"
     },
-    "calculator": {
-      "title": "Calculateur",
+    "calculators": {
+      "title": "Calculateurs",
       "miningProfit": "Calculateur de Profit Minier"
     }
   },
@@ -47,8 +47,8 @@
     "loading": "Chargement de la répartition de qualité...",
     "noData": "Aucune donnée disponible pour la répartition de qualité"
   },
-  "sellPrice": {
-    "title": "Prix du Marché",
+  "miningProfit": {
+    "title": "Calculateur de Profit Minier",
     "description": "Suivez les prix des minéraux en temps réel dans les terminaux commerciaux de l'univers. Comparez les prix d'achat et de vente pour maximiser vos profits miniers."
   },
   "refinery": {
@@ -121,7 +121,7 @@
       "allLasers": "Tous les lasers",
       "size": "Taille du vaisseau",
       "allSizes": "Toutes les tailles",
-      "location": "Lieu d'utilisation",
+      "location": "Lieu d'achat",
       "allLocations": "Tous les lieux"
     },
     "table": {

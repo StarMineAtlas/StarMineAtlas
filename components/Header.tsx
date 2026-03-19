@@ -19,8 +19,8 @@ export function Header() {
     { href: "/", label: "header.rockTypes" },
   ]
 
-  const calculatorLinks = [
-    { href: "/calculator/mining-profit", label: "header.calculator.miningProfit" },
+  const calculatorsLinks = [
+    { href: "/calculators/mining-profit", label: "header.calculators.miningProfit" },
   ]
 
   const dataLinks = [
@@ -54,7 +54,7 @@ export function Header() {
                 {t(link.label)}
               </Link>
             ))}
-            {/* Dropdown Calculator */}
+            {/* Dropdown Calculators */}
             <div className="relative">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -63,12 +63,12 @@ export function Header() {
                     tabIndex={0}
                     suppressHydrationWarning
                   >
-                    {t("header.calculator.title")}
+                    {t("header.calculators.title")}
                     <ChevronDown className="ml-2 h-4 w-4" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-slate-900 border border-cyan-900/50 shadow-lg rounded-md min-w-[200px]">
-                  {calculatorLinks.map((link) => (
+                  {calculatorsLinks.map((link) => (
                     <DropdownMenuItem
                       asChild
                       key={link.href}
@@ -156,9 +156,9 @@ export function Header() {
             ))}
             {/* Dropdowns for mobile */}
             <div className="mb-2 flex flex-col">
-              <span className="text-base font-medium text-slate-500 border-b border-slate-700 pb-2 mb-1 mt-4">{t("header.calculator.title")}</span>
+              <span className="text-base font-medium text-slate-500 border-b border-slate-700 pb-2 mb-1 mt-4">{t("header.calculators.title")}</span>
               {
-                calculatorLinks.map((link) => (
+                calculatorsLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}

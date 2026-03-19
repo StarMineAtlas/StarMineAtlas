@@ -9,8 +9,8 @@
       "marketPrices": "Market Prices",
       "miningLasers": "Mining Lasers"
     },
-    "calculator": {
-      "title": "Calculator",
+    "calculators": {
+      "title": "Calculators",
       "miningProfit": "Mining Profit Calculator"
     }
   },
@@ -121,7 +121,7 @@
       "allLasers": "All Lasers",
       "size": "Ship Size",
       "allSizes": "All Sizes",
-      "location": "Usage Location",
+      "location": "Purchase Location",
       "allLocations": "All Locations"
     },
     "table": {
