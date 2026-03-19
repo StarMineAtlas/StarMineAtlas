@@ -4,15 +4,30 @@ import { Header } from "@/components/Header";
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints";
 import { MiningLaser, MiningLaserAttributes, miningLaserAttributeType, MiningLaserPrices, MiningLaserRawData } from "@/models/MiningLaser";
 import { useEffect, useState } from "react";
+import { MiningLaserFilter } from "@/components/MiningLaserFilter";
 import { useTranslation } from "react-i18next";
 
+const getColorForValue = (val: string | number | null | undefined) => {
+    if (val === null || val === undefined || val === "") return "text-gray-400";
+    const num = typeof val === "string" ? parseFloat(val.replace(/[^-\d.]/g, "")) : val;
+    if (isNaN(num)) return "text-gray-400";
+    if (num > 0) return "text-green-400";
+    if (num < 0) return "text-red-400";
+    return "text-gray-400";
+};
+
 export default function MiningLasersPage() {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const [miningLasersRawData, setMiningLasersRawData] = useState<MiningLaserRawData[]>([]);
     const [formattedMiningLasers, setFormattedMiningLasers] = useState<any[]>([]);
 
     const [allColumns, setAllColumns] = useState<string[]>([]);
+
+    // Filtres
+    const [filterName, setFilterName] = useState("");
+    const [filterSize, setFilterSize] = useState("");
+    const [filterLocation, setFilterLocation] = useState("");
 
     useEffect(() => {
         fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.itemsCategory + UEX_API_ITEM_CATEGORIES.miningLasers)
@@ -80,7 +95,7 @@ export default function MiningLasersPage() {
             t("miningLasers.table.optimalChargeRate"),
             t("miningLasers.table.optimalChargeWindow"),
             t("miningLasers.table.inertMaterials"),
-        ]
+        ];
         // ajout des données de localisations
         const uniqueLocations = new Set<string>();
         formattedMiningLasers.forEach(laser => {
@@ -89,7 +104,20 @@ export default function MiningLasersPage() {
         const locationColumns = Array.from(uniqueLocations).map(location => location);
         const allColumns = [...columns, ...locationColumns];
         setAllColumns(allColumns);
-    }, [formattedMiningLasers]);
+    }, [formattedMiningLasers, i18n.language]);
+
+    // Préparation des valeurs uniques pour les filtres
+    const laserNames = Array.from(new Set(formattedMiningLasers.map(l => l.name))).sort();
+    const sizes = Array.from(new Set(formattedMiningLasers.map(l => l.size))).sort();
+    const locations = Array.from(new Set(formattedMiningLasers.flatMap(l => l.locations))).sort();
+
+    // Application des filtres
+    const filteredLasers = formattedMiningLasers.filter(laser => {
+        const matchName = !filterName || laser.name === filterName;
+        const matchSize = !filterSize || laser.size === filterSize;
+        const matchLocation = !filterLocation || laser.locations.includes(filterLocation);
+        return matchName && matchSize && matchLocation;
+    });
 
     const getMinMaxPower = (miningLaser: MiningLaser) => {
         const sliptedValue = miningLaser?.min_power?.split('-');
@@ -116,6 +144,18 @@ export default function MiningLasersPage() {
                     </div>
 
                     <div className="w-full mt-8 flex flex-col gap-4">
+                        {/* Filtres */}
+                        <MiningLaserFilter
+                            laserNames={laserNames}
+                            sizes={sizes}
+                            locations={locations}
+                            selectedName={filterName}
+                            selectedSize={filterSize}
+                            selectedLocation={filterLocation}
+                            onNameChange={setFilterName}
+                            onSizeChange={setFilterSize}
+                            onLocationChange={setFilterLocation}
+                        />
                         <div className="overflow-x-auto w-full mx-auto rounded-xl shadow-lg border border-slate-800 bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-md mb-8">
                             <table className="w-full table-auto border-collapse text-left">
                                 <thead>
@@ -126,6 +166,7 @@ export default function MiningLasersPage() {
                                                     key={index}
                                                     className="px-6 py-4 text-cyan-300 font-semibold text-xs md:text-sm border border-slate-700 bg-slate-900 sticky left-0 z-10"
                                                     style={{ minWidth: '10rem', maxWidth: '16rem', width: '10rem' }}
+                                                    suppressHydrationWarning
                                                 >
                                                     {col}
                                                 </th>
@@ -138,6 +179,7 @@ export default function MiningLasersPage() {
                                                         width: col.length > 10 ? '12rem' : col.length + 'rem',
                                                         fontSize: '0.65rem'
                                                     }}
+                                                    suppressHydrationWarning
                                                 >
                                                     {col}
                                                 </th>
@@ -146,21 +188,21 @@ export default function MiningLasersPage() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {formattedMiningLasers.map((laser, idx) => (
+                                    {filteredLasers.map((laser, idx) => (
                                         <tr key={idx} className={`transition-colors duration-200 ${idx % 2 === 0 ? "bg-slate-950/70" : "bg-slate-900/60"} hover:bg-cyan-950/40 hover:shadow-md`}>
-                                            <td className="px-6 py-4 border border-slate-700 font-medium text-cyan-100 text-xs md:text-sm bg-slate-950 sticky left-0 z-10" style={{ minWidth: '8rem', maxWidth: '12rem', width: '10rem', backgroundColor: '#0f172a' }}>{laser.name}</td>
-                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{laser.size}</td>
-                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{laser.slots}</td>
-                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{laser.optimal_range}</td>
-                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{laser.max_range}</td>
-                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{laser.min_power}</td>
-                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{laser.max_power}</td>
-                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{laser.extract_power}</td>
-                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{laser.resistance}</td>
-                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{laser.instability}</td>
-                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{laser.optimal_charge_rate}</td>
-                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{laser.optimal_charge_window}</td>
-                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{laser.inert_materials}</td>
+                                            <td className={`px-6 py-4 border border-slate-700 font-medium text-cyan-100 text-xs md:text-sm bg-slate-950 sticky left-0 z-10`} style={{ minWidth: '8rem', maxWidth: '12rem', width: '10rem', backgroundColor: '#0f172a' }}>{laser.name}</td>
+                                            <td className={`px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200`}>{laser.size}</td>
+                                            <td className={`px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200`}>{laser.slots}</td>
+                                            <td className={`px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200`}>{laser.optimal_range}</td>
+                                            <td className={`px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200`}>{laser.max_range}</td>
+                                            <td className={`px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200`}>{laser.min_power}</td>
+                                            <td className={`px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200`}>{laser.max_power}</td>
+                                            <td className={`px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200`}>{laser.extract_power}</td>
+                                            <td className={`px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center ${getColorForValue(laser.resistance)}`}>{laser.resistance}</td>
+                                            <td className={`px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center ${getColorForValue(laser.instability)}`}>{laser.instability}</td>
+                                            <td className={`px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center ${getColorForValue(laser.optimal_charge_rate)}`}>{laser.optimal_charge_rate}</td>
+                                            <td className={`px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center ${getColorForValue(laser.optimal_charge_window)}`}>{laser.optimal_charge_window}</td>
+                                            <td className={`px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center ${getColorForValue(laser.inert_materials)}`}>{laser.inert_materials}</td>
                                             {allColumns.slice(13).map((location, locIndex) => (
                                                 <td key={locIndex} className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">
                                                     {laser.locations.includes(location) ? "✓" : ""}

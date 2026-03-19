@@ -115,6 +115,15 @@
   "miningLasers": {
     "title": "Mining Lasers",
     "description": "Discover the different mining lasers available in the verse, their characteristics and optimal use cases. Compare mining lasers to choose the best one for your mining operations.",
+    "filters": {
+      "title": "Filters",
+      "laser": "Laser",
+      "allLasers": "All Lasers",
+      "size": "Ship Size",
+      "allSizes": "All Sizes",
+      "location": "Usage Location",
+      "allLocations": "All Locations"
+    },
     "table": {
       "laser": "Laser",
       "size": "Size",

@@ -114,7 +114,31 @@
   },
   "miningLasers": {
     "title": "Lasers de minage",
-    "description": "Découvrez les différents lasers de minage disponibles dans le verse, leurs caractéristiques et cas d'utilisation optimaux. Comparez les lasers de minage pour choisir le meilleur pour vos opérations minières."
+    "description": "Découvrez les différents lasers de minage disponibles dans le verse, leurs caractéristiques et cas d'utilisation optimaux. Comparez les lasers de minage pour choisir le meilleur pour vos opérations minières.",
+    "filters": {
+      "title": "Filtres",
+      "laser": "Laser",
+      "allLasers": "Tous les lasers",
+      "size": "Taille du vaisseau",
+      "allSizes": "Toutes les tailles",
+      "location": "Lieu d'utilisation",
+      "allLocations": "Tous les lieux"
+    },
+    "table": {
+      "laser": "Laser",
+      "size": "Taille",
+      "slots": "Emplacements",
+      "optimalRange": "Portée optimale",
+      "maxRange": "Portée maximale",
+      "minPower": "Puissance minimale",
+      "maxPower": "Puissance maximale",
+      "extractionPower": "Puissance d'extraction",
+      "resistance": "Résistance",
+      "instability": "Instabilité",
+      "optimalChargeRate": "Taux de charge optimal",
+      "optimalChargeWindow": "Fenêtre de charge optimale",
+      "inertMaterials": "Matériaux inertes"
+    }
   },
   "utils": {
     "wip": "En cours de développement - Bientôt disponible"
