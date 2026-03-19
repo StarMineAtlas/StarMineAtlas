@@ -115,6 +115,8 @@
   "miningLasers": {
     "title": "Lasers de minage",
     "description": "Découvrez les différents lasers de minage disponibles dans le verse, leurs caractéristiques et cas d'utilisation optimaux. Comparez les lasers de minage pour choisir le meilleur pour vos opérations minières.",
+    "loading": "Chargement des lasers de minage...",
+    "noResultForFilter": "Aucun laser de minage ne correspond à vos filtres. Essayez d'autres critères.",
     "filters": {
       "title": "Filtres",
       "laser": "Laser",
