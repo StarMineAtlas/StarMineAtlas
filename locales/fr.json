@@ -3,10 +3,16 @@
     "siteName": "Star Mine Atlas",
     "rockTypes": "Types de Roches",
     "qualityDistribution": "Repartition qualite",
-    "sellPrice": "Prix du Marché",
-    "data": "Données",
-    "refinery": "Raffinerie",
-    "marketPrices": "Prix du Marché - Tableau"
+    "data": {
+      "title": "Données",
+      "refinery": "Raffinerie",
+      "marketPrices": "Prix du Marché",
+      "miningLasers": "Lasers de Minage"
+    },
+    "calculators": {
+      "title": "Calculateurs",
+      "miningProfit": "Calculateur de Profit Minier"
+    }
   },
   "home": {
     "title": "Types de Roches",
@@ -15,7 +21,24 @@
     "showing": "Affichage de {{count}} sur {{total}} roches",
     "noRocksFound": "Aucune roche trouvée",
     "noRocksHint": "Essayez d'ajuster vos filtres ou votre recherche",
-    "loading": "Chargement des roches..."
+    "loading": "Chargement des roches...",
+    "filters": {
+      "searchPlaceholder": "Recherche...",
+      "filters": "Filtres :",
+      "allSystems": "Tous les systèmes",
+      "allBodies": "Tous les astres",
+      "allMinerals": "Tous les minéraux"
+    },
+    "rockCard": {
+      "primary": "Primaire :",
+      "secondary": "Secondaire :",
+      "none": "Aucun",
+      "notEnoughData": "Les données récoltées ne sont pas suffisantes pour fournir des statistiques fiables",
+      "celestialBody": "Astre / Activité :",
+      "system": "Système :",
+      "quality": "Qualité :",
+      "median": "Médiane :"
+    }
   },
   "qualityDistribution": {
     "title": "Répartition qualité",
@@ -24,8 +47,8 @@
     "loading": "Chargement de la répartition de qualité...",
     "noData": "Aucune donnée disponible pour la répartition de qualité"
   },
-  "sellPrice": {
-    "title": "Prix du Marché",
+  "miningProfit": {
+    "title": "Calculateur de Profit Minier",
     "description": "Suivez les prix des minéraux en temps réel dans les terminaux commerciaux de l'univers. Comparez les prix d'achat et de vente pour maximiser vos profits miniers."
   },
   "refinery": {
@@ -89,25 +112,33 @@
       "oneScuPrice": "Prix max par SCU"
     }
   },
-  "filters": {
-    "searchPlaceholder": "Recherche...",
-    "filters": "Filtres :",
-    "allSystems": "Tous les systèmes",
-    "allBodies": "Tous les astres",
-    "allMinerals": "Tous les minéraux"
-  },
-  "rockCard": {
-    "primary": "Primaire :",
-    "secondary": "Secondaire :",
-    "none": "Aucun",
-    "inertMaterial": "Matériau inerte :",
-    "yes": "Oui",
-    "no": "Non",
-    "notEnoughData": "Les données récoltées ne sont pas suffisantes pour fournir des statistiques fiables",
-    "celestialBody": "Astre / Activité :",
-    "system": "Système :",
-    "quality": "Qualité :",
-    "median": "Médiane :"
+  "miningLasers": {
+    "title": "Lasers de minage",
+    "description": "Découvrez les différents lasers de minage disponibles dans le verse, leurs caractéristiques et cas d'utilisation optimaux. Comparez les lasers de minage pour choisir le meilleur pour vos opérations minières.",
+    "filters": {
+      "title": "Filtres",
+      "laser": "Laser",
+      "allLasers": "Tous les lasers",
+      "size": "Taille du vaisseau",
+      "allSizes": "Toutes les tailles",
+      "location": "Lieu d'achat",
+      "allLocations": "Tous les lieux"
+    },
+    "table": {
+      "laser": "Laser",
+      "size": "Taille",
+      "slots": "Emplacements",
+      "optimalRange": "Portée optimale",
+      "maxRange": "Portée maximale",
+      "minPower": "Puissance minimale",
+      "maxPower": "Puissance maximale",
+      "extractionPower": "Puissance d'extraction",
+      "resistance": "Résistance",
+      "instability": "Instabilité",
+      "optimalChargeRate": "Taux de charge optimal",
+      "optimalChargeWindow": "Fenêtre de charge optimale",
+      "inertMaterials": "Matériaux inertes"
+    }
   },
   "utils": {
     "wip": "En cours de développement - Bientôt disponible"

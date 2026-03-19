@@ -96,7 +96,7 @@ export function MineralFilter({
         <Input
           suppressHydrationWarning
           type="text"
-          placeholder={t("filters.searchPlaceholder")}
+          placeholder={t("home.filters.searchPlaceholder")}
           value={debouncedSearch}
           onChange={(e) => setDebouncedSearch(e.target.value)}
           className="border-slate-800 bg-slate-900/50 pl-10 text-cyan-50 placeholder:text-slate-500 focus:border-cyan-700 focus:ring-cyan-700/20"
@@ -107,7 +107,7 @@ export function MineralFilter({
       <div className="flex flex-col md:flex-row flex-wrap items-center gap-3">
         <div className="flex items-center gap-2 text-slate-400">
           <Filter className="h-4 w-4" />
-          <span className="text-sm" suppressHydrationWarning>{t("filters.filters")}</span>
+          <span className="text-sm" suppressHydrationWarning>{t("home.filters.filters")}</span>
         </div>
 
         {/* System Filter */}
@@ -128,7 +128,7 @@ export function MineralFilter({
                 value="all"
                 className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
               >
-                {t("filters.allSystems")}
+                {t("home.filters.allSystems")}
               </SelectItem>
               {systems && systems.length > 0 && systems.map((system) => (
                 <SelectItem
@@ -148,14 +148,14 @@ export function MineralFilter({
           <MapPin className="h-4 w-4 text-slate-500" />
           <Select value={selectedBody} onValueChange={onBodyChange}>
             <SelectTrigger className="w-[180px] border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
-              <SelectValue placeholder="Celestial Body" />
+              <SelectValue placeholder={t("home.filters.bodyPlaceholder")} />
             </SelectTrigger>
             <SelectContent className="border-slate-800 bg-slate-900">
               <SelectItem
                 value="all"
                 className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
               >
-                {t("filters.allBodies")}
+                {t("home.filters.allBodies")}
               </SelectItem>
               {/* Group bodies by system */}
               {(() => {
@@ -197,7 +197,7 @@ export function MineralFilter({
                 value="all"
                 className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
               >
-                {t("filters.allMinerals")}
+                {t("home.filters.allMinerals")}
               </SelectItem>
               {/* Group minerals by type */}
               {Object.entries(mineralsByType).map(([type, mineralsList]) => (

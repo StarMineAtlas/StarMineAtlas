@@ -17,7 +17,17 @@ export function Header() {
 
   const navLinks = [
     { href: "/", label: "header.rockTypes" },
-    { href: "/sell-price", label: "header.sellPrice" },
+  ]
+
+  const calculatorsLinks = [
+    { href: "/calculators/mining-profit", label: "header.calculators.miningProfit" },
+  ]
+
+  const dataLinks = [
+    { href: "/data/quality-distribution", label: "header.qualityDistribution" },
+    { href: "/data/refinery", label: "header.data.refinery" },
+    { href: "/data/market-prices", label: "header.data.marketPrices" },
+    { href: "/data/mining-lasers", label: "header.data.miningLasers" },
   ]
 
   return (
@@ -44,6 +54,38 @@ export function Header() {
                 {t(link.label)}
               </Link>
             ))}
+            {/* Dropdown Calculators */}
+            <div className="relative">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="flex items-center text-sm font-medium transition-colors hover:text-cyan-400 text-slate-400 px-2 py-1 rounded-md"
+                    tabIndex={0}
+                    suppressHydrationWarning
+                  >
+                    {t("header.calculators.title")}
+                    <ChevronDown className="ml-2 h-4 w-4" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-slate-900 border border-cyan-900/50 shadow-lg rounded-md min-w-[200px]">
+                  {calculatorsLinks.map((link) => (
+                    <DropdownMenuItem
+                      asChild
+                      key={link.href}
+                      className="hover:bg-cyan-900/30 focus:bg-cyan-900/40 rounded transition-colors p-0"
+                    >
+                      <Link
+                        href={link.href}
+                        className={pathname === link.href ? "text-cyan-400" : "text-slate-300"}
+                        suppressHydrationWarning
+                      >
+                        <span className="hover:text-white w-full p-2">{t(link.label)}</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             {/* Dropdown Data */}
             <div className="relative">
               <DropdownMenu>
@@ -53,26 +95,26 @@ export function Header() {
                     tabIndex={0}
                     suppressHydrationWarning
                   >
-                    {t("header.data")}
+                    {t("header.data.title")}
                     <ChevronDown className="ml-2 h-4 w-4" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-slate-900 border border-cyan-900/50 shadow-lg rounded-md min-w-[200px]">
-                  <DropdownMenuItem asChild className="hover:bg-cyan-900/30 focus:bg-cyan-900/40 rounded transition-colors p-0">
-                    <Link href="/data/quality-distribution" className={pathname === "/data/quality-distribution" ? "text-cyan-400" : "text-slate-300"} suppressHydrationWarning>
-                      <span className="hover:text-white w-full p-2">{t("header.qualityDistribution")}</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="hover:bg-cyan-900/30 focus:bg-cyan-900/40 rounded transition-colors p-0">
-                    <Link href="/data/refinery" className={pathname === "/data/refinery" ? "text-cyan-400" : "text-slate-300"} suppressHydrationWarning>
-                      <span className="hover:text-white w-full p-2">{t("header.refinery")}</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="hover:bg-cyan-900/30 focus:bg-cyan-900/40 rounded transition-colors p-0">
-                    <Link href="/data/market-prices" className={pathname === "/data/market-prices" ? "text-cyan-400" : "text-slate-300"} suppressHydrationWarning>
-                      <span className="hover:text-white w-full p-2">{t("header.marketPrices")}</span>
-                    </Link>
-                  </DropdownMenuItem>
+                  {dataLinks.map((link) => (
+                    <DropdownMenuItem
+                      asChild
+                      key={link.href}
+                      className="hover:bg-cyan-900/30 focus:bg-cyan-900/40 rounded transition-colors p-0"
+                    >
+                      <Link
+                        href={link.href}
+                        className={pathname === link.href ? "text-cyan-400" : "text-slate-300"}
+                        suppressHydrationWarning
+                      >
+                        <span className="hover:text-white w-full p-2">{t(link.label)}</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -112,12 +154,38 @@ export function Header() {
                 {t(link.label)}
               </Link>
             ))}
-            {/* Dropdown Data for mobile */}
-            <div className="mt-2 flex flex-col">
-              <span className="text-base font-medium text-slate-500 border-b border-slate-700 pb-2 mb-1">{t("header.data")}</span>
-              <Link href="/data/quality-distribution" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/data/quality-distribution" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.qualityDistribution")}</Link>
-              <Link href="/data/refinery" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/data/refinery" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.refinery")}</Link>
-              <Link href="/data/market-prices" onClick={() => setMobileMenuOpen(false)} className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === "/data/market-prices" ? "text-cyan-400" : "text-slate-400"}`}>{t("header.marketPrices")}</Link>
+            {/* Dropdowns for mobile */}
+            <div className="mb-2 flex flex-col">
+              <span className="text-base font-medium text-slate-500 border-b border-slate-700 pb-2 mb-1 mt-4">{t("header.calculators.title")}</span>
+              {
+                calculatorsLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === link.href ? "text-cyan-400" : "text-slate-400"
+                      }`}
+                    suppressHydrationWarning
+                  >
+                    {t(link.label)}
+                  </Link>
+                ))
+              }
+              <span className="text-base font-medium text-slate-500 border-b border-slate-700 pb-2 mb-1 mt-4">{t("header.data.title")}</span>
+              {
+                dataLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-800 hover:text-cyan-400 ${pathname === link.href ? "text-cyan-400" : "text-slate-400"
+                      }`}
+                    suppressHydrationWarning
+                  >
+                    {t(link.label)}
+                  </Link>
+                ))
+              }
             </div>
           </nav>
           <div className="border-t border-cyan-900/50 px-4 py-4">

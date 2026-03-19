@@ -3,10 +3,16 @@
     "siteName": "Star Mine Atlas",
     "rockTypes": "Rock Types",
     "qualityDistribution": "Quality Distribution",
-    "sellPrice": "Sell Price",
-    "data": "Data",
-    "refinery": "Refinery",
-    "marketPrices": "Market Prices"
+    "data": {
+      "title": "Data",
+      "refinery": "Refinery",
+      "marketPrices": "Market Prices",
+      "miningLasers": "Mining Lasers"
+    },
+    "calculators": {
+      "title": "Calculators",
+      "miningProfit": "Mining Profit Calculator"
+    }
   },
   "home": {
     "title": "Rock Types",
@@ -15,7 +21,24 @@
     "showing": "Showing {{count}} of {{total}} rocks",
     "noRocksFound": "No rocks found",
     "noRocksHint": "Try adjusting your filters or search query",
-    "loading": "Loading rocks..."
+    "loading": "Loading rocks...",
+    "filters": {
+      "searchPlaceholder": "Search...",
+      "filters": "Filters:",
+      "allSystems": "All Systems",
+      "allBodies": "All Bodies",
+      "allMinerals": "All Minerals"
+    },
+    "rockCard": {
+      "primary": "Primary:",
+      "secondary": "Secondary:",
+      "none": "None",
+      "notEnoughData": "Data collected is not sufficient to provide reliable statistics",
+      "celestialBody": "Celestial Body / Activity:",
+      "system": "System:",
+      "quality": "Quality:",
+      "median": "Median:"
+    }
   },
   "qualityDistribution": {
     "title": "Quality Distribution",
@@ -24,8 +47,8 @@
     "loading": "Loading quality distribution...",
     "noData": "No data available for quality distribution"
   },
-  "sellPrice": {
-    "title": "Market Price",
+  "miningProfit": {
+    "title": "Mining Profit",
     "description": "Track real-time mineral prices across trading terminals in the verse. Compare buy and sell prices to maximize your mining profits."
   },
   "refinery": {
@@ -89,25 +112,33 @@
       "oneScuPrice": "Max Price per SCU"
     }
   },
-  "filters": {
-    "searchPlaceholder": "Search...",
-    "filters": "Filters:",
-    "allSystems": "All Systems",
-    "allBodies": "All Bodies",
-    "allMinerals": "All Minerals"
-  },
-  "rockCard": {
-    "primary": "Primary:",
-    "secondary": "Secondary:",
-    "none": "None",
-    "inertMaterial": "Inert Material:",
-    "yes": "Yes",
-    "no": "No",
-    "notEnoughData": "Data collected is not sufficient to provide reliable statistics",
-    "celestialBody": "Celestial Body / Activity:",
-    "system": "System:",
-    "quality": "Quality:",
-    "median": "Median:"
+  "miningLasers": {
+    "title": "Mining Lasers",
+    "description": "Discover the different mining lasers available in the verse, their characteristics and optimal use cases. Compare mining lasers to choose the best one for your mining operations.",
+    "filters": {
+      "title": "Filters",
+      "laser": "Laser",
+      "allLasers": "All Lasers",
+      "size": "Ship Size",
+      "allSizes": "All Sizes",
+      "location": "Purchase Location",
+      "allLocations": "All Locations"
+    },
+    "table": {
+      "laser": "Laser",
+      "size": "Size",
+      "slots": "Slots",
+      "optimalRange": "Optimal Range",
+      "maxRange": "Max Range",
+      "minPower": "Min Power",
+      "maxPower": "Max Power",
+      "extractionPower": "Extraction Power",
+      "resistance": "Resistance",
+      "instability": "Instability",
+      "optimalChargeRate": "Optimal Charge Rate",
+      "optimalChargeWindow": "Optimal Charge Window",
+      "inertMaterials": "Inert Materials"
+    }
   },
   "utils": {
     "wip": "Work in Progress - Coming Soon"

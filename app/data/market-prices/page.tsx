@@ -142,8 +142,8 @@ export default function marketPrices() {
                                             {formattedCommoditiesShip.map((commodity, idx) => (
                                                 <tr key={commodity.id} className={`transition-colors duration-200 ${idx % 2 === 0 ? "bg-slate-950/70" : "bg-slate-900/60"} hover:bg-cyan-950/40 hover:shadow-md`}>
                                                     <td className="px-6 py-4 border border-slate-700 font-medium text-cyan-100 text-xs md:text-sm bg-slate-950 sticky left-0 z-10" style={{ minWidth: '10rem', maxWidth: '10rem', width: '10rem', backgroundColor: '#0f172a' }}>{commodity.name}</td>
-                                                    <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{commodity.raw.price_sell.toLocaleString()}</td>
-                                                    <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{commodity.refined.price_sell.toLocaleString()}</td>
+                                                    <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{commodity.raw.price_sell.toLocaleString()} <span className="device-font">aUEC</span></td>
+                                                    <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{commodity.refined.price_sell.toLocaleString()} <span className="device-font">aUEC</span></td>
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -167,8 +167,8 @@ export default function marketPrices() {
                                             {formattedCommoditiesFPS.map((commodity, idx) => (
                                                 <tr key={commodity.id} className={`transition-colors duration-200 ${idx % 2 === 0 ? "bg-slate-950/70" : "bg-slate-900/60"} hover:bg-cyan-950/40 hover:shadow-md`}>
                                                     <td className="px-6 py-4 border border-slate-700 font-medium text-cyan-100 text-xs md:text-sm bg-slate-950 sticky left-0 z-10" style={{ minWidth: '10rem', maxWidth: '10rem', width: '10rem', backgroundColor: '#0f172a' }}>{commodity.name}</td>
-                                                    <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{singleGemPrice(commodity.refined.price_sell).toLocaleString()}</td>
-                                                    <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{commodity.refined.price_sell.toLocaleString()}</td>
+                                                    <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{singleGemPrice(commodity.refined.price_sell).toLocaleString()} <span className="device-font">aUEC</span></td>
+                                                    <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">{commodity.refined.price_sell.toLocaleString()} <span className="device-font">aUEC</span></td>
                                                 </tr>
                                             ))}
                                         </tbody>

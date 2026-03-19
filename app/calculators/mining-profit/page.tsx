@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next"
 import { Header } from "@/components/Header"
 import { TrendingUp, Construction } from "lucide-react"
 
-export default function MarketPricePage() {
+export default function MiningProfitPage() {
   const { t } = useTranslation()
 
   return (
@@ -15,12 +15,12 @@ export default function MarketPricePage() {
           <div className="mb-6 flex items-center gap-3">
             <TrendingUp className="h-10 w-10 text-cyan-400" />
             <h1 className="text-3xl font-bold tracking-tight text-cyan-50 sm:text-4xl">
-              {t("sellPrice.title")}
+              {t("miningProfit.title")}
             </h1>
           </div>
 
           <p className="mb-8 max-w-2xl text-lg text-slate-400">
-            {t("sellPrice.description")}
+            {t("miningProfit.description")}
           </p>
 
           <div className="flex items-center gap-2 rounded-lg border border-amber-500/50 bg-amber-500/10 px-4 py-3">
