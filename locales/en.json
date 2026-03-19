@@ -115,6 +115,8 @@
   "miningLasers": {
     "title": "Mining Lasers",
     "description": "Discover the different mining lasers available in the verse, their characteristics and optimal use cases. Compare mining lasers to choose the best one for your mining operations.",
+    "loading": "Loading mining lasers...",
+    "noResultForFilter": "No mining lasers match your filters. Try changing your criteria.",
     "filters": {
       "title": "Filters",
       "laser": "Laser",
