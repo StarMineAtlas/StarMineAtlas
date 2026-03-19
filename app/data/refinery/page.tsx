@@ -160,18 +160,12 @@ export default function refinery() {
                                     onLocationChange={setSelectedLocation}
                                 />
                                 {(selectedMineral && selectedLocation && filteredYields.length === 0) ? (
-                                    <div className="flex flex-col items-center justify-center w-full px-12">
-                                        <div className="rounded-xl border border-cyan-800 bg-slate-900/80 px-6 py-8 text-center text-cyan-200 text-lg font-semibold">
-                                            {t("refinery.yieldTable.noResultForFilter")}
-                                        </div>
-                                    </div>
+                                    <RefinerySingleResult mineral={selectedMineral} location={selectedLocation} value={0} />
                                 ) : filteredMinerals.length === 1 && filteredLocations.length === 1 ? (
                                     (() => {
-                                        const mineral = filteredMinerals[0];
-                                        const location = filteredLocations[0];
-                                        const yieldData = filteredYields.find(y => y!.mineral === mineral && y!.name === location);
+                                        const yieldData = filteredYields.find(y => y!.mineral === selectedMineral && y!.name === selectedLocation);
                                         const value = yieldData ? yieldData.yield : null;
-                                        return <RefinerySingleResult mineral={mineral} location={location} value={value} />;
+                                        return <RefinerySingleResult mineral={selectedMineral} location={selectedLocation} value={value} />;
                                     })()
                                 ) : (
                                     <div className={`overflow-x-auto rounded-xl shadow-lg border border-slate-800 bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-md ${filteredLocations.length === 1 ? 'w-full md:w-1/2 mx-auto' : 'w-full'}`}>
