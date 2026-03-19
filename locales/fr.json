@@ -3,11 +3,16 @@
     "siteName": "Star Mine Atlas",
     "rockTypes": "Types de Roches",
     "qualityDistribution": "Repartition qualite",
-    "sellPrice": "Prix du Marché",
-    "data": "Données",
-    "refinery": "Raffinerie",
-    "marketPrices": "Prix du Marché - Tableau",
-    "miningLasers": "Lasers de minage"
+    "data": {
+      "title": "Données",
+      "refinery": "Raffinerie",
+      "marketPrices": "Prix du Marché",
+      "miningLasers": "Lasers de Minage"
+    },
+    "calculator": {
+      "title": "Calculateur",
+      "miningProfit": "Calculateur de Profit Minier"
+    }
   },
   "home": {
     "title": "Types de Roches",

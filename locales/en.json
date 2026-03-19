@@ -3,11 +3,16 @@
     "siteName": "Star Mine Atlas",
     "rockTypes": "Rock Types",
     "qualityDistribution": "Quality Distribution",
-    "sellPrice": "Sell Price",
-    "data": "Data",
-    "refinery": "Refinery",
-    "marketPrices": "Market Prices",
-    "miningLasers": "Mining Lasers"
+    "data": {
+      "title": "Data",
+      "refinery": "Refinery",
+      "marketPrices": "Market Prices",
+      "miningLasers": "Mining Lasers"
+    },
+    "calculator": {
+      "title": "Calculator",
+      "miningProfit": "Mining Profit Calculator"
+    }
   },
   "home": {
     "title": "Rock Types",
@@ -42,8 +47,8 @@
     "loading": "Loading quality distribution...",
     "noData": "No data available for quality distribution"
   },
-  "sellPrice": {
-    "title": "Market Price",
+  "miningProfit": {
+    "title": "Mining Profit",
     "description": "Track real-time mineral prices across trading terminals in the verse. Compare buy and sell prices to maximize your mining profits."
   },
   "refinery": {
