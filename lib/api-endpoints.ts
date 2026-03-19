@@ -9,7 +9,6 @@ export const API_ENDPOINTS = {
     systems: "systems",
     bodies: "bodies",
     rocks: "rocks",
-    stats: "stats",
     graph: "graph",
 };
 
