@@ -9,6 +9,7 @@ import { API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
 import { RefineryMethod, RefineryRatingCost, RefineryRatingSpeed, RefineryRatingYield, RefineryYield } from "@/models/Refinery"
 import { RefinerySingleResult } from "@/components/RefinerySingleResult"
 
+// Function to get color class based on rating (1 = red, 2 = orange, 3 = green)
 function getRatingColor(rating: number) {
     switch (rating) {
         case 1:
@@ -67,14 +68,11 @@ export default function refinery() {
         }).filter(Boolean);
     }, [refineriesYields]);
 
-    // Déclarer d'abord les minerais et locations uniques
-
-
-    // State pour les filtres
+    // State for filters
     const [selectedMineral, setSelectedMineral] = useState("");
     const [selectedLocation, setSelectedLocation] = useState("");
 
-    // Filtres appliqués sur les yields
+    // Filters applied on the yields
     const filteredYields = useMemo(() => {
         return formattedYields.filter(yieldData => {
             const mineralMatch = selectedMineral ? yieldData!.mineral === selectedMineral : true;
@@ -84,7 +82,7 @@ export default function refinery() {
     }, [formattedYields, selectedMineral, selectedLocation]);
 
 
-    // Pour la table, on veut les minerais et locations uniques filtrés (après déclaration des uniques)
+    // For the table, we want the unique minerals and locations filtered (after declaring the uniques)
     const uniqueMinerals = useMemo(() => {
         const mineralsSet = new Set<string>();
         refineriesYields.forEach(yieldData => {
@@ -106,7 +104,7 @@ export default function refinery() {
         return Array.from(locationsSet).sort();
     }, [refineriesYields]);
 
-    // Toujours ne garder que les valeurs présentes dans filteredYields
+    // Always keep only the values present in filteredYields
     const filteredMinerals = useMemo(() => {
         const mineralsSet = new Set<string>();
         filteredYields.forEach(yieldData => mineralsSet.add(yieldData!.mineral));

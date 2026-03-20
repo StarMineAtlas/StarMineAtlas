@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next"
 import { Header } from "@/components/Header"
 import { RockCard } from "@/components/RockCard"
 import { MineralFilter } from "@/components/MineralFilter"
-import { Mountain } from "lucide-react"
+import { Mountain, Stone } from "lucide-react"
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"
 import { Rock } from "@/models/Rock"
 
@@ -98,7 +98,7 @@ export default function Home() {
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <Mountain className="h-8 w-8 text-cyan-400" />
+            <Stone className="h-8 w-8 text-cyan-400" />
             <h1 className="text-3xl font-bold tracking-tight text-cyan-50" suppressHydrationWarning>
               {t("home.title")}
             </h1>
@@ -106,7 +106,7 @@ export default function Home() {
           <p className="text-slate-400" suppressHydrationWarning>
             {t("home.description")}
           </p>
-          {/* Info zone stylisée */}
+          {/* Info zone */}
           <div
             className="mt-6 rounded-xl border border-cyan-800 bg-gradient-to-br from-slate-900/80 to-cyan-950/80 p-5 shadow-lg flex items-center gap-3"
             style={{ backdropFilter: 'blur(4px)' }}
@@ -136,7 +136,7 @@ export default function Home() {
 
         {isLoading ? (
           <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16">
-            <Mountain className="mb-4 h-12 w-12 text-slate-700 animate-spin" />
+            <Stone className="mb-4 h-12 w-12 text-slate-700 animate-spin" />
             <p className="text-lg text-slate-400" suppressHydrationWarning>{t("home.loading")}</p>
           </div>
         ) : rocks.length > 0 && filteredRocks.length > 0 ? (
@@ -147,7 +147,7 @@ export default function Home() {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16">
-            <Mountain className="mb-4 h-12 w-12 text-slate-700" />
+            <Stone className="mb-4 h-12 w-12 text-slate-700" />
             <p className="text-lg text-slate-400" suppressHydrationWarning>{t("home.noRocksFound")}</p>
             <p className="text-sm text-slate-500" suppressHydrationWarning>
               {t("home.noRocksHint")}

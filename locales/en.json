@@ -1,22 +1,24 @@
 {
   "header": {
     "siteName": "Star Mine Atlas",
-    "rockTypes": "Rock Types",
+    "findMinerals": "Find Minerals",
     "qualityDistribution": "Quality Distribution",
     "data": {
       "title": "Data",
       "refinery": "Refinery",
       "marketPrices": "Market Prices",
-      "miningLasers": "Mining Lasers"
+      "miningLasers": "Mining Lasers",
+      "modulesGadgets": "Modules & Gadgets"
     },
     "calculators": {
       "title": "Calculators",
-      "miningProfit": "Mining Profit Calculator"
+      "miningProfit": "Mining Profit Calculator",
+      "loadout": "Loadout Calculator"
     }
   },
   "home": {
-    "title": "Rock Types",
-    "description": "Browse and filter mineable rock types across the verse. Data updated for Star Citizen 4.7.",
+    "title": "Find Minerals",
+    "description": "Browse and filter minerals across the verse. Data updated for Star Citizen 4.7.",
     "infoZone": "Note: Mineral statistics are being collected and represent only a sample and averages. They may not perfectly reflect in-game reality, as you can find any quality of mineral on celestial bodies. This data may become obsolete in the future or be questioned based on game updates.",
     "showing": "Showing {{count}} of {{total}} rocks",
     "noRocksFound": "No rocks found",
@@ -50,6 +52,10 @@
   "miningProfit": {
     "title": "Mining Profit",
     "description": "Track real-time mineral prices across trading terminals in the verse. Compare buy and sell prices to maximize your mining profits."
+  },
+  "loadout": {
+    "title": "Loadout Calculator",
+    "description": "Plan and optimize your mining loadout with our loadout calculator. Compare mining modules, gadgets, and lasers to create the perfect setup for your mining operations."
   },
   "refinery": {
     "title": "Refinery",
@@ -94,7 +100,7 @@
     }
   },
   "marketPrices": {
-    "title": "Market Prices - Table",
+    "title": "Market Prices",
     "infoZone": "Note: All data from tables are sourced from UEX data, after a new version of Star Citizen is released, it may take some time to update those data.",
     "loading": "Loading market prices...",
     "shipMinerals": {
@@ -112,20 +118,24 @@
       "oneScuPrice": "Max Price per SCU"
     }
   },
+  "laserModuleGadgetFilters": {
+    "title": "Filters",
+    "laser": "Laser",
+    "allLasers": "All Lasers",
+    "moduleGadget": "Module / Gadget",
+    "allModuleGadgets": "All Modules / Gadgets",
+    "size": "Ship Size",
+    "allSizes": "All Sizes",
+    "itemType": "Type",
+    "allItemTypes": "All Types",
+    "location": "Purchase Location",
+    "allLocations": "All Locations"
+  },
   "miningLasers": {
     "title": "Mining Lasers",
-    "description": "Discover the different mining lasers available in the verse, their characteristics and optimal use cases. Compare mining lasers to choose the best one for your mining operations.",
+    "infoZone": "Note: All data from tables are sourced from UEX data, after a new version of Star Citizen is released, it may take some time to update those data.",
     "loading": "Loading mining lasers...",
     "noResultForFilter": "No mining lasers match your filters. Try changing your criteria.",
-    "filters": {
-      "title": "Filters",
-      "laser": "Laser",
-      "allLasers": "All Lasers",
-      "size": "Ship Size",
-      "allSizes": "All Sizes",
-      "location": "Purchase Location",
-      "allLocations": "All Locations"
-    },
     "table": {
       "laser": "Laser",
       "size": "Size",
@@ -140,6 +150,28 @@
       "optimalChargeRate": "Optimal Charge Rate",
       "optimalChargeWindow": "Optimal Charge Window",
       "inertMaterials": "Inert Materials"
+    }
+  },
+  "modulesGadgets": {
+    "title": "Modules and Gadgets",
+    "infoZone": "Note: All data from tables are sourced from UEX data, after a new version of Star Citizen is released, it may take some time to update those data.",
+    "loading": "Loading modules and gadgets...",
+    "noResultForFilter": "No modules or gadgets match your filters. Try changing your criteria.",
+    "table": {
+      "name": "Module / Gadget",
+      "itemType": "Type",
+      "laserPowerMod": "Laser Power Mod",
+      "resistance": "Resistance",
+      "instability": "Instability",
+      "optimalChargeRate": "Optimal Charge Rate",
+      "optimalChargeWindow": "Optimal Charge Window",
+      "inertMaterials": "Inert Materials",
+      "overchargeRate": "Overcharge Rate",
+      "clustering": "Clustering",
+      "shatterDamage": "Shatter Damage",
+      "extractionPowerMod": "Extraction Power Mod",
+      "uses": "Uses",
+      "duration": "Duration (s)"
     }
   },
   "utils": {

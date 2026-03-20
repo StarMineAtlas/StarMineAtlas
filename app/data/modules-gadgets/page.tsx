@@ -1,0 +1,275 @@
+"use client"
+
+import { Header } from "@/components/Header";
+import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints";
+import { moduleGadgetAttributeType, type ModuleGadget, type ModuleGadgetAttributes, type ModuleGadgetPrices, type ModuleGadgetRawData } from "@/models/ModuleGadget";
+import { useEffect, useState } from "react";
+import { LayersPlus } from "lucide-react";
+import { LaserModuleGadgetFilter } from "@/components/LaserModuleGadgetFilter";
+import { useTranslation } from "react-i18next";
+
+// Function to get color class based on value (positive = green, negative = red, zero or non-numeric = gray), with optional inverse coloring
+const getColorForValue = (val: string | number | null | undefined, isInverse: boolean = false) => {
+    if (val === null || val === undefined || val === "") return "text-gray-400";
+    const num = typeof val === "string" ? parseFloat(val.replace(/[^-\d.]/g, "")) : val;
+    if (isNaN(num)) return "text-gray-400";
+    if (num > 0) return isInverse ? "text-red-400" : "text-green-400";
+    if (num < 0) return isInverse ? "text-green-400" : "text-red-400";
+    return "text-gray-400";
+};
+
+// Function to get color class based on item type
+const getTypeClass = (itemType: string) => {
+    switch (itemType) {
+        case "Active":
+            return "text-yellow-400";
+        case "Passive":
+            return "text-orange-400";
+        case "Gadget":
+            return "text-blue-400";
+        default:
+            return "text-gray-400";
+    }
+}
+
+export default function ModulesGadgetsPage() {
+    const { t, i18n } = useTranslation();
+
+    const [modulesRawData, setModulesRawData] = useState<ModuleGadgetRawData[]>([]);
+    const [formattedModules, setFormattedModules] = useState<ModuleGadget[]>([]);
+    const [allColumns, setAllColumns] = useState<string[]>([]);
+    // Filters
+    const [filterName, setFilterName] = useState("");
+    const [filterItemType, setFilterItemType] = useState("");
+    const [filterLocation, setFilterLocation] = useState("");
+    // Loader
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        setLoading(true);
+        Promise.all([
+            fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.itemsCategory + "28"),
+            fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.itemsCategory + "30")
+        ])
+            .then(async ([res28, res30]) => {
+                const result28 = await res28.json();
+                const result30 = await res30.json();
+                const mergedData = [
+                    ...((result28.data as ModuleGadgetRawData[]) || []),
+                    ...((result30.data as ModuleGadgetRawData[]) || [])
+                ];
+                setModulesRawData(mergedData);
+            });
+    }, []);
+
+    useEffect(() => {
+        if (modulesRawData.length > 0) {
+            setLoading(true);
+            const modulesGadgetsPromises = modulesRawData.map(async (module) => {
+                const moduleGadget: ModuleGadget = {} as ModuleGadget;
+                moduleGadget.id = module.id;
+                moduleGadget.name = module.name.replace(/ Module$/, "").replace(/ Gadget$/, "");
+                moduleGadget.locations = [];
+
+                // Fetch prices
+                const pricesRes = await fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.itemsPrices + module.id);
+                const pricesResult: { data: ModuleGadgetPrices[] } = await pricesRes.json();
+                pricesResult.data.forEach(attr => {
+                    moduleGadget.locations.push(attr.terminal_name || "");
+                });
+
+                // Fetch attributes
+                const attributesRes = await fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.itemsAttributes + module.id);
+                const attributesResult: { data: ModuleGadgetAttributes[] } = await attributesRes.json();
+                attributesResult.data.forEach(attr => {
+                    Object.keys(moduleGadgetAttributeType).forEach(key => {
+                        if (attr.attribute_name === moduleGadgetAttributeType[key as keyof typeof moduleGadgetAttributeType]) {
+                            (moduleGadget as any)[key] = attr.value + (attr.unit ? `${attr.unit}` : "");
+                        }
+                    });
+                });
+
+                moduleGadget.locations = Array.from(new Set(moduleGadget.locations));
+                moduleGadget.laserPowerMod = ((moduleGadget.laserPowerMod ? parseFloat(moduleGadget.laserPowerMod.replace("%", "")) : 0) - 100).toString();
+                if (moduleGadget.laserPowerMod && !moduleGadget.laserPowerMod.startsWith("-")) {
+                    moduleGadget.laserPowerMod = "+" + moduleGadget.laserPowerMod;
+                }
+                moduleGadget.laserPowerMod = moduleGadget.laserPowerMod !== '-100' ? moduleGadget.laserPowerMod + "%" : "";
+                return moduleGadget;
+            });
+
+            Promise.all(modulesGadgetsPromises).then((modules) => {
+                setFormattedModules(modules.sort((a, b) => {
+                    const itemTypeOrder = ["Active", "Passive", "Gadget"];
+                    const aTypeIndex = itemTypeOrder.indexOf(a.itemType || "");
+                    const bTypeIndex = itemTypeOrder.indexOf(b.itemType || "");
+                    if (aTypeIndex !== bTypeIndex) {
+                        return aTypeIndex - bTypeIndex;
+                    }
+                    return a.name.localeCompare(b.name);
+                }));
+                setLoading(false);
+            });
+        }
+    }, [modulesRawData]);
+
+    useEffect(() => {
+        // cols names with i18n
+        const columns = [
+            t("modulesGadgets.table.name"),
+            t("modulesGadgets.table.itemType"),
+            t("modulesGadgets.table.laserPowerMod"),
+            t("modulesGadgets.table.resistance"),
+            t("modulesGadgets.table.instability"),
+            t("modulesGadgets.table.optimalChargeRate"),
+            t("modulesGadgets.table.optimalChargeWindow"),
+            t("modulesGadgets.table.inertMaterials"),
+            t("modulesGadgets.table.overchargeRate"),
+            t("modulesGadgets.table.clustering"),
+            t("modulesGadgets.table.shatterDamage"),
+            t("modulesGadgets.table.extractionPowerMod"),
+            t("modulesGadgets.table.uses"),
+            t("modulesGadgets.table.duration")
+        ];
+        // add unique locations as columns
+        const uniqueLocations = new Set<string>();
+        formattedModules.forEach(item => {
+            item.locations.forEach((location: string) => uniqueLocations.add(location));
+        });
+        const locationColumns = Array.from(uniqueLocations).map(location => location);
+        const allColumns = [...columns, ...locationColumns];
+        setAllColumns(allColumns);
+    }, [formattedModules, i18n.language]);
+
+
+    // Preparation of unique values for filters
+    const moduleNames = Array.from(new Set(formattedModules.map(l => l.name))).sort();
+    const itemTypes = Array.from(new Set(formattedModules.map(l => l.itemType).filter((v): v is string => typeof v === 'string'))).sort((a, b) => {
+        const itemTypeOrder = ["Active", "Passive", "Gadget"];
+        const aTypeIndex = itemTypeOrder.indexOf(a || "");
+        const bTypeIndex = itemTypeOrder.indexOf(b || "");
+        if (aTypeIndex !== bTypeIndex) {
+            return aTypeIndex - bTypeIndex;
+        }
+        return 0;
+    });
+    const locations = Array.from(new Set(formattedModules.flatMap(l => l.locations))).sort();
+
+    // Applying filters
+    const filteredModules = formattedModules.filter(item => {
+        const matchName = !filterName || item.name === filterName;
+        const matchType = !filterItemType || item.itemType === filterItemType;
+        const matchLocation = !filterLocation || item.locations.includes(filterLocation);
+        return matchName && matchType && matchLocation;
+    });
+
+
+
+    return (
+        <div className="min-h-screen bg-slate-950 text-slate-50">
+            <Header />
+            <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+                <div className="flex flex-col items-start justify-center">
+                    <div className="mb-6 flex items-start gap-3">
+                        <LayersPlus className="h-10 w-10 text-cyan-400" />
+                        <h1 className="text-3xl font-bold tracking-tight text-cyan-50 sm:text-4xl" suppressHydrationWarning>
+                            {t("modulesGadgets.title")}
+                        </h1>
+                    </div>
+                    <div
+                        className="mt-6 rounded-xl w-full border border-cyan-800 bg-gradient-to-br from-slate-900/80 to-cyan-950/80 p-5 shadow-lg flex items-center gap-3"
+                        style={{ backdropFilter: 'blur(4px)' }}
+                    >
+                        <span className="text-cyan-100 text-xs font-medium tracking-wide" suppressHydrationWarning>{t("modulesGadgets.infoZone")}</span>
+                    </div>
+
+                    {loading ? (
+                        <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16 w-full max-w-3xl mx-auto mt-8">
+                            <LayersPlus className="mb-4 h-12 w-12 text-slate-700 animate-spin" />
+                            <p className="text-lg text-slate-400" suppressHydrationWarning>{t("modulesGadgets.loading")}</p>
+                        </div>
+                    ) : (
+                        <div className="w-full mt-8 flex flex-col gap-4">
+                            {/* Filters */}
+                            <LaserModuleGadgetFilter
+                                laserNames={moduleNames}
+                                itemTypes={itemTypes}
+                                locations={locations}
+                                selectedName={filterName}
+                                selectedItemType={filterItemType}
+                                selectedLocation={filterLocation}
+                                onNameChange={setFilterName}
+                                onItemTypeChange={setFilterItemType}
+                                onLocationChange={setFilterLocation}
+                            />
+                            {filteredModules.length === 0 ? (
+                                <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-12 w-full max-w-3xl mx-auto mb-8">
+                                    <p className="text-lg text-slate-400 text-center" suppressHydrationWarning>{t("modulesGadgets.noResultForFilter")}</p>
+                                </div>
+                            ) : (
+                                <div className="overflow-x-auto w-full mx-auto rounded-xl shadow-lg border border-slate-800 bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-md mb-8">
+                                    <table className="w-full table-auto border-collapse text-left">
+                                        <thead>
+                                            <tr className="bg-slate-900/80">
+                                                {allColumns.map((col, index) =>
+                                                    index === 0 ? (
+                                                        <th
+                                                            key={index}
+                                                            className="px-6 py-4 text-cyan-300 font-semibold text-xs md:text-sm border border-slate-700 bg-slate-900 sticky left-0 z-10"
+                                                            style={{ minWidth: '10rem', maxWidth: '16rem', width: '10rem' }}
+                                                            suppressHydrationWarning
+                                                        >
+                                                            {col}
+                                                        </th>
+                                                    ) : (
+                                                        <th
+                                                            key={index}
+                                                            className="px-6 py-4 text-cyan-300 font-semibold md:text-sm border border-slate-700 bg-slate-900 text-center"
+                                                            style={{
+                                                                minWidth: index > 13 ? '12rem' : '8rem',
+                                                                width: index > 13 ? '12rem' : '8rem',
+                                                                fontSize: '0.65rem'
+                                                            }}
+                                                            suppressHydrationWarning
+                                                        >
+                                                            {col}
+                                                        </th>
+                                                    )
+                                                )}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {filteredModules.map((item, idx) => (
+                                                <tr key={idx} className="border border-slate-700 hover:bg-slate-800/50 transition-colors">
+                                                    <td className="px-6 py-4 border border-slate-700 font-medium text-cyan-100 text-xs md:text-sm bg-slate-950 sticky left-0 z-10" style={{ minWidth: '8rem', maxWidth: '12rem', width: '10rem', backgroundColor: '#0f172a' }}>{item.name}</td>
+                                                    <td className={`px-6 py-4 border border-slate-700 text-sm text-center ${getTypeClass(item.itemType)}`}>{item.itemType}</td>
+                                                    <td className={`px-6 py-4 border border-slate-700 text-sm text-center ${getColorForValue(item.laserPowerMod)}`}>{item.laserPowerMod}</td>
+                                                    <td className={`px-6 py-4 border border-slate-700 text-sm text-center ${getColorForValue(item.resistance, true)}`}>{item.resistance}</td>
+                                                    <td className={`px-6 py-4 border border-slate-700 text-sm text-center ${getColorForValue(item.instability, true)}`}>{item.instability}</td>
+                                                    <td className={`px-6 py-4 border border-slate-700 text-sm text-center ${getColorForValue(item.optimalChargeRate)}`}>{item.optimalChargeRate}</td>
+                                                    <td className={`px-6 py-4 border border-slate-700 text-sm text-center ${getColorForValue(item.optimalChargeWindow)}`}>{item.optimalChargeWindow}</td>
+                                                    <td className={`px-6 py-4 border border-slate-700 text-sm text-center ${getColorForValue(item.inertMaterials, true)}`}>{item.inertMaterials}</td>
+                                                    <td className={`px-6 py-4 border border-slate-700 text-sm text-center ${getColorForValue(item.overchargeRate, true)}`}>{item.overchargeRate}</td>
+                                                    <td className={`px-6 py-4 border border-slate-700 text-sm text-center ${getColorForValue(item.clustering)}`}>{item.clustering}</td>
+                                                    <td className={`px-6 py-4 border border-slate-700 text-sm text-center ${getColorForValue(item.shatterDamage, true)}`}>{item.shatterDamage}</td>
+                                                    <td className={`px-6 py-4 border border-slate-700 text-sm text-center ${getColorForValue(item.extractionPowerMod)}`}>{item.extractionPowerMod}</td>
+                                                    <td className="px-6 py-4 border border-slate-700 text-cyan-200 text-sm text-center">{item.uses}</td>
+                                                    <td className="px-6 py-4 border border-slate-700 text-cyan-200 text-sm text-center">{item.duration}</td>
+                                                    {allColumns.slice(14).map((location, locIdx) => (
+                                                        <td key={locIdx} className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">
+                                                            {item.locations.includes(location) ? "✓" : ""}
+                                                        </td>
+                                                    ))}
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </main>
+        </div>
+    );
+}
