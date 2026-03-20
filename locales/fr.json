@@ -1,21 +1,23 @@
 {
   "header": {
     "siteName": "Star Mine Atlas",
-    "rockTypes": "Types de Roches",
+    "findMinerals": "Rechercher des minerais",
     "qualityDistribution": "Repartition qualite",
     "data": {
       "title": "Données",
       "refinery": "Raffinerie",
       "marketPrices": "Prix du Marché",
-      "miningLasers": "Lasers de Minage"
+      "miningLasers": "Lasers de Minage",
+      "modulesGadgets": "Modules et Gadgets"
     },
     "calculators": {
       "title": "Calculateurs",
-      "miningProfit": "Calculateur de Profit Minier"
+      "miningProfit": "Calculateur de Profit Minier",
+      "loadout": "Calculateur de Loadout"
     }
   },
   "home": {
-    "title": "Types de Roches",
+    "title": "Rechercher des minerais",
     "description": "Parcourez et filtrez les minerais exploitables dans l'univers. Données mises à jour pour Star Citizen 4.7.",
     "infoZone": "Note : Les statistiques des minerais sont en cours de collecte et représentent seulement un échantillon et des moyennes. Il se peut que cela ne reflète pas parfaitement la réalité en jeu, car vous pouvez trouver n'importe quelle qualité de minerai sur les astres. Ces données pourraient devenir inutiles à l'avenir ou être remises en question en fonction des mises à jour du jeu.",
     "showing": "Affichage de {{count}} sur {{total}} roches",
@@ -50,6 +52,10 @@
   "miningProfit": {
     "title": "Calculateur de Profit Minier",
     "description": "Suivez les prix des minéraux en temps réel dans les terminaux commerciaux de l'univers. Comparez les prix d'achat et de vente pour maximiser vos profits miniers."
+  },
+  "loadout": {
+    "title": "Calculateur de Loadout",
+    "description": "Planifiez et optimisez votre équipement de minage avec notre calculateur de loadout. Comparez les modules, gadgets et lasers de minage pour créer la configuration parfaite pour vos opérations minières."
   },
   "refinery": {
     "title": "Raffinerie",
@@ -94,7 +100,7 @@
     }
   },
   "marketPrices": {
-    "title": "Prix du Marché - Tableau",
+    "title": "Prix du Marché",
     "infoZone": "Note : Toutes les données des tableaux proviennent de UEX, après la sortie d'une nouvelle version de Star Citizen, il peut s'écouler un certain temps avant que ces données ne soient mises à jour.",
     "loading": "Chargement des prix du marché...",
     "shipMinerals": {
@@ -112,6 +118,19 @@
       "oneScuPrice": "Prix max par SCU"
     }
   },
+  "laserModuleGadgetFilters": {
+    "title": "Filtres",
+    "laser": "Laser",
+    "allLasers": "Tous les lasers",
+    "moduleGadget": "Module / Gadget",
+    "allModuleGadgets": "Tous les modules / gadgets",
+    "size": "Taille du vaisseau",
+    "allSizes": "Toutes les tailles",
+    "itemType": "Type",
+    "allItemTypes": "Tous les types",
+    "location": "Lieu d'achat",
+    "allLocations": "Tous les lieux"
+  },
   "miningLasers": {
     "title": "Lasers de minage",
     "description": "Découvrez les différents lasers de minage disponibles dans le verse, leurs caractéristiques et cas d'utilisation optimaux. Comparez les lasers de minage pour choisir le meilleur pour vos opérations minières.",
@@ -123,6 +142,8 @@
       "allLasers": "Tous les lasers",
       "size": "Taille du vaisseau",
       "allSizes": "Toutes les tailles",
+      "itemType": "Type",
+      "allItemTypes": "Tous les types",
       "location": "Lieu d'achat",
       "allLocations": "Tous les lieux"
     },
@@ -140,6 +161,28 @@
       "optimalChargeRate": "Taux de charge optimal",
       "optimalChargeWindow": "Fenêtre de charge optimale",
       "inertMaterials": "Matériaux inertes"
+    }
+  },
+  "modulesGadgets": {
+    "title": "Modules et Gadgets",
+    "description": "Découvrez les différents modules et gadgets disponibles dans le verse, leurs caractéristiques et cas d'utilisation optimaux. Comparez les modules et gadgets pour choisir le meilleur pour vos opérations.",
+    "loading": "Chargement des modules et gadgets...",
+    "noResultForFilter": "Aucun module ou gadget ne correspond à vos filtres. Essayez d'autres critères.",
+    "table": {
+      "name": "Module / Gadget",
+      "itemType": "Type",
+      "laserPowerMod": "Modificateur de puissance du laser",
+      "resistance": "Résistance",
+      "instability": "Instabilité",
+      "optimalChargeRate": "Taux de charge optimal",
+      "optimalChargeWindow": "Fenêtre de charge optimale",
+      "inertMaterials": "Matériaux inertes",
+      "overchargeRate": "Taux de surcharge",
+      "clustering": "Regroupement",
+      "shatterDamage": "Dégâts de fragmentation",
+      "extractionPowerMod": "Modificateur de puissance d'extraction",
+      "uses": "Utilisations",
+      "duration": "Durée (s)"
     }
   },
   "utils": {

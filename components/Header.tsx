@@ -16,11 +16,12 @@ export function Header() {
   // Suppression de l'état openDropdown, retour au comportement par défaut
 
   const navLinks = [
-    { href: "/", label: "header.rockTypes" },
+    { href: "/", label: "header.findMinerals" },
   ]
 
   const calculatorsLinks = [
     { href: "/calculators/mining-profit", label: "header.calculators.miningProfit" },
+    { href: "/calculators/loadout", label: "header.calculators.loadout" },
   ]
 
   const dataLinks = [
@@ -28,6 +29,7 @@ export function Header() {
     { href: "/data/refinery", label: "header.data.refinery" },
     { href: "/data/market-prices", label: "header.data.marketPrices" },
     { href: "/data/mining-lasers", label: "header.data.miningLasers" },
+    { href: "/data/modules-gadgets", label: "header.data.modulesGadgets" },
   ]
 
   return (
