@@ -133,7 +133,7 @@
   },
   "miningLasers": {
     "title": "Lasers de minage",
-    "description": "Découvrez les différents lasers de minage disponibles dans le verse, leurs caractéristiques et cas d'utilisation optimaux. Comparez les lasers de minage pour choisir le meilleur pour vos opérations minières.",
+    "infoZone": "Note : Toutes les données des tableaux proviennent de UEX, après la sortie d'une nouvelle version de Star Citizen, il peut s'écouler un certain temps avant que ces données ne soient mises à jour.",
     "loading": "Chargement des lasers de minage...",
     "noResultForFilter": "Aucun laser de minage ne correspond à vos filtres. Essayez d'autres critères.",
     "filters": {
@@ -165,7 +165,7 @@
   },
   "modulesGadgets": {
     "title": "Modules et Gadgets",
-    "description": "Découvrez les différents modules et gadgets disponibles dans le verse, leurs caractéristiques et cas d'utilisation optimaux. Comparez les modules et gadgets pour choisir le meilleur pour vos opérations.",
+    "infoZone": "Note : Toutes les données des tableaux proviennent de UEX, après la sortie d'une nouvelle version de Star Citizen, il peut s'écouler un certain temps avant que ces données ne soient mises à jour.",
     "loading": "Chargement des modules et gadgets...",
     "noResultForFilter": "Aucun module ou gadget ne correspond à vos filtres. Essayez d'autres critères.",
     "table": {

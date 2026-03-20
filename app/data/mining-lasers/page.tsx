@@ -146,7 +146,7 @@ export default function MiningLasersPage() {
                         className="mt-6 rounded-xl w-full border border-cyan-800 bg-gradient-to-br from-slate-900/80 to-cyan-950/80 p-5 shadow-lg flex items-center gap-3"
                         style={{ backdropFilter: 'blur(4px)' }}
                     >
-                        <span className="text-cyan-100 text-xs font-medium tracking-wide" suppressHydrationWarning>{t("miningLasers.description")}</span>
+                        <span className="text-cyan-100 text-xs font-medium tracking-wide" suppressHydrationWarning>{t("miningLasers.infoZone")}</span>
                     </div>
 
                     {loading ? (

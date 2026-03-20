@@ -18,7 +18,7 @@
   },
   "home": {
     "title": "Find Minerals",
-    "description": "Browse and filter mineable rock types across the verse. Data updated for Star Citizen 4.7.",
+    "description": "Browse and filter minerals across the verse. Data updated for Star Citizen 4.7.",
     "infoZone": "Note: Mineral statistics are being collected and represent only a sample and averages. They may not perfectly reflect in-game reality, as you can find any quality of mineral on celestial bodies. This data may become obsolete in the future or be questioned based on game updates.",
     "showing": "Showing {{count}} of {{total}} rocks",
     "noRocksFound": "No rocks found",
@@ -133,7 +133,7 @@
   },
   "miningLasers": {
     "title": "Mining Lasers",
-    "description": "Discover the different mining lasers available in the verse, their characteristics and optimal use cases. Compare mining lasers to choose the best one for your mining operations.",
+    "infoZone": "Note: All data from tables are sourced from UEX data, after a new version of Star Citizen is released, it may take some time to update those data.",
     "loading": "Loading mining lasers...",
     "noResultForFilter": "No mining lasers match your filters. Try changing your criteria.",
     "table": {
@@ -154,7 +154,7 @@
   },
   "modulesGadgets": {
     "title": "Modules and Gadgets",
-    "description": "Discover the different modules and gadgets available in the verse, their characteristics and optimal use cases. Compare modules and gadgets to choose the best one for your operations.",
+    "infoZone": "Note: All data from tables are sourced from UEX data, after a new version of Star Citizen is released, it may take some time to update those data.",
     "loading": "Loading modules and gadgets...",
     "noResultForFilter": "No modules or gadgets match your filters. Try changing your criteria.",
     "table": {
