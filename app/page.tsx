@@ -106,7 +106,7 @@ export default function Home() {
           <p className="text-slate-400" suppressHydrationWarning>
             {t("home.description")}
           </p>
-          {/* Info zone stylisée */}
+          {/* Info zone */}
           <div
             className="mt-6 rounded-xl border border-cyan-800 bg-gradient-to-br from-slate-900/80 to-cyan-950/80 p-5 shadow-lg flex items-center gap-3"
             style={{ backdropFilter: 'blur(4px)' }}

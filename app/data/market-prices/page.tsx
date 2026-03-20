@@ -2,8 +2,8 @@
 
 import { Header } from "@/components/Header"
 import { useTranslation } from "react-i18next"
-import { Construction, TrendingUp } from "lucide-react"
-import { use, useEffect, useState } from "react"
+import { TrendingUp } from "lucide-react"
+import { useEffect, useState } from "react"
 import { API_BASE_URL, API_ENDPOINTS, API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
 import { Mineral } from "@/models/Mineral"
 import { Commodity, excludedIds, FormattedCommodityMaxPrice } from "@/models/Commodity"

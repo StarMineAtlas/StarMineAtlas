@@ -4,10 +4,11 @@ import { Header } from "@/components/Header";
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints";
 import { moduleGadgetAttributeType, type ModuleGadget, type ModuleGadgetAttributes, type ModuleGadgetPrices, type ModuleGadgetRawData } from "@/models/ModuleGadget";
 import { useEffect, useState } from "react";
-import { Factory } from "lucide-react";
+import { LayersPlus } from "lucide-react";
 import { LaserModuleGadgetFilter } from "@/components/LaserModuleGadgetFilter";
 import { useTranslation } from "react-i18next";
 
+// Function to get color class based on value (positive = green, negative = red, zero or non-numeric = gray), with optional inverse coloring
 const getColorForValue = (val: string | number | null | undefined, isInverse: boolean = false) => {
     if (val === null || val === undefined || val === "") return "text-gray-400";
     const num = typeof val === "string" ? parseFloat(val.replace(/[^-\d.]/g, "")) : val;
@@ -17,6 +18,7 @@ const getColorForValue = (val: string | number | null | undefined, isInverse: bo
     return "text-gray-400";
 };
 
+// Function to get color class based on item type
 const getTypeClass = (itemType: string) => {
     switch (itemType) {
         case "Active":
@@ -36,7 +38,7 @@ export default function ModulesGadgetsPage() {
     const [modulesRawData, setModulesRawData] = useState<ModuleGadgetRawData[]>([]);
     const [formattedModules, setFormattedModules] = useState<ModuleGadget[]>([]);
     const [allColumns, setAllColumns] = useState<string[]>([]);
-    // Filtres
+    // Filters
     const [filterName, setFilterName] = useState("");
     const [filterItemType, setFilterItemType] = useState("");
     const [filterLocation, setFilterLocation] = useState("");
@@ -112,7 +114,7 @@ export default function ModulesGadgetsPage() {
     }, [modulesRawData]);
 
     useEffect(() => {
-        // noms des colonnes du tableau
+        // cols names with i18n
         const columns = [
             t("modulesGadgets.table.name"),
             t("modulesGadgets.table.itemType"),
@@ -129,7 +131,7 @@ export default function ModulesGadgetsPage() {
             t("modulesGadgets.table.uses"),
             t("modulesGadgets.table.duration")
         ];
-        // ajout des données de localisations
+        // add unique locations as columns
         const uniqueLocations = new Set<string>();
         formattedModules.forEach(item => {
             item.locations.forEach((location: string) => uniqueLocations.add(location));
@@ -140,7 +142,7 @@ export default function ModulesGadgetsPage() {
     }, [formattedModules, i18n.language]);
 
 
-    // Préparation des valeurs uniques pour les filtres
+    // Preparation of unique values for filters
     const moduleNames = Array.from(new Set(formattedModules.map(l => l.name))).sort();
     const itemTypes = Array.from(new Set(formattedModules.map(l => l.itemType).filter((v): v is string => typeof v === 'string'))).sort((a, b) => {
         const itemTypeOrder = ["Active", "Passive", "Gadget"];
@@ -153,7 +155,7 @@ export default function ModulesGadgetsPage() {
     });
     const locations = Array.from(new Set(formattedModules.flatMap(l => l.locations))).sort();
 
-    // Application des filtres
+    // Applying filters
     const filteredModules = formattedModules.filter(item => {
         const matchName = !filterName || item.name === filterName;
         const matchType = !filterItemType || item.itemType === filterItemType;
@@ -169,7 +171,7 @@ export default function ModulesGadgetsPage() {
             <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
                 <div className="flex flex-col items-start justify-center">
                     <div className="mb-6 flex items-start gap-3">
-                        <Factory className="h-10 w-10 text-cyan-400" />
+                        <LayersPlus className="h-10 w-10 text-cyan-400" />
                         <h1 className="text-3xl font-bold tracking-tight text-cyan-50 sm:text-4xl" suppressHydrationWarning>
                             {t("modulesGadgets.title")}
                         </h1>
@@ -183,12 +185,12 @@ export default function ModulesGadgetsPage() {
 
                     {loading ? (
                         <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16 w-full max-w-3xl mx-auto mt-8">
-                            <Factory className="mb-4 h-12 w-12 text-slate-700 animate-spin" />
+                            <LayersPlus className="mb-4 h-12 w-12 text-slate-700 animate-spin" />
                             <p className="text-lg text-slate-400" suppressHydrationWarning>{t("modulesGadgets.loading")}</p>
                         </div>
                     ) : (
                         <div className="w-full mt-8 flex flex-col gap-4">
-                            {/* Filtres */}
+                            {/* Filters */}
                             <LaserModuleGadgetFilter
                                 laserNames={moduleNames}
                                 itemTypes={itemTypes}

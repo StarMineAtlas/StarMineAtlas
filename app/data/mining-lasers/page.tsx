@@ -4,10 +4,11 @@ import { Header } from "@/components/Header";
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints";
 import { MiningLaser, MiningLaserAttributes, miningLaserAttributeType, MiningLaserPrices, MiningLaserRawData } from "@/models/MiningLaser";
 import { useEffect, useState } from "react";
-import { Factory } from "lucide-react";
+import { Drill } from "lucide-react";
 import { LaserModuleGadgetFilter } from "@/components/LaserModuleGadgetFilter";
 import { useTranslation } from "react-i18next";
 
+// Function to get color class based on value (positive = green, negative = red, zero or non-numeric = gray), with optional inverse coloring
 const getColorForValue = (val: string | number | null | undefined, isInverse: boolean = false) => {
     if (val === null || val === undefined || val === "") return "text-gray-400";
     const num = typeof val === "string" ? parseFloat(val.replace(/[^-\d.]/g, "")) : val;
@@ -23,7 +24,7 @@ export default function MiningLasersPage() {
     const [miningLasersRawData, setMiningLasersRawData] = useState<MiningLaserRawData[]>([]);
     const [formattedMiningLasers, setFormattedMiningLasers] = useState<any[]>([]);
     const [allColumns, setAllColumns] = useState<string[]>([]);
-    // Filtres
+    // Filters
     const [filterName, setFilterName] = useState("");
     const [filterSize, setFilterSize] = useState("");
     const [filterLocation, setFilterLocation] = useState("");
@@ -84,7 +85,7 @@ export default function MiningLasersPage() {
     }, [miningLasersRawData]);
 
     useEffect(() => {
-        // noms des colonnes du tableau
+        // cols names with i18n
         const columns = [
             t("miningLasers.table.laser"),
             t("miningLasers.table.size"),
@@ -100,7 +101,7 @@ export default function MiningLasersPage() {
             t("miningLasers.table.optimalChargeWindow"),
             t("miningLasers.table.inertMaterials"),
         ];
-        // ajout des données de localisations
+        // add unique locations as columns
         const uniqueLocations = new Set<string>();
         formattedMiningLasers.forEach(laser => {
             laser.locations.forEach((location: string) => uniqueLocations.add(location));
@@ -110,12 +111,12 @@ export default function MiningLasersPage() {
         setAllColumns(allColumns);
     }, [formattedMiningLasers, i18n.language]);
 
-    // Préparation des valeurs uniques pour les filtres
+    // Preparation of unique values for filters
     const laserNames = Array.from(new Set(formattedMiningLasers.map(l => l.name))).sort();
     const sizes = Array.from(new Set(formattedMiningLasers.map(l => l.size).filter((v): v is string => typeof v === 'string'))).sort();
     const locations = Array.from(new Set(formattedMiningLasers.flatMap(l => l.locations))).sort();
 
-    // Application des filtres
+    // Applying filters
     const filteredLasers = formattedMiningLasers.filter(laser => {
         const matchName = !filterName || laser.name === filterName;
         const matchSize = !filterSize || laser.size === filterSize;
@@ -136,7 +137,7 @@ export default function MiningLasersPage() {
             <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
                 <div className="flex flex-col items-start justify-center">
                     <div className="mb-6 flex items-start gap-3">
-                        <Factory className="h-10 w-10 text-cyan-400" />
+                        <Drill className="h-10 w-10 text-cyan-400" />
                         <h1 className="text-3xl font-bold tracking-tight text-cyan-50 sm:text-4xl" suppressHydrationWarning>
                             {t("miningLasers.title")}
                         </h1>
@@ -150,12 +151,12 @@ export default function MiningLasersPage() {
 
                     {loading ? (
                         <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16 w-full max-w-3xl mx-auto mt-8">
-                            <Factory className="mb-4 h-12 w-12 text-slate-700 animate-spin" />
+                            <Drill className="mb-4 h-12 w-12 text-slate-700 animate-spin" />
                             <p className="text-lg text-slate-400" suppressHydrationWarning>{t("miningLasers.loading")}</p>
                         </div>
                     ) : (
                         <div className="w-full mt-8 flex flex-col gap-4">
-                            {/* Filtres */}
+                            {/* Filters */}
                             <LaserModuleGadgetFilter
                                 laserNames={laserNames}
                                 sizes={sizes}
