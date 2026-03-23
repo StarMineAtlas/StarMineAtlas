@@ -65,7 +65,22 @@
     "modulePlaceholder": "Choisissez un module...",
     "gadgets": "Gadgets",
     "gadgetPlaceholder": "Choisissez un gadget...",
-    "inventory": "Inventaire"
+    "inventory": "Inventaire",
+    "tooltips": {
+      "minPower": "Puissance minimale du laser (Tous les lasers actifs combinés)",
+      "maxPower": "Puissance maximale du laser (Tous les lasers actifs combinés)",
+      "optimalRange": "Portée optimale (Moyenne pour tous les lasers actifs)",
+      "maxRange": "Portée maximale (Moyenne pour tous les lasers actifs)",
+      "resistance": "Modificateur de résistance",
+      "instability": "Modificateur d'instabilité",
+      "overchargeRate": "Modificateur de taux de surcharge",
+      "clustering": "Modificateur de regroupement",
+      "inertMaterials": "Filtrage des matériaux inertes",
+      "optimalChargeRate": "Modificateur de taux de charge optimal",
+      "optimalChargeWindow": "Modificateur de fenêtre de charge optimale (max 50% de la fenêtre totale)",
+      "shatterDamage": "Modificateur de dégâts de fragmentation",
+      "extractionPower": "Puissance totale d'extraction (Tous les lasers actifs combinés)"
+    }
   },
   "refinery": {
     "title": "Raffinerie",

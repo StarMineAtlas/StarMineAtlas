@@ -182,13 +182,6 @@ export default function LoadoutPage() {
     }
   }, [selectedShip, formattedLasers, formattedModules, formattedGadgets]);
 
-
-  useEffect(() => {
-    if (loadout) {
-      console.log("Current Loadout:", loadout);
-    }
-  }, [loadout]);
-
   const getMinMaxPower = (miningLaser: MiningLaserWithPrices) => {
     const sliptedValue = miningLaser?.min_power?.split('-');
     const minPower = sliptedValue ? sliptedValue[0] : "";

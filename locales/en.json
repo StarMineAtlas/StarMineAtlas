@@ -65,7 +65,22 @@
     "modulePlaceholder": "Select a module...",
     "gadgets": "Gadgets",
     "gadgetPlaceholder": "Select a gadget...",
-    "inventory": "Inventory"
+    "inventory": "Inventory",
+    "tooltips": {
+      "minPower": "Minimum laser power (All active lasers combined)",
+      "maxPower": "Maximum laser power (All active lasers combined)",
+      "optimalRange": "Optimal range (Average for all active lasers)",
+      "maxRange": "Maximum range (Average for all active lasers)",
+      "resistance": "Resistance Modifier",
+      "instability": "Instability Modifier",
+      "overchargeRate": "Overcharge rate Modifier",
+      "clustering": "Clustering Modifier",
+      "inertMaterials": "Inert Materials Filtering",
+      "optimalChargeRate": "Optimal Charge Rate Modifier",
+      "optimalChargeWindow": "Optimal Charge Window Modifier (max 50% of the total window)",
+      "shatterDamage": "Shatter Damage Modifier",
+      "extractionPower": "Total extraction power (All active lasers combined)"
+    }
   },
   "refinery": {
     "title": "Refinery",

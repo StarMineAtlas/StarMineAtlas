@@ -3,6 +3,7 @@
 import React, { use, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Loadout, LoadoutResumeModel } from "@/models/Loadout";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
 interface LoadoutBlocProps {
     loadout: Loadout;
@@ -15,7 +16,7 @@ const getColorForValue = (val: string | number | null | undefined, isInverse: bo
     if (isNaN(num)) return "text-gray-400";
     if (num > 0) return isInverse ? "text-red-400" : "text-green-400";
     if (num < 0) return isInverse ? "text-green-400" : "text-red-400";
-    return "text-gray-400";
+    return "text-cyan-200";
 };
 
 // Function to add a "+" sign before positive numbers and keep negative numbers as they are.
@@ -152,79 +153,138 @@ export const LoadoutResume: React.FC<LoadoutBlocProps> = ({
 
     return (
         <div className="p-4 w-full bg-slate-900 rounded-xl text-cyan-200 col-span-1 md:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="flex flex-col items-center">
-                <span className={`text-sm ${getColorForValue(minPourcentageEvolution)}`}>{resume?.min_power}</span>
-                {
-                    minPourcentageEvolution !== 0 && (
-                        <span className={`text-resume-pourcentage ${getColorForValue(minPourcentageEvolution)}`}>
-                            {"(" + (minPourcentageEvolution > 0 ? "+" : "") + minPourcentageEvolution.toFixed(1) + "%)"}
-                        </span>
-                    )
-                }
-                <span className={`text-xs ${getColorForValue(minPourcentageEvolution)}`}>MIN PWR</span>
-            </div>
-            <div className="flex flex-col items-center">
-                <span className={`text-sm ${getColorForValue(maxPourcentageEvolution)}`}>{resume?.max_power}</span>
-                {
-                    maxPourcentageEvolution !== 0 && (
-                        <span className={`text-resume-pourcentage ${getColorForValue(maxPourcentageEvolution)}`}>
-                            {"(" + (maxPourcentageEvolution > 0 ? "+" : "") + maxPourcentageEvolution.toFixed(1) + "%)"}
-                        </span>
-                    )
-                }
-                <span className={`text-xs ${getColorForValue(maxPourcentageEvolution)}`}>MAX PWR</span>
-            </div>
-            <div className="flex flex-col items-center">
-                <span className="text-sm">{resume?.optimal_range}</span>
-                <span className="text-xs">OPT RNG</span>
-            </div>
-            <div className="flex flex-col items-center">
-                <span className="text-sm">{resume?.max_range}</span>
-                <span className="text-xs">MAX RNG</span>
-            </div>
-            <div className="flex flex-col items-center">
-                <span className={`text-sm ${getColorForValue(resume?.resistance, true)}`}>{formatValueWithSign(resume?.resistance)}</span>
-                <span className={`text-xs ${getColorForValue(resume?.resistance, true)}`}>RESISTANCE</span>
-            </div>
-            <div className="flex flex-col items-center">
-                <span className={`text-sm ${getColorForValue(resume?.instability, true)}`}>{formatValueWithSign(resume?.instability)}</span>
-                <span className={`text-xs ${getColorForValue(resume?.instability, true)}`}>INSTABILITY</span>
-            </div>
-            <div className="flex flex-col items-center">
-                <span className={`text-sm ${getColorForValue(resume?.overcharge, true)}`}>{formatValueWithSign(resume?.overcharge)}</span>
-                <span className={`text-xs ${getColorForValue(resume?.overcharge, true)}`}>OVERCHARGE</span>
-            </div>
-            <div className="flex flex-col items-center">
-                <span className={`text-sm ${getColorForValue(resume?.clustering)}`}>{formatValueWithSign(resume?.clustering)}</span>
-                <span className={`text-xs ${getColorForValue(resume?.clustering)}`}>CLUSTER</span>
-            </div>
-            <div className="flex flex-col items-center">
-                <span className={`text-sm ${getColorForValue(resume?.inert_material, true)}`}>{formatValueWithSign(resume?.inert_material)}</span>
-                <span className={`text-xs ${getColorForValue(resume?.inert_material, true)}`}>INERT</span>
-            </div>
-            <div className="flex flex-col items-center">
-                <span className={`text-sm ${getColorForValue(resume?.optimal_charge_rate)}`}>{formatValueWithSign(resume?.optimal_charge_rate)}</span>
-                <span className={`text-xs ${getColorForValue(resume?.optimal_charge_rate)}`}>OPT CHRG RATE</span>
-            </div>
-            <div className="flex flex-col items-center">
-                <span className={`text-sm ${getColorForValue(resume?.optimal_charge_window)}`}>{formatValueWithSign(resume?.optimal_charge_window)}</span>
-                <span className={`text-xs ${getColorForValue(resume?.optimal_charge_window)}`}>OPT CHRG WIN</span>
-            </div>
-            <div className="flex flex-col items-center">
-                <span className={`text-sm ${getColorForValue(resume?.shatter_damage, true)}`}>{formatValueWithSign(resume?.shatter_damage)}</span>
-                <span className={`text-xs ${getColorForValue(resume?.shatter_damage, true)}`}>SHATTER</span>
-            </div>
-            <div className="flex flex-col items-center">
-                <span className={`text-sm ${getColorForValue(resume?.extraction_power)}`}>{resume?.extraction_power}</span>
-                {
-                    extractionPowerPourcentageEvolution !== 0 && (
-                        <span className={`text-resume-pourcentage ${getColorForValue(extractionPowerPourcentageEvolution)}`}>
-                            {"(" + (extractionPowerPourcentageEvolution > 0 ? "+" : "") + extractionPowerPourcentageEvolution.toFixed(1) + "%)"}
-                        </span>
-                    )
-                }
-                <span className={`text-xs ${getColorForValue(resume?.extraction_power)}`}>EXTR PWR</span>
-            </div>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <div className="flex flex-col items-center">
+                        <span className={`text-sm ${getColorForValue(minPourcentageEvolution)}`}>{resume?.min_power}</span>
+                        {minPourcentageEvolution !== 0 && (
+                            <span className={`text-resume-pourcentage ${getColorForValue(minPourcentageEvolution)}`}>
+                                {'(' + (minPourcentageEvolution > 0 ? '+' : '') + minPourcentageEvolution.toFixed(1) + '%)'}
+                            </span>
+                        )}
+                        <span className={`text-xs ${getColorForValue(minPourcentageEvolution)}`}>MIN PWR</span>
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent>{t("loadout.tooltips.minPower")}</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <div className="flex flex-col items-center">
+                        <span className={`text-sm ${getColorForValue(maxPourcentageEvolution)}`}>{resume?.max_power}</span>
+                        {maxPourcentageEvolution !== 0 && (
+                            <span className={`text-resume-pourcentage ${getColorForValue(maxPourcentageEvolution)}`}>
+                                {'(' + (maxPourcentageEvolution > 0 ? '+' : '') + maxPourcentageEvolution.toFixed(1) + '%)'}
+                            </span>
+                        )}
+                        <span className={`text-xs ${getColorForValue(maxPourcentageEvolution)}`}>MAX PWR</span>
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent>{t("loadout.tooltips.maxPower")}</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <div className="flex flex-col items-center">
+                        <span className="text-sm">{resume?.optimal_range}</span>
+                        <span className="text-xs">OPT RNG</span>
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent>{t("loadout.tooltips.optimalRange")}</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <div className="flex flex-col items-center">
+                        <span className="text-sm">{resume?.max_range}</span>
+                        <span className="text-xs">MAX RNG</span>
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent>{t("loadout.tooltips.maxRange")}</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <div className="flex flex-col items-center">
+                        <span className={`text-sm ${getColorForValue(resume?.resistance, true)}`}>{formatValueWithSign(resume?.resistance)}</span>
+                        <span className={`text-xs ${getColorForValue(resume?.resistance, true)}`}>RESISTANCE</span>
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent>{t("loadout.tooltips.resistance")}</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <div className="flex flex-col items-center">
+                        <span className={`text-sm ${getColorForValue(resume?.instability, true)}`}>{formatValueWithSign(resume?.instability)}</span>
+                        <span className={`text-xs ${getColorForValue(resume?.instability, true)}`}>INSTABILITY</span>
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent>{t("loadout.tooltips.instability")}</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <div className="flex flex-col items-center">
+                        <span className={`text-sm ${getColorForValue(resume?.overcharge, true)}`}>{formatValueWithSign(resume?.overcharge)}</span>
+                        <span className={`text-xs ${getColorForValue(resume?.overcharge, true)}`}>OVERCHARGE</span>
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent>{t("loadout.tooltips.overchargeRate")}</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <div className="flex flex-col items-center">
+                        <span className={`text-sm ${getColorForValue(resume?.clustering)}`}>{formatValueWithSign(resume?.clustering)}</span>
+                        <span className={`text-xs ${getColorForValue(resume?.clustering)}`}>CLUSTER</span>
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent>{t("loadout.tooltips.clustering")}</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <div className="flex flex-col items-center">
+                        <span className={`text-sm ${getColorForValue(resume?.inert_material, true)}`}>{formatValueWithSign(resume?.inert_material)}</span>
+                        <span className={`text-xs ${getColorForValue(resume?.inert_material, true)}`}>INERT</span>
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent>{t("loadout.tooltips.inertMaterials")}</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <div className="flex flex-col items-center">
+                        <span className={`text-sm ${getColorForValue(resume?.optimal_charge_rate)}`}>{formatValueWithSign(resume?.optimal_charge_rate)}</span>
+                        <span className={`text-xs ${getColorForValue(resume?.optimal_charge_rate)}`}>OPT CHRG RATE</span>
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent>{t("loadout.tooltips.optimalChargeRate")}</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <div className="flex flex-col items-center">
+                        <span className={`text-sm ${getColorForValue(resume?.optimal_charge_window)}`}>{formatValueWithSign(resume?.optimal_charge_window)}</span>
+                        <span className={`text-xs ${getColorForValue(resume?.optimal_charge_window)}`}>OPT CHRG WIN</span>
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent>{t("loadout.tooltips.optimalChargeWindow")}</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <div className="flex flex-col items-center">
+                        <span className={`text-sm ${getColorForValue(resume?.shatter_damage, true)}`}>{formatValueWithSign(resume?.shatter_damage)}</span>
+                        <span className={`text-xs ${getColorForValue(resume?.shatter_damage, true)}`}>SHATTER</span>
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent>{t("loadout.tooltips.shatterDamage")}</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <div className="flex flex-col items-center">
+                        <span className={`text-sm ${getColorForValue(extractionPowerPourcentageEvolution)}`}>{resume?.extraction_power}</span>
+                        {extractionPowerPourcentageEvolution !== 0 && (
+                            <span className={`text-resume-pourcentage ${getColorForValue(extractionPowerPourcentageEvolution)}`}>
+                                {'(' + (extractionPowerPourcentageEvolution > 0 ? '+' : '') + extractionPowerPourcentageEvolution.toFixed(1) + '%)'}
+                            </span>
+                        )}
+                        <span className={`text-xs ${getColorForValue(extractionPowerPourcentageEvolution)}`}>EXTR PWR</span>
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent>{t("loadout.tooltips.extractionPower")}</TooltipContent>
+            </Tooltip>
         </div>
     );
 };
