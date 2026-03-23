@@ -4,11 +4,13 @@ import { Header } from "@/components/Header"
 import { LoadoutBloc } from "@/components/LoadoutBloc"
 import { LoadoutInventory } from "@/components/LoadoutInventory"
 import { LoadoutResume } from "@/components/LoadoutResume"
+import { LoadoutSaveModal } from "@/components/LoadoutSaveModal"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints"
 import { Loadout, ModuleGadgetWithActive, ShipConfiguration } from "@/models/Loadout"
 import { miningLaserAttributeType, MiningLaserRawData, MiningLaserWithPrices } from "@/models/MiningLaser"
 import { gadgetAttributeType, moduleAttributeType, ModuleGadgetRawData, ModuleGadgetWithPrices } from "@/models/ModuleGadget"
+import { set } from "date-fns"
 import { RotateCcw, Save, Store, Toolbox } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -49,8 +51,30 @@ export default function LoadoutPage() {
   const [selectedShip, setSelectedShip] = useState<ShipConfiguration>(ships[0]);
   const [loadout, setLoadout] = useState<Loadout | null>(null);
 
+  // Modal state
+  const [saveModalOpen, setSaveModalOpen] = useState(false);
+
+  // Loadouts sauvegardés
+  const [savedLoadouts, setSavedLoadouts] = useState<Loadout[]>([]);
+  const [selectedSavedLoadout, setSelectedSavedLoadout] = useState<string>("");
+
   useEffect(() => {
     setLoading(true);
+    try {
+      const existing = localStorage.getItem("mining-atlas-loadout-saved");
+      if (existing) {
+        const arr = JSON.parse(existing);
+        if (Array.isArray(arr)) {
+          setSavedLoadouts(arr);
+        } else {
+          setSavedLoadouts([]);
+        }
+      } else {
+        setSavedLoadouts([]);
+      }
+    } catch {
+      setSavedLoadouts([]);
+    }
     Promise.all([
       fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.itemsCategory + UEX_API_ITEM_CATEGORIES.miningLasers),
       fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.itemsCategory + UEX_API_ITEM_CATEGORIES.gadgets),
@@ -157,12 +181,12 @@ export default function LoadoutPage() {
         setFormattedGadgets(gadgetsData.sort((a: ModuleGadgetWithPrices, b: ModuleGadgetWithPrices) => {
           return a.name.localeCompare(b.name);
         }));
+        setLoading(false);
       })();
     }
   }, [mergedRawData]);
 
   useEffect(() => {
-    setLoading(true);
     if (selectedShip) {
       const baseLaser = formattedLasers.find(laser => laser.name === selectedShip.baseLaser) || null;
       const initialLoadout: Loadout = {
@@ -177,7 +201,6 @@ export default function LoadoutPage() {
         name: ""
       };
       setLoadout(initialLoadout);
-      setLoading(false);
     }
   }, [selectedShip, formattedLasers, formattedModules, formattedGadgets]);
 
@@ -219,6 +242,64 @@ export default function LoadoutPage() {
     setLoadout(resetedLoadout);
   }
 
+
+  const handleSaveLoadout = (name: string) => {
+    if (!loadout) return;
+    const toSave = { ...loadout, name, isSaved: true };
+    try {
+      const existing = localStorage.getItem("mining-atlas-loadout-saved");
+      let arr = [];
+      if (existing) {
+        arr = JSON.parse(existing);
+        if (!Array.isArray(arr)) arr = [];
+      }
+      const existingIndex = arr.findIndex((l: Loadout) => l.name === name);
+      if (existingIndex !== -1) {
+        arr[existingIndex] = toSave;
+      } else {
+        arr.push(toSave);
+      }
+      localStorage.setItem("mining-atlas-loadout-saved", JSON.stringify(arr));
+    } catch (e) {
+      // Optionally handle error
+    }
+    setSaveModalOpen(false);
+    // Refresh saved loadouts from localStorage
+    setTimeout(() => {
+      try {
+        const existing = localStorage.getItem("mining-atlas-loadout-saved");
+        if (existing) {
+          const arr = JSON.parse(existing);
+          if (Array.isArray(arr)) {
+            setSavedLoadouts(arr);
+            setSelectedSavedLoadout(arr.findIndex((l: Loadout) => l.name === name).toString() || "");
+          }
+        }
+      } catch { }
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (loading || !selectedSavedLoadout) return;
+    setLoading(true);
+    const idx = parseInt(selectedSavedLoadout);
+    if (isNaN(idx) || idx < 0 || idx >= savedLoadouts.length) return;
+    const saved = savedLoadouts[idx];
+
+    setSelectedShip(saved.ship);
+
+    //timeout
+    setTimeout(() => {
+      setLoadout(saved);
+      setLoading(false);
+    }, 1000);
+  }, [selectedSavedLoadout, savedLoadouts]);
+
+  // Sélection d'un loadout sauvegardé (déclenche l'effet ci-dessus)
+  const handleSelectSavedLoadout = (idx: string) => {
+    setSelectedSavedLoadout(idx);
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
       <Header />
@@ -233,6 +314,26 @@ export default function LoadoutPage() {
           <p className="text-slate-400" suppressHydrationWarning>
             {t("loadout.description")}
           </p>
+
+          {/* Sélecteur de loadout sauvegardé */}
+          {savedLoadouts.length > 0 && (
+            <div className="flex flex-col my-4 w-full max-w-xs">
+              <label className="block text-xs font-medium text-cyan-200 ms-2 mb-1">Charger un loadout sauvegardé</label>
+              <Select value={selectedSavedLoadout} onValueChange={handleSelectSavedLoadout}>
+                <SelectTrigger className="w-full border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
+                  <SelectValue placeholder="Sélectionner un loadout" />
+                </SelectTrigger>
+                <SelectContent className="border-slate-800 bg-slate-900">
+                  {savedLoadouts.map((l, idx) => (
+                    <SelectItem key={idx} value={String(idx)} className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300">
+                      {l.name || `Loadout ${idx + 1}`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
           {
             loading ? (
               <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16 w-full max-w-3xl mx-auto mt-8">
@@ -265,27 +366,32 @@ export default function LoadoutPage() {
                   <LoadoutInventory gadgetList={loadout?.gadgets || []} gadgets={formattedGadgets} onChange={(updatedGadgetList) => handleGadgetChange(updatedGadgetList)} />
                   <LoadoutResume loadout={loadout!} />
                 </div>
+                <div className="flex flex-col md:flex-row justify-between items-center w-full mt-2">
+                  <button onClick={resetActualLoadout} className="mt-6 inline-flex items-center gap-2 rounded bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                    <RotateCcw className="h-4 w-4" />
+                    {t("loadout.reset", "Reset Loadout")}
+                  </button>
+                  <div className="mt-6 flex gap-3">
+                    <button
+                      className="inline-flex items-center gap-2 rounded bg-cyan-700 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
+                      onClick={() => setSaveModalOpen(true)}
+                      disabled={!loadout}
+                    >
+                      <Save className="h-4 w-4" />
+                      {t("loadout.save", "Save")}
+                    </button>
+                    <button disabled className="inline-flex items-center gap-2 rounded bg-emerald-700/50 px-4 py-2 text-sm font-medium text-white opacity-60 cursor-not-allowed">
+                      <Store className="h-4 w-4" />
+                      {t("loadout.shop", "Shop")}
+                    </button>
+                  </div>
+                </div>
               </div>
             )
           }
         </div>
-        <div className="flex flex-col md:flex-row justify-between items-center w-full mt-2">
-          <button onClick={resetActualLoadout} className="mt-6 inline-flex items-center gap-2 rounded bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-            <RotateCcw className="h-4 w-4" />
-            {t("loadout.reset", "Reset Loadout")}
-          </button>
-          <div className="mt-6 flex gap-3">
-            <button disabled className="inline-flex items-center gap-2 rounded bg-cyan-700/50 px-4 py-2 text-sm font-medium text-white opacity-60 cursor-not-allowed">
-              <Save className="h-4 w-4" />
-              {t("loadout.save", "Save")}
-            </button>
-            <button disabled className="inline-flex items-center gap-2 rounded bg-emerald-700/50 px-4 py-2 text-sm font-medium text-white opacity-60 cursor-not-allowed">
-              <Store className="h-4 w-4" />
-              {t("loadout.shop", "Shop")}
-            </button>
-          </div>
-        </div>
       </div>
+      <LoadoutSaveModal open={saveModalOpen} initialName={loadout?.name || ""} onClose={() => setSaveModalOpen(false)} onSave={handleSaveLoadout} />
     </div>
   )
 }
