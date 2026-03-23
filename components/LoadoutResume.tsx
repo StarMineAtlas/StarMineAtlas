@@ -1,13 +1,28 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Loadout, LoadoutResumeModel } from "@/models/Loadout";
-
 
 interface LoadoutBlocProps {
     loadout: Loadout;
 }
+
+// Function to get color class based on value (positive = green, negative = red, zero or non-numeric = gray), with optional inverse coloring
+const getColorForValue = (val: string | number | null | undefined, isInverse: boolean = false) => {
+    if (val === null || val === undefined || val === "") return "text-gray-400";
+    const num = typeof val === "string" ? parseFloat(val.replace(/[^-\d.]/g, "")) : val;
+    if (isNaN(num)) return "text-gray-400";
+    if (num > 0) return isInverse ? "text-red-400" : "text-green-400";
+    if (num < 0) return isInverse ? "text-green-400" : "text-red-400";
+    return "text-gray-400";
+};
+
+// Function to add a "+" sign before positive numbers and keep negative numbers as they are.
+const formatValueWithSign = (val: string | undefined) => {
+    if (val?.includes('-')) return val;
+    return val ? `+${val}` : val;
+};
 
 export const LoadoutResume: React.FC<LoadoutBlocProps> = ({
     loadout
@@ -15,6 +30,9 @@ export const LoadoutResume: React.FC<LoadoutBlocProps> = ({
     const { t } = useTranslation();
 
     const [resume, setResume] = useState<LoadoutResumeModel>();
+    const [minPourcentageEvolution, setMinPourcentageEvolution] = useState<number>(0);
+    const [maxPourcentageEvolution, setMaxPourcentageEvolution] = useState<number>(0);
+    const [extractionPowerPourcentageEvolution, setExtractionPowerPourcentageEvolution] = useState<number>(0);
 
     useEffect(() => {
         const resumeData: LoadoutResumeModel = {
@@ -110,8 +128,15 @@ export const LoadoutResume: React.FC<LoadoutBlocProps> = ({
         pourcentagesShatterDamage.push(loadout.gadgets.filter((gadget) => gadget?.isActive).map((gadget) => parseFloat(gadget?.shatterDamage || "0")));
         resumeData.shatter_damage = calcultateAdditionalPourcentage(pourcentagesShatterDamage.flat()) + "%";
 
-
         setResume(resumeData);
+
+        // calculate pourcentage evolutions
+        const baseMinPower = loadout.bloc.reduce((acc, bloc) => acc + (bloc.isLaserActive ? parseFloat(bloc.miningLaser?.min_power || "0") : 0), 0);
+        const baseMaxPower = loadout.bloc.reduce((acc, bloc) => acc + (bloc.isLaserActive ? parseFloat(bloc.miningLaser?.max_power || "0") : 0), 0);
+        const baseExtractionPower = loadout.bloc.reduce((acc, bloc) => acc + (bloc.isLaserActive ? parseFloat(bloc.miningLaser?.extract_power || "0") : 0), 0);
+        setMinPourcentageEvolution(baseMinPower > 0 ? ((parseFloat(resumeData.min_power || "0") - baseMinPower) / baseMinPower) * 100 : 0);
+        setMaxPourcentageEvolution(baseMaxPower > 0 ? ((parseFloat(resumeData.max_power || "0") - baseMaxPower) / baseMaxPower) * 100 : 0);
+        setExtractionPowerPourcentageEvolution(baseExtractionPower > 0 ? ((parseFloat(resumeData.extraction_power || "0") - baseExtractionPower) / baseExtractionPower) * 100 : 0);
     }, [loadout]);
 
     const calcultateAdditionalPourcentage = (pourcentages: number[]) => {
@@ -128,12 +153,26 @@ export const LoadoutResume: React.FC<LoadoutBlocProps> = ({
     return (
         <div className="p-4 w-full bg-slate-900 rounded-xl text-cyan-200 col-span-1 md:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="flex flex-col items-center">
-                <span className="text-sm">{resume?.min_power}</span>
-                <span className="text-xs">MIN PWR</span>
+                <span className={`text-sm ${getColorForValue(minPourcentageEvolution)}`}>{resume?.min_power}</span>
+                {
+                    minPourcentageEvolution !== 0 && (
+                        <span className={`text-resume-pourcentage ${getColorForValue(minPourcentageEvolution)}`}>
+                            {"(" + (minPourcentageEvolution > 0 ? "+" : "") + minPourcentageEvolution.toFixed(1) + "%)"}
+                        </span>
+                    )
+                }
+                <span className={`text-xs ${getColorForValue(minPourcentageEvolution)}`}>MIN PWR</span>
             </div>
             <div className="flex flex-col items-center">
-                <span className="text-sm">{resume?.max_power}</span>
-                <span className="text-xs">MAX PWR</span>
+                <span className={`text-sm ${getColorForValue(maxPourcentageEvolution)}`}>{resume?.max_power}</span>
+                {
+                    maxPourcentageEvolution !== 0 && (
+                        <span className={`text-resume-pourcentage ${getColorForValue(maxPourcentageEvolution)}`}>
+                            {"(" + (maxPourcentageEvolution > 0 ? "+" : "") + maxPourcentageEvolution.toFixed(1) + "%)"}
+                        </span>
+                    )
+                }
+                <span className={`text-xs ${getColorForValue(maxPourcentageEvolution)}`}>MAX PWR</span>
             </div>
             <div className="flex flex-col items-center">
                 <span className="text-sm">{resume?.optimal_range}</span>
@@ -144,40 +183,47 @@ export const LoadoutResume: React.FC<LoadoutBlocProps> = ({
                 <span className="text-xs">MAX RNG</span>
             </div>
             <div className="flex flex-col items-center">
-                <span className="text-sm">{resume?.resistance}</span>
-                <span className="text-xs">RESISTANCE</span>
+                <span className={`text-sm ${getColorForValue(resume?.resistance, true)}`}>{formatValueWithSign(resume?.resistance)}</span>
+                <span className={`text-xs ${getColorForValue(resume?.resistance, true)}`}>RESISTANCE</span>
             </div>
             <div className="flex flex-col items-center">
-                <span className="text-sm">{resume?.instability}</span>
-                <span className="text-xs">INSTABILITY</span>
+                <span className={`text-sm ${getColorForValue(resume?.instability, true)}`}>{formatValueWithSign(resume?.instability)}</span>
+                <span className={`text-xs ${getColorForValue(resume?.instability, true)}`}>INSTABILITY</span>
             </div>
             <div className="flex flex-col items-center">
-                <span className="text-sm">{resume?.overcharge}</span>
-                <span className="text-xs">OVERCHARGE</span>
+                <span className={`text-sm ${getColorForValue(resume?.overcharge, true)}`}>{formatValueWithSign(resume?.overcharge)}</span>
+                <span className={`text-xs ${getColorForValue(resume?.overcharge, true)}`}>OVERCHARGE</span>
             </div>
             <div className="flex flex-col items-center">
-                <span className="text-sm">{resume?.clustering}</span>
-                <span className="text-xs">CLUSTER</span>
+                <span className={`text-sm ${getColorForValue(resume?.clustering)}`}>{formatValueWithSign(resume?.clustering)}</span>
+                <span className={`text-xs ${getColorForValue(resume?.clustering)}`}>CLUSTER</span>
             </div>
             <div className="flex flex-col items-center">
-                <span className="text-sm">{resume?.inert_material}</span>
-                <span className="text-xs">INERT</span>
+                <span className={`text-sm ${getColorForValue(resume?.inert_material, true)}`}>{formatValueWithSign(resume?.inert_material)}</span>
+                <span className={`text-xs ${getColorForValue(resume?.inert_material, true)}`}>INERT</span>
             </div>
             <div className="flex flex-col items-center">
-                <span className="text-sm">{resume?.optimal_charge_rate}</span>
-                <span className="text-xs">OPT CHRG RATE</span>
+                <span className={`text-sm ${getColorForValue(resume?.optimal_charge_rate)}`}>{formatValueWithSign(resume?.optimal_charge_rate)}</span>
+                <span className={`text-xs ${getColorForValue(resume?.optimal_charge_rate)}`}>OPT CHRG RATE</span>
             </div>
             <div className="flex flex-col items-center">
-                <span className="text-sm">{resume?.optimal_charge_window}</span>
-                <span className="text-xs">OPT CHRG WIN</span>
+                <span className={`text-sm ${getColorForValue(resume?.optimal_charge_window)}`}>{formatValueWithSign(resume?.optimal_charge_window)}</span>
+                <span className={`text-xs ${getColorForValue(resume?.optimal_charge_window)}`}>OPT CHRG WIN</span>
             </div>
             <div className="flex flex-col items-center">
-                <span className="text-sm">{resume?.shatter_damage}</span>
-                <span className="text-xs">SHATTER</span>
+                <span className={`text-sm ${getColorForValue(resume?.shatter_damage, true)}`}>{formatValueWithSign(resume?.shatter_damage)}</span>
+                <span className={`text-xs ${getColorForValue(resume?.shatter_damage, true)}`}>SHATTER</span>
             </div>
             <div className="flex flex-col items-center">
-                <span className="text-sm">{resume?.extraction_power}</span>
-                <span className="text-xs">EXTR PWR</span>
+                <span className={`text-sm ${getColorForValue(resume?.extraction_power)}`}>{resume?.extraction_power}</span>
+                {
+                    extractionPowerPourcentageEvolution !== 0 && (
+                        <span className={`text-resume-pourcentage ${getColorForValue(extractionPowerPourcentageEvolution)}`}>
+                            {"(" + (extractionPowerPourcentageEvolution > 0 ? "+" : "") + extractionPowerPourcentageEvolution.toFixed(1) + "%)"}
+                        </span>
+                    )
+                }
+                <span className={`text-xs ${getColorForValue(resume?.extraction_power)}`}>EXTR PWR</span>
             </div>
         </div>
     );

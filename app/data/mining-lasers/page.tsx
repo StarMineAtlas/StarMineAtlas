@@ -36,7 +36,6 @@ export default function MiningLasersPage() {
         fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.itemsCategory + UEX_API_ITEM_CATEGORIES.miningLasers)
             .then(res => res.json())
             .then(result => {
-                console.log("Mining Lasers Data from UEX API:", result);
                 setMiningLasersRawData(result.data || []);
             })
     }, []);

@@ -38,7 +38,6 @@ export default function marketPrices() {
         } else {
             result = commodities.filter(fc => mineralsFPS.some(mineral => fc.name.includes(mineral.name)))
         }
-        console.log("Before filtering excluded IDs:", result)
         result = result.filter(commodity => !excludedIds.includes(commodity.id))
         return result.sort((a, b) => b.refined.price_sell - a.refined.price_sell)
     }
@@ -78,8 +77,6 @@ export default function marketPrices() {
                 mineralGroups[name].rawPrices.push(commodity.price_sell);
                 mineralGroups[name].ids.push(commodity.id_commodity);
             });
-
-            console.log("Mineral groups before formatting:", mineralGroups)
 
             const formatted = Object.entries(mineralGroups).map(([name, group]) => {
                 return {

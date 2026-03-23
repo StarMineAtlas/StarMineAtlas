@@ -84,7 +84,6 @@ export default function ModulesGadgetsPage() {
                 const isGadget = attributesResult.data.find(a => a.attribute_name === "Item Type")?.value === "Gadget";
                 attributesResult.data.forEach(attr => {
                     if (isGadget) {
-                        console.log('ICI ' + moduleGadget.name, attr.attribute_name, attr.value);
                         Object.keys(gadgetAttributeType).forEach(key => {
                             if (attr.attribute_name === gadgetAttributeType[key as keyof typeof gadgetAttributeType]) {
                                 (moduleGadget as any)[key] = attr.value + (attr.unit ? `${attr.unit}` : "");
