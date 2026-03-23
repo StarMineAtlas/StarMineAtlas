@@ -55,7 +55,63 @@
   },
   "loadout": {
     "title": "Calculateur de Loadout",
-    "description": "Planifiez et optimisez votre équipement de minage avec notre calculateur de loadout. Comparez les modules, gadgets et lasers de minage pour créer la configuration parfaite pour vos opérations minières."
+    "description": "Planifiez et optimisez votre équipement de minage avec notre calculateur de loadout. Comparez les modules, gadgets et lasers de minage pour créer la configuration parfaite pour vos opérations minières.",
+    "loading": "Chargement des données de loadout...",
+    "selectShip": "Sélectionnez votre vaisseau",
+    "shipPlaceholder": "Choisissez un vaisseau...",
+    "lasers": "Lasers de minage",
+    "laserPlaceholder": "Choisissez un laser de minage...",
+    "laserSize": {
+      "S0": "Lasers de minage taille 0",
+      "1": "Lasers de minage taille 1",
+      "2": "Lasers de minage taille 2"
+    },
+    "modules": "Modules",
+    "modulePlaceholder": "Choisissez un module...",
+    "gadgets": "Gadgets",
+    "gadgetPlaceholder": "Choisissez un gadget...",
+    "inventory": "Inventaire",
+    "tooltips": {
+      "minPower": "Puissance minimale du laser (Tous les lasers actifs combinés)",
+      "maxPower": "Puissance maximale du laser (Tous les lasers actifs combinés)",
+      "optimalRange": "Portée optimale (Moyenne pour tous les lasers actifs)",
+      "maxRange": "Portée maximale (Moyenne pour tous les lasers actifs)",
+      "resistance": "Modificateur de résistance",
+      "instability": "Modificateur d'instabilité",
+      "overchargeRate": "Modificateur de taux de surcharge",
+      "clustering": "Modificateur de regroupement",
+      "inertMaterials": "Filtrage des matériaux inertes",
+      "optimalChargeRate": "Modificateur de taux de charge optimal",
+      "optimalChargeWindow": "Modificateur de fenêtre de charge optimale (max 50% de la fenêtre totale)",
+      "shatterDamage": "Modificateur de dégâts de fragmentation",
+      "extractionPower": "Puissance totale d'extraction (Tous les lasers actifs combinés)"
+    },
+    "loadLoadout": "Charger un loadout sauvegardé",
+    "loadLoadoutPlaceholder": "Sélectionnez un loadout sauvegardé",
+    "saveLoadout": {
+      "title": "Sauvegarder le Loadout",
+      "nameLabel": "Nom du Loadout",
+      "namePlaceholder": "Entrez le nom du loadout...",
+      "nameRequired": "Le nom est requis.",
+      "cancelButton": "Annuler",
+      "saveButton": "Sauvegarder"
+    },
+    "shopLoadout": {
+      "title": "Acheter le Loadout",
+      "description": "Découvrez où acheter les composants de votre loadout à travers le verse. Comparez les prix et la disponibilité dans différents endroits pour optimiser vos achats.",
+      "loading": "Chargement des données du magasin...",
+      "noData": "Aucune donnée de magasin disponible pour ce loadout",
+      "lasers": "Lasers",
+      "modules": "Modules",
+      "gadgets": "Gadgets",
+      "location": "Lieu",
+      "price": "Prix",
+      "closeButton": "Fermer"
+    },
+    "confirmRemove": "Êtes-vous sûr de vouloir supprimer ce loadout sauvegardé ?",
+    "resetButton": "Réinitialiser le loadout",
+    "saveButton": "Sauvegarder",
+    "shopButton": "Acheter"
   },
   "refinery": {
     "title": "Raffinerie",

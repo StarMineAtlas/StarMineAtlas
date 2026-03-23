@@ -1,10 +1,10 @@
 "use client"
 
-import { useTranslation } from "react-i18next"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Gem, Layers, CircleDot, Globe, MapPin, Activity } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Rock, RockSecondaries } from "@/models/Rock"
+import { CircleDot, Gem, Globe, Layers, MapPin } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 interface RockCardProps {
   rock: Rock

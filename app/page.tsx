@@ -1,13 +1,13 @@
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
-import { useTranslation } from "react-i18next"
-import { Header } from "@/components/Header"
+import { Header } from "@/components/Header/Header"
+import { MineralFilter } from "@/components/Filters/MineralFilter"
 import { RockCard } from "@/components/RockCard"
-import { MineralFilter } from "@/components/MineralFilter"
-import { Mountain, Stone } from "lucide-react"
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"
 import { Rock } from "@/models/Rock"
+import { Stone } from "lucide-react"
+import { useEffect, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 export default function Home() {
   const { t } = useTranslation()

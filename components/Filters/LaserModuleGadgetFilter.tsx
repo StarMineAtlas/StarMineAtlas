@@ -1,5 +1,5 @@
-import React from "react";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
 
 
@@ -24,7 +24,7 @@ const sizeToShipName: Record<string, string> = {
     "2": "Mole",
 };
 
-export const LaserModuleGadgetFilter: React.FC<MiningLaserFilterProps> = ({
+export const LaserModuleGadgetFilter: FC<MiningLaserFilterProps> = ({
     laserNames,
     itemTypes,
     sizes,

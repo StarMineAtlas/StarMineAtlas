@@ -1,8 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@import './font/font.css';
-
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -116,6 +114,9 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
+
+@import './font/font.css';
+@import './layout/dialog.css';
 
 @layer base {
   * {

@@ -1,11 +1,11 @@
 "use client"
 
-import { Header } from "@/components/Header";
+import { Header } from "@/components/Header/Header";
+import { LaserModuleGadgetFilter } from "@/components/Filters/LaserModuleGadgetFilter";
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints";
 import { MiningLaser, MiningLaserAttributes, miningLaserAttributeType, MiningLaserPrices, MiningLaserRawData } from "@/models/MiningLaser";
-import { useEffect, useState } from "react";
 import { Drill } from "lucide-react";
-import { LaserModuleGadgetFilter } from "@/components/LaserModuleGadgetFilter";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 // Function to get color class based on value (positive = green, negative = red, zero or non-numeric = gray), with optional inverse coloring
@@ -36,7 +36,6 @@ export default function MiningLasersPage() {
         fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.itemsCategory + UEX_API_ITEM_CATEGORIES.miningLasers)
             .then(res => res.json())
             .then(result => {
-                console.log("Mining Lasers Data from UEX API:", result);
                 setMiningLasersRawData(result.data || []);
             })
     }, []);

@@ -1,13 +1,13 @@
 "use client"
 
-import { Header } from "@/components/Header"
-import { useTranslation } from "react-i18next"
-import { Factory } from "lucide-react"
-import { useEffect, useState, useMemo } from "react"
-import { RefineryFilter } from "@/components/RefineryFilter"
+import { Header } from "@/components/Header/Header"
+import { RefineryFilter } from "@/components/Filters/RefineryFilter"
+import { RefinerySingleResult } from "@/components/RefinerySingleResult"
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
 import { RefineryMethod, RefineryRatingCost, RefineryRatingSpeed, RefineryRatingYield, RefineryYield } from "@/models/Refinery"
-import { RefinerySingleResult } from "@/components/RefinerySingleResult"
+import { Factory } from "lucide-react"
+import { useEffect, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 // Function to get color class based on rating (1 = red, 2 = orange, 3 = green)
 function getRatingColor(rating: number) {

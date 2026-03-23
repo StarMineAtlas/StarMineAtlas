@@ -1,11 +1,11 @@
 "use client"
 
-import { Header } from "@/components/Header";
+import { Header } from "@/components/Header/Header";
+import { LaserModuleGadgetFilter } from "@/components/Filters/LaserModuleGadgetFilter";
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints";
-import { moduleGadgetAttributeType, type ModuleGadget, type ModuleGadgetAttributes, type ModuleGadgetPrices, type ModuleGadgetRawData } from "@/models/ModuleGadget";
-import { useEffect, useState } from "react";
+import { gadgetAttributeType, moduleAttributeType, type ModuleGadget, type ModuleGadgetAttributes, type ModuleGadgetPrices, type ModuleGadgetRawData } from "@/models/ModuleGadget";
 import { LayersPlus } from "lucide-react";
-import { LaserModuleGadgetFilter } from "@/components/LaserModuleGadgetFilter";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 // Function to get color class based on value (positive = green, negative = red, zero or non-numeric = gray), with optional inverse coloring
@@ -48,8 +48,8 @@ export default function ModulesGadgetsPage() {
     useEffect(() => {
         setLoading(true);
         Promise.all([
-            fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.itemsCategory + "28"),
-            fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.itemsCategory + "30")
+            fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.itemsCategory + UEX_API_ITEM_CATEGORIES.gadgets),
+            fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.itemsCategory + UEX_API_ITEM_CATEGORIES.modules)
         ])
             .then(async ([res28, res30]) => {
                 const result28 = await res28.json();
@@ -81,12 +81,24 @@ export default function ModulesGadgetsPage() {
                 // Fetch attributes
                 const attributesRes = await fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.itemsAttributes + module.id);
                 const attributesResult: { data: ModuleGadgetAttributes[] } = await attributesRes.json();
+                const isGadget = attributesResult.data.find(a => a.attribute_name === "Item Type")?.value === "Gadget";
                 attributesResult.data.forEach(attr => {
-                    Object.keys(moduleGadgetAttributeType).forEach(key => {
-                        if (attr.attribute_name === moduleGadgetAttributeType[key as keyof typeof moduleGadgetAttributeType]) {
-                            (moduleGadget as any)[key] = attr.value + (attr.unit ? `${attr.unit}` : "");
+                    if (isGadget) {
+                        Object.keys(gadgetAttributeType).forEach(key => {
+                            if (attr.attribute_name === gadgetAttributeType[key as keyof typeof gadgetAttributeType]) {
+                                (moduleGadget as any)[key] = attr.value + (attr.unit ? `${attr.unit}` : "");
+                            }
+                        });
+                        if (attr.attribute_name === "Laser Instability" || attr.attribute_name === "Instability") {
+                            moduleGadget.instability = moduleGadget.instability ? moduleGadget.instability : attr.value + (attr.unit ? `${attr.unit}` : "");
                         }
-                    });
+                    } else {
+                        Object.keys(moduleAttributeType).forEach(key => {
+                            if (attr.attribute_name === moduleAttributeType[key as keyof typeof moduleAttributeType]) {
+                                (moduleGadget as any)[key] = attr.value + (attr.unit ? `${attr.unit}` : "");
+                            }
+                        });
+                    }
                 });
 
                 moduleGadget.locations = Array.from(new Set(moduleGadget.locations));
@@ -168,7 +180,7 @@ export default function ModulesGadgetsPage() {
     return (
         <div className="min-h-screen bg-slate-950 text-slate-50">
             <Header />
-            <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
                 <div className="flex flex-col items-start justify-center">
                     <div className="mb-6 flex items-start gap-3">
                         <LayersPlus className="h-10 w-10 text-cyan-400" />
@@ -269,7 +281,7 @@ export default function ModulesGadgetsPage() {
                         </div>
                     )}
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useTranslation } from "react-i18next"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
@@ -8,12 +8,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
-import { Filter, Search, Globe, MapPin, Gem } from "lucide-react"
+import { Filter, Gem, Globe, MapPin, Search } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
-import { useEffect, useState } from "react"
-import { set } from "date-fns"
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"
+import { useEffect, useState } from "react"
 
 interface MineralFilterProps {
   selectedMineral: string

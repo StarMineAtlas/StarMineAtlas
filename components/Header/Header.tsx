@@ -1,13 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { ChevronDown, Menu, X } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Pickaxe, Menu, X } from "lucide-react"
-import { ChevronDown } from "lucide-react"
+import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { LanguageSelector } from "./LanguageSelector"
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
 
 export function Header() {
   const { t } = useTranslation()
@@ -39,7 +38,7 @@ export function Header() {
           <img
             src="/sma-logo.png"
             alt={t("header.siteName")}
-            className="h-[40px] w-auto my-auto transition-transform group-hover:rotate-12"
+            className="h-[40px] w-auto my-auto transition-transform group-hover:scale-110"
           />
         </Link>
 

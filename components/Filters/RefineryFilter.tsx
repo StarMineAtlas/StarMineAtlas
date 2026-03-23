@@ -1,5 +1,5 @@
-import React from "react";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
 
 interface RefineryFilterProps {
@@ -11,7 +11,7 @@ interface RefineryFilterProps {
     onLocationChange: (location: string) => void;
 }
 
-export const RefineryFilter: React.FC<RefineryFilterProps> = ({
+export const RefineryFilter: FC<RefineryFilterProps> = ({
     minerals,
     locations,
     selectedMineral,

@@ -1,8 +1,8 @@
 "use client"
 
+import { Header } from "@/components/Header/Header"
+import { Calculator, Construction } from "lucide-react"
 import { useTranslation } from "react-i18next"
-import { Header } from "@/components/Header"
-import { Construction, Calculator } from "lucide-react"
 
 export default function MiningProfitPage() {
   const { t } = useTranslation()

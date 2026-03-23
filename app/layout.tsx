@@ -1,7 +1,8 @@
+import { I18nProvider } from '@/components/I18nProvider'
+import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import { I18nProvider } from '@/components/I18nProvider'
+import { ReactNode } from 'react'
 import '../styles/globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -56,7 +57,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: ReactNode
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>

@@ -1,12 +1,12 @@
 "use client"
 
-import { Header } from "@/components/Header"
-import { useTranslation } from "react-i18next"
+import { Header } from "@/components/Header/Header"
+import { API_BASE_URL, API_ENDPOINTS, API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
+import { Commodity, excludedIds, FormattedCommodityMaxPrice } from "@/models/Commodity"
+import { Mineral } from "@/models/Mineral"
 import { TrendingUp } from "lucide-react"
 import { useEffect, useState } from "react"
-import { API_BASE_URL, API_ENDPOINTS, API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
-import { Mineral } from "@/models/Mineral"
-import { Commodity, excludedIds, FormattedCommodityMaxPrice } from "@/models/Commodity"
+import { useTranslation } from "react-i18next"
 
 function filteredCommodities(commodities: Commodity[], minerals: Mineral[]) {
     const mineralNames = minerals.map(mineral => mineral.name)
@@ -38,7 +38,6 @@ export default function marketPrices() {
         } else {
             result = commodities.filter(fc => mineralsFPS.some(mineral => fc.name.includes(mineral.name)))
         }
-        console.log("Before filtering excluded IDs:", result)
         result = result.filter(commodity => !excludedIds.includes(commodity.id))
         return result.sort((a, b) => b.refined.price_sell - a.refined.price_sell)
     }
@@ -78,8 +77,6 @@ export default function marketPrices() {
                 mineralGroups[name].rawPrices.push(commodity.price_sell);
                 mineralGroups[name].ids.push(commodity.id_commodity);
             });
-
-            console.log("Mineral groups before formatting:", mineralGroups)
 
             const formatted = Object.entries(mineralGroups).map(([name, group]) => {
                 return {
