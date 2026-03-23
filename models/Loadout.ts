@@ -8,15 +8,20 @@ export interface ShipConfiguration {
     canChangeLasers: boolean;
 }
 
+export interface ModuleGadgetWithActive extends ModuleGadgetWithPrices {
+    isActive: boolean;
+}
+
 export interface LoadoutBlocConfig {
     miningLaser: MiningLaserWithPrices | null;
-    modules: (ModuleGadgetWithPrices | null)[];
+    isLaserActive: boolean;
+    modules: (ModuleGadgetWithActive | null)[];
 }
 
 export interface Loadout {
     ship: ShipConfiguration;
     bloc: LoadoutBlocConfig[];
-    gadgets: (ModuleGadgetWithPrices | null)[];
+    gadgets: (ModuleGadgetWithActive | null)[];
     isSaved?: boolean;
     name?: string;
 }

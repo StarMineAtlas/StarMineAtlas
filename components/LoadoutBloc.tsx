@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { LoadoutBlocConfig } from "@/models/Loadout";
+import { LoadoutBlocConfig, ModuleGadgetWithActive } from "@/models/Loadout";
 import { MiningLaserWithPrices } from "@/models/MiningLaser";
 import { ModuleGadgetWithPrices } from "@/models/ModuleGadget";
 import {
@@ -12,7 +12,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+
 import { Layers, Trash } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 
 
 interface LoadoutBlocProps {
@@ -36,11 +38,14 @@ export const LoadoutBloc: React.FC<LoadoutBlocProps> = ({
         const selectedLaser = lasers.find(laser => laser.name === laserName);
         const slots = Number(selectedLaser?.slots) || 0;
         bloc.modules = Array.from({ length: slots }).map(() => null);
-        onChange({ ...bloc, miningLaser: selectedLaser ? selectedLaser : null });
+        onChange({ ...bloc, miningLaser: selectedLaser ? selectedLaser : null, isLaserActive: !!selectedLaser });
     };
 
     const handleModuleChange = (moduleName: string, index: number) => {
-        const selectedModule = modules.find(module => module.name === moduleName);
+        const selectedModule = {
+            ...modules.find(module => module.name === moduleName),
+            isActive: true
+        } as ModuleGadgetWithActive | null;
         const updatedModules = [...bloc.modules];
         updatedModules[index] = selectedModule ? selectedModule : null;
         onChange({ ...bloc, modules: updatedModules });
@@ -52,6 +57,21 @@ export const LoadoutBloc: React.FC<LoadoutBlocProps> = ({
         onChange({ ...bloc, modules: updatedModules });
     };
 
+    const handleSwitchLaserChange = (index: number) => {
+        const updatedBloc = { ...bloc };
+        updatedBloc.isLaserActive = !updatedBloc.isLaserActive;
+        updatedBloc.modules = updatedBloc.modules.map(module => module ? { ...module, isActive: updatedBloc.isLaserActive } : null);
+        onChange(updatedBloc);
+    }
+
+    const handleSwitchModuleChange = (index: number) => {
+        const updatedModules = [...bloc.modules];
+        if (updatedModules[index]) {
+            updatedModules[index] = { ...updatedModules[index], isActive: !updatedModules[index]?.isActive };
+        }
+        onChange({ ...bloc, modules: updatedModules });
+    }
+
     return (
         <div className="p-4 w-full bg-slate-800 rounded-xl text-cyan-200">
             <span className="text-lg font-semibold">Laser {index + 1}</span>
@@ -60,6 +80,11 @@ export const LoadoutBloc: React.FC<LoadoutBlocProps> = ({
                     <>
                         {/* Laser */}
                         <div className="flex items-center w-full gap-2">
+                            <Switch
+                                checked={bloc.isLaserActive}
+                                onCheckedChange={() => handleSwitchLaserChange(index)}
+                                className="mr-2"
+                            />
                             <Select
                                 value={bloc.miningLaser?.name || ""}
                                 onValueChange={handleLaserChange}
@@ -130,6 +155,13 @@ export const LoadoutBloc: React.FC<LoadoutBlocProps> = ({
                         <div className="flex flex-col items-center w-full gap-2">
                             {Array.from({ length: bloc.modules.length }).map((_, idx) => (
                                 <div className="flex items-center w-full gap-2" key={idx}>
+                                    {bloc.modules[idx]?.itemType === "Active" && (
+                                        <Switch
+                                            checked={bloc.modules[idx]?.isActive || false}
+                                            onCheckedChange={() => handleSwitchModuleChange(idx)}
+                                            className="mr-2"
+                                        />
+                                    )}
                                     <Select
                                         value={bloc.modules[idx]?.name || ""}
                                         onValueChange={(value) => handleModuleChange(value, idx)}

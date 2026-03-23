@@ -8,7 +8,7 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints"
 import { MiningLaserAttributes, miningLaserAttributeType, MiningLaserPrices, MiningLaserRawData, MiningLaserWithPrices } from "@/models/MiningLaser"
 import { ModuleGadget, moduleAttributeType, ModuleGadgetPrices, ModuleGadgetRawData, ModuleGadgetWithPrices, ModuleGadgetAttributes, gadgetAttributeType } from "@/models/ModuleGadget"
-import { Loadout, ShipConfiguration } from "@/models/Loadout"
+import { Loadout, ModuleGadgetWithActive, ShipConfiguration } from "@/models/Loadout"
 import { LoadoutBloc } from "@/components/LoadoutBloc"
 import { set } from "date-fns"
 import { LoadoutInventory } from "@/components/LoadoutInventory"
@@ -170,9 +170,10 @@ export default function LoadoutPage() {
         ship: selectedShip,
         bloc: Array.from({ length: selectedShip.numberOfLasers }).map(() => ({
           miningLaser: baseLaser,
-          modules: Array.from({ length: parseInt(baseLaser?.slots || "0") }).map(() => ({})) as ModuleGadgetWithPrices[]
+          isLaserActive: !!baseLaser,
+          modules: Array.from({ length: parseInt(baseLaser?.slots || "0") }).map(() => ({})) as ModuleGadgetWithActive[]
         })),
-        gadgets: Array.from({ length: 1 }).map(() => null) as (ModuleGadgetWithPrices | null)[],
+        gadgets: Array.from({ length: 1 }).map(() => null) as (ModuleGadgetWithActive | null)[],
         isSaved: false,
         name: ""
       };
@@ -202,7 +203,7 @@ export default function LoadoutPage() {
     setLoadout(newLoadout);
   };
 
-  const handleGadgetChange = (updatedGadgetList: (ModuleGadgetWithPrices | null)[]) => {
+  const handleGadgetChange = (updatedGadgetList: (ModuleGadgetWithActive | null)[]) => {
     if (!loadout) return;
     const newLoadout = { ...loadout, bloc: [...loadout.bloc] };
     newLoadout.gadgets = updatedGadgetList;

@@ -2,8 +2,6 @@
 
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { LoadoutBlocConfig } from "@/models/Loadout";
-import { MiningLaserWithPrices } from "@/models/MiningLaser";
 import { ModuleGadgetWithPrices } from "@/models/ModuleGadget";
 import {
     Select,
@@ -12,13 +10,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Layers, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
+import { ModuleGadgetWithActive } from "@/models/Loadout";
+import { Switch } from "./ui/switch";
 
 
 interface LoadoutBlocProps {
-    gadgetList: (ModuleGadgetWithPrices | null)[];
+    gadgetList: (ModuleGadgetWithActive | null)[];
     gadgets: ModuleGadgetWithPrices[];
-    onChange: (updatedGadgetList: (ModuleGadgetWithPrices | null)[]) => void;
+    onChange: (updatedGadgetList: (ModuleGadgetWithActive | null)[]) => void;
 }
 
 export const LoadoutInventory: React.FC<LoadoutBlocProps> = ({
@@ -30,23 +30,35 @@ export const LoadoutInventory: React.FC<LoadoutBlocProps> = ({
 
     const handleGadgetChange = (gadgetName: string, index: number) => {
         // If the value is an empty string, treat as null (unselected)
-        const selectedGadget = gadgets.find((g) => g.name === gadgetName) || null;
-        // Force the type to (ModuleGadgetWithPrices | null)[]
-        const updatedGadgetList = gadgetList.slice() as (ModuleGadgetWithPrices | null)[];
+        const selectedGadget = {
+            ...gadgets.find((g) => g.name === gadgetName) || null,
+            isActive: true
+        } as ModuleGadgetWithActive | null;
+        // Force the type to (ModuleGadgetWithActive | null)[]
+        const updatedGadgetList = gadgetList.slice() as (ModuleGadgetWithActive | null)[];
         updatedGadgetList[index] = selectedGadget;
         if (updatedGadgetList.every((g) => g !== null)) {
-            (updatedGadgetList as (ModuleGadgetWithPrices | null)[]).push(null);
+            (updatedGadgetList as (ModuleGadgetWithActive | null)[]).push(null);
         }
         onChange(updatedGadgetList);
     };
 
     const handleRemoveGadget = (index: number) => {
-        const updatedGadgetList = gadgetList.slice() as (ModuleGadgetWithPrices | null)[];
+        const updatedGadgetList = gadgetList.slice() as (ModuleGadgetWithActive | null)[];
         updatedGadgetList.splice(index, 1);
         if (updatedGadgetList.length === 0) {
-            (updatedGadgetList as (ModuleGadgetWithPrices | null)[]).push(null);
+            (updatedGadgetList as (ModuleGadgetWithActive | null)[]).push(null);
         }
         onChange(updatedGadgetList);
+    }
+
+    const handleSwitchGadgetChange = (index: number) => {
+        const updatedGadgetList = gadgetList.slice() as (ModuleGadgetWithActive | null)[];
+        const gadget = updatedGadgetList[index];
+        if (gadget) {
+            updatedGadgetList[index] = { ...gadget, isActive: !gadget.isActive };
+            onChange(updatedGadgetList);
+        }
     }
 
     return (
@@ -59,6 +71,15 @@ export const LoadoutInventory: React.FC<LoadoutBlocProps> = ({
                         <div className="flex flex-col items-center w-full gap-2">
                             {Array.from({ length: gadgetList.length }).map((_, idx) => (
                                 <div className="flex items-center w-full gap-2" key={idx}>
+                                    {
+                                        gadgetList[idx] && gadgetList[idx]?.name && (
+                                            <Switch
+                                                checked={gadgetList[idx]?.isActive || false}
+                                                onCheckedChange={() => handleSwitchGadgetChange(idx)}
+                                                className="mr-2"
+                                            />
+                                        )
+                                    }
                                     <Select
                                         value={gadgetList[idx]?.name ?? ""}
                                         onValueChange={(value) => handleGadgetChange(value, idx)}

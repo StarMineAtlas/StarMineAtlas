@@ -33,79 +33,81 @@ export const LoadoutResume: React.FC<LoadoutBlocProps> = ({
             extraction_power: "0"
         };
         loadout.bloc.forEach((bloc) => {
-            if (bloc.miningLaser) {
-                const pourcentagePowerMod = bloc.modules.map((module) => parseFloat(module?.laserPowerMod || "0")).reduce((acc, val) => acc + val, 0);
+            if (bloc.miningLaser && bloc.isLaserActive) {
+                const pourcentagePowerMod = bloc.modules.filter((module) => module?.isActive).map((module) => parseFloat(module?.laserPowerMod || "0")).reduce((acc, val) => acc + val, 0);
                 resumeData.min_power = (parseFloat(resumeData.min_power || "0") + (parseFloat(bloc.miningLaser.min_power || "0")) * (1 + pourcentagePowerMod / 100)).toString();
                 resumeData.max_power = (parseFloat(resumeData.max_power || "0") + (parseFloat(bloc.miningLaser.max_power || "0")) * (1 + pourcentagePowerMod / 100)).toString();
                 resumeData.optimal_range = (parseFloat(resumeData.optimal_range || "0") + parseFloat(bloc.miningLaser.optimal_range || "0")).toString()
                 resumeData.max_range = (parseFloat(resumeData.max_range || "0") + parseFloat(bloc.miningLaser.max_range || "0")).toString();
-                const pourcentageExtractionPowerMod = bloc.modules.map((module) => parseFloat(module?.extractionPowerMod || "0")).reduce((acc, val) => acc + val, 0);
+                const pourcentageExtractionPowerMod = bloc.modules.filter((module) => module?.isActive).map((module) => parseFloat(module?.extractionPowerMod || "0")).reduce((acc, val) => acc + val, 0);
                 resumeData.extraction_power = (parseFloat(resumeData.extraction_power || "0") + (parseFloat(bloc.miningLaser.extract_power || "0")) * (1 + pourcentageExtractionPowerMod / 100)).toString();
             }
         });
-        resumeData.optimal_range = (parseFloat(resumeData.optimal_range || "0") / (loadout.bloc.length > 0 ? loadout.bloc.length : 1)).toString() + "m";
-        resumeData.max_range = (parseFloat(resumeData.max_range || "0") / (loadout.bloc.length > 0 ? loadout.bloc.length : 1)).toString() + "m";
+
+        // calculate ranges per laser
+        resumeData.optimal_range = (parseFloat(resumeData.optimal_range || "0") / (loadout.bloc.filter((bloc) => bloc.isLaserActive).length > 0 ? loadout.bloc.filter((bloc) => bloc.isLaserActive).length : 1)).toString() + "m";
+        resumeData.max_range = (parseFloat(resumeData.max_range || "0") / (loadout.bloc.filter((bloc) => bloc.isLaserActive).length > 0 ? loadout.bloc.filter((bloc) => bloc.isLaserActive).length : 1)).toString() + "m";
 
         // calculate pourcentages
         const pourcentagesResistance = loadout.bloc.map((bloc) => {
-            const laserResistance = parseFloat(bloc.miningLaser?.resistance || "0");
-            const modulesResistance = bloc.modules.map((module) => parseFloat(module?.resistance || "0")).reduce((acc, val) => acc + val, 0);
+            const laserResistance = bloc.isLaserActive ? parseFloat(bloc.miningLaser?.resistance || "0") : 0;
+            const modulesResistance = bloc.modules.filter((module) => module?.isActive).map((module) => parseFloat(module?.resistance || "0")).reduce((acc, val) => acc + val, 0);
             return [laserResistance, modulesResistance];
         });
-        pourcentagesResistance.push(loadout.gadgets.map((gadget) => parseFloat(gadget?.resistance || "0")));
+        pourcentagesResistance.push(loadout.gadgets.filter((gadget) => gadget?.isActive).map((gadget) => parseFloat(gadget?.resistance || "0")));
         resumeData.resistance = calcultateAdditionalPourcentage(pourcentagesResistance.flat()) + "%";
 
         const pourcentagesOvercharge = loadout.bloc.map((bloc) => {
-            const modulesOvercharge = bloc.modules.map((module) => parseFloat(module?.overchargeRate || "0")).reduce((acc, val) => acc + val, 0);
+            const modulesOvercharge = bloc.modules.filter((module) => module?.isActive).map((module) => parseFloat(module?.overchargeRate || "0")).reduce((acc, val) => acc + val, 0);
             return [modulesOvercharge];
         });
-        pourcentagesOvercharge.push(loadout.gadgets.map((gadget) => parseFloat(gadget?.overchargeRate || "0")));
+        pourcentagesOvercharge.push(loadout.gadgets.filter((gadget) => gadget?.isActive).map((gadget) => parseFloat(gadget?.overchargeRate || "0")));
         resumeData.overcharge = calcultateAdditionalPourcentage(pourcentagesOvercharge.flat()) + "%";
 
         const pourcentagesClustering = loadout.bloc.map((bloc) => {
-            const modulesClustering = bloc.modules.map((module) => parseFloat(module?.clustering || "0")).reduce((acc, val) => acc + val, 0);
+            const modulesClustering = bloc.modules.filter((module) => module?.isActive).map((module) => parseFloat(module?.clustering || "0")).reduce((acc, val) => acc + val, 0);
             return [modulesClustering];
         });
-        pourcentagesClustering.push(loadout.gadgets.map((gadget) => parseFloat(gadget?.clustering || "0")));
+        pourcentagesClustering.push(loadout.gadgets.filter((gadget) => gadget?.isActive).map((gadget) => parseFloat(gadget?.clustering || "0")));
         resumeData.clustering = calcultateAdditionalPourcentage(pourcentagesClustering.flat()) + "%";
 
         const pourcentagesInstability = loadout.bloc.map((bloc) => {
-            const laserInstability = parseFloat(bloc.miningLaser?.instability || "0");
-            const modulesInstability = bloc.modules.map((module) => parseFloat(module?.instability || "0")).reduce((acc, val) => acc + val, 0);
+            const laserInstability = bloc.isLaserActive ? parseFloat(bloc.miningLaser?.instability || "0") : 0;
+            const modulesInstability = bloc.modules.filter((module) => module?.isActive).map((module) => parseFloat(module?.instability || "0")).reduce((acc, val) => acc + val, 0);
             return [laserInstability, modulesInstability];
         });
-        pourcentagesInstability.push(loadout.gadgets.map((gadget) => parseFloat(gadget?.instability || "0")));
+        pourcentagesInstability.push(loadout.gadgets.filter((gadget) => gadget?.isActive).map((gadget) => parseFloat(gadget?.instability || "0")));
         resumeData.instability = calcultateAdditionalPourcentage(pourcentagesInstability.flat()) + "%";
 
         const pourcentagesInertMaterial = loadout.bloc.map((bloc) => {
-            const laserInertMaterial = parseFloat(bloc.miningLaser?.inert_materials || "0");
-            const modulesInertMaterial = bloc.modules.map((module) => parseFloat(module?.inertMaterials || "0")).reduce((acc, val) => acc + val, 0);
+            const laserInertMaterial = bloc.isLaserActive ? parseFloat(bloc.miningLaser?.inert_materials || "0") : 0;
+            const modulesInertMaterial = bloc.modules.filter((module) => module?.isActive).map((module) => parseFloat(module?.inertMaterials || "0")).reduce((acc, val) => acc + val, 0);
             return [laserInertMaterial, modulesInertMaterial];
         });
-        pourcentagesInertMaterial.push(loadout.gadgets.map((gadget) => parseFloat(gadget?.inertMaterials || "0")));
+        pourcentagesInertMaterial.push(loadout.gadgets.filter((gadget) => gadget?.isActive).map((gadget) => parseFloat(gadget?.inertMaterials || "0")));
         resumeData.inert_material = calcultateAdditionalPourcentage(pourcentagesInertMaterial.flat()) + "%";
 
         const pourcentagesOptimalChargeRate = loadout.bloc.map((bloc) => {
-            const laserOptimalChargeRate = parseFloat(bloc.miningLaser?.optimal_charge_rate || "0");
-            const modulesOptimalChargeRate = bloc.modules.map((module) => parseFloat(module?.optimalChargeRate || "0")).reduce((acc, val) => acc + val, 0);
+            const laserOptimalChargeRate = bloc.isLaserActive ? parseFloat(bloc.miningLaser?.optimal_charge_rate || "0") : 0;
+            const modulesOptimalChargeRate = bloc.modules.filter((module) => module?.isActive).map((module) => parseFloat(module?.optimalChargeRate || "0")).reduce((acc, val) => acc + val, 0);
             return [laserOptimalChargeRate, modulesOptimalChargeRate];
         });
-        pourcentagesOptimalChargeRate.push(loadout.gadgets.map((gadget) => parseFloat(gadget?.optimalChargeRate || "0")));
+        pourcentagesOptimalChargeRate.push(loadout.gadgets.filter((gadget) => gadget?.isActive).map((gadget) => parseFloat(gadget?.optimalChargeRate || "0")));
         resumeData.optimal_charge_rate = calcultateAdditionalPourcentage(pourcentagesOptimalChargeRate.flat()) + "%";
 
         const pourcentagesOptimalChargeWindow = loadout.bloc.map((bloc) => {
-            const laserOptimalChargeWindow = parseFloat(bloc.miningLaser?.optimal_charge_window || "0");
-            const modulesOptimalChargeWindow = bloc.modules.map((module) => parseFloat(module?.optimalChargeWindow || "0")).reduce((acc, val) => acc + val, 0);
+            const laserOptimalChargeWindow = bloc.isLaserActive ? parseFloat(bloc.miningLaser?.optimal_charge_window || "0") : 0;
+            const modulesOptimalChargeWindow = bloc.modules.filter((module) => module?.isActive).map((module) => parseFloat(module?.optimalChargeWindow || "0")).reduce((acc, val) => acc + val, 0);
             return [laserOptimalChargeWindow, modulesOptimalChargeWindow];
         });
-        pourcentagesOptimalChargeWindow.push(loadout.gadgets.map((gadget) => parseFloat(gadget?.optimalChargeWindow || "0")));
+        pourcentagesOptimalChargeWindow.push(loadout.gadgets.filter((gadget) => gadget?.isActive).map((gadget) => parseFloat(gadget?.optimalChargeWindow || "0")));
         resumeData.optimal_charge_window = calcultateAdditionalPourcentage(pourcentagesOptimalChargeWindow.flat()) + "%";
 
         const pourcentagesShatterDamage = loadout.bloc.map((bloc) => {
-            const modulesShatterDamage = bloc.modules.map((module) => parseFloat(module?.shatterDamage || "0")).reduce((acc, val) => acc + val, 0);
+            const modulesShatterDamage = bloc.modules.filter((module) => module?.isActive).map((module) => parseFloat(module?.shatterDamage || "0")).reduce((acc, val) => acc + val, 0);
             return [modulesShatterDamage];
         });
-        pourcentagesShatterDamage.push(loadout.gadgets.map((gadget) => parseFloat(gadget?.shatterDamage || "0")));
+        pourcentagesShatterDamage.push(loadout.gadgets.filter((gadget) => gadget?.isActive).map((gadget) => parseFloat(gadget?.shatterDamage || "0")));
         resumeData.shatter_damage = calcultateAdditionalPourcentage(pourcentagesShatterDamage.flat()) + "%";
 
 
