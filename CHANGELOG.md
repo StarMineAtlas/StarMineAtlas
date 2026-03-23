@@ -1,4 +1,3 @@
-et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 # Changelog
 
 All notable changes to this project will be documented in this file.
