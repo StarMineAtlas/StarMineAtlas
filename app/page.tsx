@@ -19,6 +19,8 @@ export default function Home() {
   const [rocks, setRocks] = useState<Rock[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
+  const [showData, setShowData] = useState(false)
+
   const filteredRocks = useMemo(() => {
     if (isLoading) return [];
     return rocks.filter((rock) => {
@@ -62,6 +64,14 @@ export default function Home() {
 
   useEffect(() => {
     setIsLoading(true);
+    // get localstorage config to know if we need to show data or not
+    const configStr = localStorage.getItem("star-mine-atlas-config");
+    if (configStr) {
+      const config: { showData: string } = JSON.parse(configStr);
+      const showDataValue = config.showData.toLowerCase() === "true";
+      setShowData(showDataValue);
+    }
+
     fetch(API_BASE_URL + API_ENDPOINTS.rocks)
       .then(res => res.json())
       .then(data => {
@@ -142,7 +152,7 @@ export default function Home() {
         ) : rocks.length > 0 && filteredRocks.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filteredRocks.map((rock, index) => (
-              <RockCard key={`${rock.name}-${rock.system}-${index}`} rock={rock} secondaries={getSecondaryQualityStat(rock.secondary, rock.body)} />
+              <RockCard key={`${rock.name}-${rock.system}-${index}`} rock={rock} secondaries={getSecondaryQualityStat(rock.secondary, rock.body)} showData={showData} />
             ))}
           </div>
         ) : (
