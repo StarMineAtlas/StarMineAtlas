@@ -64,7 +64,8 @@
     "modules": "Modules",
     "modulePlaceholder": "Choisissez un module...",
     "gadgets": "Gadgets",
-    "gadgetPlaceholder": "Choisissez un gadget..."
+    "gadgetPlaceholder": "Choisissez un gadget...",
+    "inventory": "Inventaire"
   },
   "refinery": {
     "title": "Raffinerie",

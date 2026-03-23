@@ -63,7 +63,7 @@ export const LoadoutInventory: React.FC<LoadoutBlocProps> = ({
 
     return (
         <div className="p-4 w-full bg-slate-800 rounded-xl text-cyan-200">
-            <span className="text-lg font-semibold">Inventory</span>
+            <span className="text-lg font-semibold">{t("loadout.inventory")}</span>
             <div className="flex flex-col items-center gap-4 my-4">
                 {gadgetList && (
                     <>

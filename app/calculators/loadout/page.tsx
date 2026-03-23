@@ -234,7 +234,7 @@ export default function LoadoutPage() {
               <div className="w-full">
                 <div className="flex flex-col my-4">
                   <label className="block text-xs font-medium text-cyan-200 ms-2 mb-1" suppressHydrationWarning>
-                    {t("loadout.select_ship", "Select your ship")}
+                    {t("loadout.selectShip", "Select your ship")}
                   </label>
                   <Select value={selectedShip.name} onValueChange={(value) => setSelectedShip(ships.find(ship => ship.name === value)!)}>
                     <SelectTrigger className="w-[180px] border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
