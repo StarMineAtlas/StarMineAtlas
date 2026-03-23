@@ -203,6 +203,23 @@ export default function LoadoutPage() {
     setLoadout(newLoadout);
   };
 
+  const resetActualLoadout = () => {
+    if (!loadout) return;
+    const baseLaser = formattedLasers.find(laser => laser.name === loadout.ship.baseLaser) || null;
+    const resetedLoadout: Loadout = {
+      ship: loadout.ship,
+      bloc: Array.from({ length: loadout.ship.numberOfLasers }).map(() => ({
+        miningLaser: baseLaser,
+        isLaserActive: !!baseLaser,
+        modules: Array.from({ length: parseInt(baseLaser?.slots || "0") }).map(() => ({})) as ModuleGadgetWithActive[]
+      })),
+      gadgets: Array.from({ length: 1 }).map(() => null) as (ModuleGadgetWithActive | null)[],
+      isSaved: false,
+      name: ""
+    };
+    setLoadout(resetedLoadout);
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
       <Header />
@@ -252,6 +269,22 @@ export default function LoadoutPage() {
               </div>
             )
           }
+        </div>
+        <div className="flex flex-col md:flex-row justify-between items-center w-full mt-2">
+          <button onClick={resetActualLoadout} className="mt-6 inline-flex items-center gap-2 rounded bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+            <Construction className="h-4 w-4" />
+            {t("loadout.reset", "Reset Loadout")}
+          </button>
+          <div className="mt-6 flex gap-3">
+            <button disabled className="inline-flex items-center gap-2 rounded bg-cyan-700/50 px-4 py-2 text-sm font-medium text-white opacity-60 cursor-not-allowed">
+              <Wrench className="h-4 w-4" />
+              {t("loadout.save", "Save")}
+            </button>
+            <button disabled className="inline-flex items-center gap-2 rounded bg-emerald-700/50 px-4 py-2 text-sm font-medium text-white opacity-60 cursor-not-allowed">
+              <Toolbox className="h-4 w-4" />
+              {t("loadout.shop", "Shop")}
+            </button>
+          </div>
         </div>
       </div>
     </div>
