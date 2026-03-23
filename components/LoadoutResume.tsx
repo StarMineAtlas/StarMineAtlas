@@ -1,9 +1,9 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Loadout, LoadoutResumeModel } from "@/models/Loadout";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface LoadoutBlocProps {
     loadout: Loadout;

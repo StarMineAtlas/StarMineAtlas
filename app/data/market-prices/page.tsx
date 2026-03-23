@@ -1,12 +1,12 @@
 "use client"
 
 import { Header } from "@/components/Header"
-import { useTranslation } from "react-i18next"
+import { API_BASE_URL, API_ENDPOINTS, API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
+import { Commodity, excludedIds, FormattedCommodityMaxPrice } from "@/models/Commodity"
+import { Mineral } from "@/models/Mineral"
 import { TrendingUp } from "lucide-react"
 import { useEffect, useState } from "react"
-import { API_BASE_URL, API_ENDPOINTS, API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
-import { Mineral } from "@/models/Mineral"
-import { Commodity, excludedIds, FormattedCommodityMaxPrice } from "@/models/Commodity"
+import { useTranslation } from "react-i18next"
 
 function filteredCommodities(commodities: Commodity[], minerals: Mineral[]) {
     const mineralNames = minerals.map(mineral => mineral.name)

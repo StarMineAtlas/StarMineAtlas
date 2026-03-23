@@ -1,8 +1,5 @@
 "use client";
 
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { ModuleGadgetWithPrices } from "@/models/ModuleGadget";
 import {
     Select,
     SelectContent,
@@ -10,8 +7,11 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Trash } from "lucide-react";
 import { ModuleGadgetWithActive } from "@/models/Loadout";
+import { ModuleGadgetWithPrices } from "@/models/ModuleGadget";
+import { Trash } from "lucide-react";
+import React from "react";
+import { useTranslation } from "react-i18next";
 import { Switch } from "./ui/switch";
 
 

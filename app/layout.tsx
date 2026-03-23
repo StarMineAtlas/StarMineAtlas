@@ -1,7 +1,7 @@
+import { I18nProvider } from '@/components/I18nProvider'
+import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import { I18nProvider } from '@/components/I18nProvider'
 import '../styles/globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });

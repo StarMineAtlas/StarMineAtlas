@@ -1,11 +1,11 @@
 "use client"
 
 import { Header } from "@/components/Header";
+import { LaserModuleGadgetFilter } from "@/components/LaserModuleGadgetFilter";
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints";
 import { gadgetAttributeType, moduleAttributeType, type ModuleGadget, type ModuleGadgetAttributes, type ModuleGadgetPrices, type ModuleGadgetRawData } from "@/models/ModuleGadget";
-import { useEffect, useState } from "react";
 import { LayersPlus } from "lucide-react";
-import { LaserModuleGadgetFilter } from "@/components/LaserModuleGadgetFilter";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 // Function to get color class based on value (positive = green, negative = red, zero or non-numeric = gray), with optional inverse coloring

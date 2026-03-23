@@ -1,7 +1,5 @@
 "use client"
 
-import { useTranslation } from "react-i18next"
-import { languages, type LanguageCode } from "@/lib/i18n"
 import {
   Select,
   SelectContent,
@@ -9,6 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { languages, type LanguageCode } from "@/lib/i18n"
+import { useTranslation } from "react-i18next"
 
 export function LanguageSelector() {
   const { i18n } = useTranslation()

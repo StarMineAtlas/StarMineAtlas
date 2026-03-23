@@ -1,12 +1,12 @@
 "use client"
-import { useTranslation } from "react-i18next"
 import { Header } from "@/components/Header"
 import { QualityChart } from "@/components/QualityChart"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"
 import { QualityDistributionData } from "@/models/QualityDistribution"
 import { BarChart3, Info } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useEffect, useState } from "react"
-import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"
+import { useTranslation } from "react-i18next"
 export default function QualityDistributionPage() {
   const { t } = useTranslation()
 

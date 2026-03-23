@@ -1,18 +1,17 @@
 "use client"
 
-import { useTranslation } from "react-i18next"
 import { Header } from "@/components/Header"
-import { Construction, Toolbox, Wrench } from "lucide-react"
-import { use, useEffect, useState } from "react"
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
-import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints"
-import { MiningLaserAttributes, miningLaserAttributeType, MiningLaserPrices, MiningLaserRawData, MiningLaserWithPrices } from "@/models/MiningLaser"
-import { ModuleGadget, moduleAttributeType, ModuleGadgetPrices, ModuleGadgetRawData, ModuleGadgetWithPrices, ModuleGadgetAttributes, gadgetAttributeType } from "@/models/ModuleGadget"
-import { Loadout, ModuleGadgetWithActive, ShipConfiguration } from "@/models/Loadout"
 import { LoadoutBloc } from "@/components/LoadoutBloc"
-import { set } from "date-fns"
 import { LoadoutInventory } from "@/components/LoadoutInventory"
 import { LoadoutResume } from "@/components/LoadoutResume"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints"
+import { Loadout, ModuleGadgetWithActive, ShipConfiguration } from "@/models/Loadout"
+import { miningLaserAttributeType, MiningLaserRawData, MiningLaserWithPrices } from "@/models/MiningLaser"
+import { gadgetAttributeType, moduleAttributeType, ModuleGadgetRawData, ModuleGadgetWithPrices } from "@/models/ModuleGadget"
+import { RotateCcw, Save, Store, Toolbox } from "lucide-react"
+import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 export default function LoadoutPage() {
   const { t } = useTranslation()
@@ -272,16 +271,16 @@ export default function LoadoutPage() {
         </div>
         <div className="flex flex-col md:flex-row justify-between items-center w-full mt-2">
           <button onClick={resetActualLoadout} className="mt-6 inline-flex items-center gap-2 rounded bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-            <Construction className="h-4 w-4" />
+            <RotateCcw className="h-4 w-4" />
             {t("loadout.reset", "Reset Loadout")}
           </button>
           <div className="mt-6 flex gap-3">
             <button disabled className="inline-flex items-center gap-2 rounded bg-cyan-700/50 px-4 py-2 text-sm font-medium text-white opacity-60 cursor-not-allowed">
-              <Wrench className="h-4 w-4" />
+              <Save className="h-4 w-4" />
               {t("loadout.save", "Save")}
             </button>
             <button disabled className="inline-flex items-center gap-2 rounded bg-emerald-700/50 px-4 py-2 text-sm font-medium text-white opacity-60 cursor-not-allowed">
-              <Toolbox className="h-4 w-4" />
+              <Store className="h-4 w-4" />
               {t("loadout.shop", "Shop")}
             </button>
           </div>

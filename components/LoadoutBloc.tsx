@@ -1,10 +1,5 @@
 "use client";
 
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { LoadoutBlocConfig, ModuleGadgetWithActive } from "@/models/Loadout";
-import { MiningLaserWithPrices } from "@/models/MiningLaser";
-import { ModuleGadgetWithPrices } from "@/models/ModuleGadget";
 import {
     Select,
     SelectContent,
@@ -12,9 +7,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { LoadoutBlocConfig, ModuleGadgetWithActive } from "@/models/Loadout";
+import { MiningLaserWithPrices } from "@/models/MiningLaser";
+import { ModuleGadgetWithPrices } from "@/models/ModuleGadget";
+import React from "react";
+import { useTranslation } from "react-i18next";
 
-import { Layers, Trash } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { Layers, Trash } from "lucide-react";
 
 
 interface LoadoutBlocProps {

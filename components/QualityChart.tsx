@@ -1,17 +1,17 @@
 "use client"
 
-import { useRef, useEffect, useCallback } from "react"
+import { QualityDistributionData } from "@/models/QualityDistribution"
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js"
+import { useCallback, useEffect, useRef } from "react"
 import { Bar } from "react-chartjs-2"
-import { QualityDistributionData } from "@/models/QualityDistribution"
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
