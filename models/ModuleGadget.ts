@@ -29,7 +29,6 @@ export interface ModuleGadgetRawData {
     notification: string | null;
 }
 
-
 export interface ModuleGadget {
     id: number;
     name: string;
@@ -47,6 +46,25 @@ export interface ModuleGadget {
     uses?: string;
     duration?: string;
     locations: string[];
+}
+
+export interface ModuleGadgetWithPrices {
+    id: number;
+    name: string;
+    itemType: string;
+    laserPowerMod?: string;
+    resistance?: string;
+    instability?: string;
+    optimalChargeRate?: string;
+    optimalChargeWindow?: string;
+    inertMaterials?: string;
+    overchargeRate?: string;
+    clustering?: string;
+    shatterDamage?: string;
+    extractionPowerMod?: string;
+    uses?: string;
+    duration?: string;
+    locations: { terminal_name: string; price: number }[];
 }
 
 export interface ModuleGadgetPrices {
@@ -125,12 +143,27 @@ export interface ModuleGadgetAttributes {
     date_modified: number;
 }
 
-export const moduleGadgetAttributeType = {
+export const moduleAttributeType = {
     itemType: "Item Type",
     laserPowerMod: "Mining Laser Power",
     resistance: "Resistance",
     instability: "Laser Instability",
     optimalChargeRate: "Optimal Charge Rate",
+    optimalChargeWindow: "Optimal Charge Window Size",
+    inertMaterials: "Inert Materials Level",
+    overchargeRate: "Catastrophic Charge Rate",
+    clustering: "Cluster Modifier",
+    shatterDamage: "Shatter Damage",
+    extractionPowerMod: "Extraction Laser Power",
+    uses: "Uses",
+    duration: "Duration"
+}
+
+export const gadgetAttributeType = {
+    itemType: "Item Type",
+    laserPowerMod: "Mining Laser Power",
+    resistance: "Resistance",
+    optimalChargeRate: "Optimal Charge Window Rate",
     optimalChargeWindow: "Optimal Charge Window Size",
     inertMaterials: "Inert Materials Level",
     overchargeRate: "Catastrophic Charge Rate",

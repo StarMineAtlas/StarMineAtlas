@@ -24,4 +24,6 @@ export const UEX_API_ENDPOINTS = {
 
 export const UEX_API_ITEM_CATEGORIES = {
     miningLasers: 29,
+    modules: 30,
+    gadgets: 28
 };

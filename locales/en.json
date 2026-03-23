@@ -55,7 +55,16 @@
   },
   "loadout": {
     "title": "Loadout Calculator",
-    "description": "Plan and optimize your mining loadout with our loadout calculator. Compare mining modules, gadgets, and lasers to create the perfect setup for your mining operations."
+    "description": "Plan and optimize your mining loadout with our loadout calculator. Compare mining modules, gadgets, and lasers to create the perfect setup for your mining operations.",
+    "loading": "Loading loadout data...",
+    "selectShip": "Select your ship",
+    "shipPlaceholder": "Select a ship...",
+    "lasers": "Mining Lasers",
+    "laserPlaceholder": "Select a mining laser...",
+    "modules": "Modules",
+    "modulePlaceholder": "Select a module...",
+    "gadgets": "Gadgets",
+    "gadgetPlaceholder": "Select a gadget..."
   },
   "refinery": {
     "title": "Refinery",

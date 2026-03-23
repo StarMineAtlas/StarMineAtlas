@@ -39,7 +39,7 @@ export function Header() {
           <img
             src="/sma-logo.png"
             alt={t("header.siteName")}
-            className="h-[40px] w-auto my-auto transition-transform group-hover:rotate-12"
+            className="h-[40px] w-auto my-auto transition-transform group-hover:scale-110"
           />
         </Link>
 

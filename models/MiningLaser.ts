@@ -122,6 +122,24 @@ export interface MiningLaser {
     locations: string[];
 }
 
+export interface MiningLaserWithPrices {
+    id: number;
+    name: string;
+    size: string;
+    slots: string;
+    optimal_range: string;
+    max_range: string;
+    min_power: string;
+    max_power: string;
+    extract_power: string;
+    resistance: string;
+    instability: string;
+    optimal_charge_rate: string;
+    optimal_charge_window: string;
+    inert_materials: string;
+    locations: { terminal_name: string, price: number }[];
+}
+
 export const miningLaserAttributeType = {
     size: "Size",
     slots: "Module Slots",

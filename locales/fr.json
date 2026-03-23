@@ -55,7 +55,16 @@
   },
   "loadout": {
     "title": "Calculateur de Loadout",
-    "description": "Planifiez et optimisez votre équipement de minage avec notre calculateur de loadout. Comparez les modules, gadgets et lasers de minage pour créer la configuration parfaite pour vos opérations minières."
+    "description": "Planifiez et optimisez votre équipement de minage avec notre calculateur de loadout. Comparez les modules, gadgets et lasers de minage pour créer la configuration parfaite pour vos opérations minières.",
+    "loading": "Chargement des données de loadout...",
+    "selectShip": "Sélectionnez votre vaisseau",
+    "shipPlaceholder": "Choisissez un vaisseau...",
+    "lasers": "Lasers de minage",
+    "laserPlaceholder": "Choisissez un laser de minage...",
+    "modules": "Modules",
+    "modulePlaceholder": "Choisissez un module...",
+    "gadgets": "Gadgets",
+    "gadgetPlaceholder": "Choisissez un gadget..."
   },
   "refinery": {
     "title": "Raffinerie",

@@ -2,3 +2,11 @@
     font-size: 8px;
     font-style: italic;
 }
+
+.text-select-item {
+    font-size: 12px;
+
+    @media (max-width: 640px) {
+        font-size: 8px;
+    }
+}
