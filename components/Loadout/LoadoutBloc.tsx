@@ -10,7 +10,7 @@ import {
 import { LoadoutBlocConfig, ModuleGadgetWithActive, ShipConfiguration } from "@/models/Loadout";
 import { MiningLaserWithPrices } from "@/models/MiningLaser";
 import { ModuleGadgetWithPrices } from "@/models/ModuleGadget";
-import React from "react";
+import React, { use, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Switch } from "@/components/ui/switch";
@@ -60,6 +60,22 @@ export const LoadoutBloc: React.FC<LoadoutBlocProps> = ({
 }) => {
     const { t } = useTranslation();
 
+    const [sortedSizes, setSortedSizes] = React.useState<string[]>([]);
+
+    useEffect(() => {
+        if (!shipConfig || !shipConfig.laserSizes) return;
+        const sizeOrder = ["2", "1", "S0"]; // Wanted order of sizes
+        const newSortedSizes = Object.keys(lasersBySize).sort((a, b) => {
+            const ia = sizeOrder.indexOf(a);
+            const ib = sizeOrder.indexOf(b);
+            if (ia === -1 && ib === -1) return a.localeCompare(b);
+            if (ia === -1) return 1;
+            if (ib === -1) return -1;
+            return ia - ib;
+        }).filter(size => shipConfig?.laserSizes?.includes(size)); // Filter sizes based on ship
+        setSortedSizes(newSortedSizes);
+    }, [lasers, shipConfig, bloc, index]);
+
     const handleLaserChange = (laserName: string) => {
         const selectedLaser = lasers.find(laser => laser.name === laserName);
         const slots = Number(selectedLaser?.slots) || 0;
@@ -108,16 +124,6 @@ export const LoadoutBloc: React.FC<LoadoutBlocProps> = ({
         return grouped;
     }, [lasers]);
 
-    const sizeOrder = ["2", "1", "S0"]; // Wanted order of sizes
-    const sortedSizes = Object.keys(lasersBySize).sort((a, b) => {
-        const ia = sizeOrder.indexOf(a);
-        const ib = sizeOrder.indexOf(b);
-        if (ia === -1 && ib === -1) return a.localeCompare(b);
-        if (ia === -1) return 1;
-        if (ib === -1) return -1;
-        return ia - ib;
-    }).filter(size => shipConfig.laserSizes.includes(size)); // Filter sizes based on ship
-
     return (
         <div className="p-4 w-full bg-slate-800 rounded-xl text-cyan-200">
             <span className="text-lg font-semibold">Laser {index + 1}</span>
@@ -134,7 +140,7 @@ export const LoadoutBloc: React.FC<LoadoutBlocProps> = ({
                             <Select
                                 value={bloc.miningLaser?.name || ""}
                                 onValueChange={handleLaserChange}
-                                disabled={!shipConfig.canChangeLasers}
+                                disabled={!shipConfig?.canChangeLasers}
                             >
                                 <SelectTrigger className="w-full border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
                                     {/* Display only the name of the selected laser */}

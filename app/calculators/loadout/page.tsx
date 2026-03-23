@@ -325,6 +325,14 @@ export default function LoadoutPage() {
     }
   };
 
+  const handleSelectShip = (shipName: string) => {
+    const ship = ships.find(s => s.name === shipName);
+    if (ship) {
+      setSelectedShip(ship);
+      setSelectedSavedLoadout("");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
       <Header />
@@ -378,7 +386,7 @@ export default function LoadoutPage() {
                   <label className="block text-xs font-medium text-cyan-200 ms-2 mb-1" suppressHydrationWarning>
                     {t("loadout.selectShip", "Select your ship")}
                   </label>
-                  <Select value={selectedShip.name} onValueChange={(value) => setSelectedShip(ships.find(ship => ship.name === value)!)}>
+                  <Select value={selectedShip.name} onValueChange={handleSelectShip}>
                     <SelectTrigger className="w-[180px] border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
                       <SelectValue placeholder={t("loadout.select_ship", "Select your ship")} />
                     </SelectTrigger>
@@ -393,7 +401,7 @@ export default function LoadoutPage() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full">
                   {loadout && Array.from({ length: selectedShip.numberOfLasers }).map((_, idx) => (
-                    <LoadoutBloc key={idx} index={idx} shipConfig={selectedShip} bloc={loadout.bloc[idx]} lasers={formattedLasers} modules={formattedModules} onChange={(updatedBloc: LoadoutBlocConfig) => handleBlocChange(updatedBloc, idx)} />
+                    <LoadoutBloc key={idx} index={idx} shipConfig={ships.find(ship => ship.name === selectedShip.name)!} bloc={loadout.bloc[idx]} lasers={formattedLasers} modules={formattedModules} onChange={(updatedBloc: LoadoutBlocConfig) => handleBlocChange(updatedBloc, idx)} />
                   ))}
                   <LoadoutInventory gadgetList={loadout?.gadgets || []} gadgets={formattedGadgets} onChange={(updatedGadgetList: (ModuleGadgetWithActive | null)[]) => handleGadgetChange(updatedGadgetList)} />
                   <LoadoutResume loadout={loadout!} />
