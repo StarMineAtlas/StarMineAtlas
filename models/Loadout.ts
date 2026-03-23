@@ -6,6 +6,8 @@ export interface ShipConfiguration {
     baseLaser: string;
     numberOfLasers: number;
     canChangeLasers: boolean;
+    laserSizes: string[]; // Added laserSizes as an array,
+    isLaserEditable: boolean;
 }
 
 export interface ModuleGadgetWithActive extends ModuleGadgetWithPrices {

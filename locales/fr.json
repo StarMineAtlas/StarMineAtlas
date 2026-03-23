@@ -61,6 +61,11 @@
     "shipPlaceholder": "Choisissez un vaisseau...",
     "lasers": "Lasers de minage",
     "laserPlaceholder": "Choisissez un laser de minage...",
+    "laserSize": {
+      "S0": "Lasers de minage taille 0",
+      "1": "Lasers de minage taille 1",
+      "2": "Lasers de minage taille 2"
+    },
     "modules": "Modules",
     "modulePlaceholder": "Choisissez un module...",
     "gadgets": "Gadgets",

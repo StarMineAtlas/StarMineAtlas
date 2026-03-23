@@ -61,6 +61,11 @@
     "shipPlaceholder": "Select a ship...",
     "lasers": "Mining Lasers",
     "laserPlaceholder": "Select a mining laser...",
+    "laserSize": {
+      "S0": "Size 0 Mining Lasers",
+      "1": "Size 1 Mining Lasers",
+      "2": "Size 2 Mining Lasers"
+    },
     "modules": "Modules",
     "modulePlaceholder": "Select a module...",
     "gadgets": "Gadgets",

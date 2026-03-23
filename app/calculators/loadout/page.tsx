@@ -7,10 +7,9 @@ import { LoadoutResume } from "@/components/Loadout/LoadoutResume"
 import { LoadoutSaveModal } from "@/components/Loadout/LoadoutSaveModal"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints"
-import { Loadout, ModuleGadgetWithActive, ShipConfiguration } from "@/models/Loadout"
+import { Loadout, LoadoutBlocConfig, ModuleGadgetWithActive, ShipConfiguration } from "@/models/Loadout"
 import { miningLaserAttributeType, MiningLaserRawData, MiningLaserWithPrices } from "@/models/MiningLaser"
 import { gadgetAttributeType, moduleAttributeType, ModuleGadgetRawData, ModuleGadgetWithPrices } from "@/models/ModuleGadget"
-import { set } from "date-fns"
 import { RotateCcw, Save, Store, Toolbox, Trash } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -33,18 +32,24 @@ export default function LoadoutPage() {
       baseLaser: 'Arbor MH1',
       numberOfLasers: 1,
       canChangeLasers: true,
+      laserSizes: ["1", "S0"],
+      isLaserEditable: true,
     },
     {
       name: "Golem",
       baseLaser: 'Pitman',
       numberOfLasers: 1,
       canChangeLasers: false,
+      laserSizes: ["S0"],
+      isLaserEditable: false,
     },
     {
       name: "Mole",
       baseLaser: 'Arbor MH2',
       numberOfLasers: 3,
       canChangeLasers: true,
+      laserSizes: ["2", "1", "S0"],
+      isLaserEditable: true,
     }
   ]
 
@@ -388,9 +393,9 @@ export default function LoadoutPage() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full">
                   {loadout && Array.from({ length: selectedShip.numberOfLasers }).map((_, idx) => (
-                    <LoadoutBloc key={idx} index={idx} bloc={loadout.bloc[idx]} lasers={formattedLasers} modules={formattedModules} onChange={(updatedBloc) => handleBlocChange(updatedBloc, idx)} />
+                    <LoadoutBloc key={idx} index={idx} shipConfig={selectedShip} bloc={loadout.bloc[idx]} lasers={formattedLasers} modules={formattedModules} onChange={(updatedBloc: LoadoutBlocConfig) => handleBlocChange(updatedBloc, idx)} />
                   ))}
-                  <LoadoutInventory gadgetList={loadout?.gadgets || []} gadgets={formattedGadgets} onChange={(updatedGadgetList) => handleGadgetChange(updatedGadgetList)} />
+                  <LoadoutInventory gadgetList={loadout?.gadgets || []} gadgets={formattedGadgets} onChange={(updatedGadgetList: (ModuleGadgetWithActive | null)[]) => handleGadgetChange(updatedGadgetList)} />
                   <LoadoutResume loadout={loadout!} />
                 </div>
                 <div className="flex flex-col md:flex-row justify-between items-center w-full mt-2">

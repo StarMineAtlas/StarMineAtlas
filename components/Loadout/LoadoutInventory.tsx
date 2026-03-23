@@ -21,6 +21,30 @@ interface LoadoutBlocProps {
     onChange: (updatedGadgetList: (ModuleGadgetWithActive | null)[]) => void;
 }
 
+// Function to get color class based on value (positive: green, negative: red, zero/null/undefined: gray)
+const getColorForValue = (val: string | number | null | undefined, isInverse: boolean = false) => {
+    if (val === null || val === undefined || val === "") return "text-gray-400";
+    const num = typeof val === "string" ? parseFloat(val.replace(/[^-\d.]/g, "")) : val;
+    if (isNaN(num)) return "text-gray-400";
+    if (num > 0) return isInverse ? "text-red-400" : "text-green-400";
+    if (num < 0) return isInverse ? "text-green-400" : "text-red-400";
+    return "text-gray-400";
+};
+
+// Function to get color class based on item type
+const getTypeClass = (itemType: string) => {
+    switch (itemType) {
+        case "Active":
+            return "text-yellow-400";
+        case "Passive":
+            return "text-orange-400";
+        case "Gadget":
+            return "text-blue-400";
+        default:
+            return "text-gray-400";
+    }
+};
+
 export const LoadoutInventory: React.FC<LoadoutBlocProps> = ({
     gadgetList,
     gadgets,
@@ -99,49 +123,51 @@ export const LoadoutInventory: React.FC<LoadoutBlocProps> = ({
                                                     value={gadget.name}
                                                     className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
                                                 >
-                                                    <div className="flex flex-row items-center text-select-item text-slate-400 gap-4">
+                                                    <div className="flex flex-row items-center text-select-item gap-4">
                                                         <div className="font-semibold text-cyan-100 text-select-item w-[60px]">{gadget.name}</div>
-                                                        <div className="font-semibold text-cyan-100 text-select-item w-[60px]">{gadget.itemType}</div>
+                                                        <div className="font-semibold text-select-item w-[60px]">
+                                                            <span className={getTypeClass(gadget.itemType)}>{gadget.itemType}</span>
+                                                        </div>
+                                                        {/* <div className="flex flex-col items-center">
+                                                            <span className={`text-select-item ${getColorForValue(gadget.laserPowerMod)}`}>{gadget.laserPowerMod ? gadget.laserPowerMod : "--"}</span>
+                                                            <span className={`text-select-item ${getColorForValue(gadget.laserPowerMod) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(gadget.laserPowerMod)}`}>LASER PWR MOD</span>
+                                                        </div> */}
                                                         <div className="flex flex-col items-center">
-                                                            <span className="text-select-item">{gadget.laserPowerMod ? gadget.laserPowerMod : "--"}</span>
-                                                            <span className="text-select-item text-slate-500">LASER PWR MOD</span>
+                                                            <span className={`text-select-item ${getColorForValue(gadget.resistance)}`}>{gadget.resistance ? gadget.resistance : "--"}</span>
+                                                            <span className={`text-select-item ${getColorForValue(gadget.resistance) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(gadget.resistance)}`}>RESISTANCE</span>
                                                         </div>
                                                         <div className="flex flex-col items-center">
-                                                            <span className="text-select-item">{gadget.resistance ? gadget.resistance : "--"}</span>
-                                                            <span className="text-select-item text-slate-500">RESISTANCE</span>
+                                                            <span className={`text-select-item ${getColorForValue(gadget.instability)}`}>{gadget.instability ? gadget.instability : "--"}</span>
+                                                            <span className={`text-select-item ${getColorForValue(gadget.instability) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(gadget.instability)}`}>INSTABILITY</span>
                                                         </div>
                                                         <div className="flex flex-col items-center">
-                                                            <span className="text-select-item">{gadget.instability ? gadget.instability : "--"}</span>
-                                                            <span className="text-select-item text-slate-500">INSTABILITY</span>
+                                                            <span className={`text-select-item ${getColorForValue(gadget.optimalChargeRate)}`}>{gadget.optimalChargeRate ? gadget.optimalChargeRate : "--"}</span>
+                                                            <span className={`text-select-item ${getColorForValue(gadget.optimalChargeRate) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(gadget.optimalChargeRate)}`}>OPT CHRG RT</span>
                                                         </div>
                                                         <div className="flex flex-col items-center">
-                                                            <span className="text-select-item">{gadget.optimalChargeRate ? gadget.optimalChargeRate : "--"}</span>
-                                                            <span className="text-select-item text-slate-500">OPT CHRG RT</span>
+                                                            <span className={`text-select-item ${getColorForValue(gadget.optimalChargeWindow)}`}>{gadget.optimalChargeWindow ? gadget.optimalChargeWindow : "--"}</span>
+                                                            <span className={`text-select-item ${getColorForValue(gadget.optimalChargeWindow) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(gadget.optimalChargeWindow)}`}>OPT CHRG WIN</span>
                                                         </div>
+                                                        {/* <div className="flex flex-col items-center">
+                                                            <span className={`text-select-item ${getColorForValue(gadget.inertMaterials)}`}>{gadget.inertMaterials ? gadget.inertMaterials : "--"}</span>
+                                                            <span className={`text-select-item ${getColorForValue(gadget.inertMaterials) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(gadget.inertMaterials)}`}>INERT</span>
+                                                        </div> */}
+                                                        {/* <div className="flex flex-col items-center">
+                                                            <span className={`text-select-item ${getColorForValue(gadget.overchargeRate)}`}>{gadget.overchargeRate ? gadget.overchargeRate : "--"}</span>
+                                                            <span className={`text-select-item ${getColorForValue(gadget.overchargeRate) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(gadget.overchargeRate)}`}>OVERCHARGE</span>
+                                                        </div> */}
                                                         <div className="flex flex-col items-center">
-                                                            <span className="text-select-item">{gadget.optimalChargeWindow ? gadget.optimalChargeWindow : "--"}</span>
-                                                            <span className="text-select-item text-slate-500">OPT CHRG WIN</span>
+                                                            <span className={`text-select-item ${getColorForValue(gadget.clustering)}`}>{gadget.clustering ? gadget.clustering : "--"}</span>
+                                                            <span className={`text-select-item ${getColorForValue(gadget.clustering) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(gadget.clustering)}`}>CLUSTERING</span>
                                                         </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className="text-select-item">{gadget.inertMaterials ? gadget.inertMaterials : "--"}</span>
-                                                            <span className="text-select-item text-slate-500">INERT</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className="text-select-item">{gadget.overchargeRate ? gadget.overchargeRate : "--"}</span>
-                                                            <span className="text-select-item text-slate-500">OVERCHARGE</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className="text-select-item">{gadget.clustering ? gadget.clustering : "--"}</span>
-                                                            <span className="text-select-item text-slate-500">CLUSTERING</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className="text-select-item">{gadget.shatterDamage ? gadget.shatterDamage : "--"}</span>
-                                                            <span className="text-select-item text-slate-500">SHATTER DMG</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className="text-select-item">{gadget.extractionPowerMod ? gadget.extractionPowerMod : "--"}</span>
-                                                            <span className="text-select-item text-slate-500">EXTRACT PWR MOD</span>
-                                                        </div>
+                                                        {/* <div className="flex flex-col items-center">
+                                                            <span className={`text-select-item ${getColorForValue(gadget.shatterDamage)}`}>{gadget.shatterDamage ? gadget.shatterDamage : "--"}</span>
+                                                            <span className={`text-select-item ${getColorForValue(gadget.shatterDamage) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(gadget.shatterDamage)}`}>SHATTER DMG</span>
+                                                        </div> */}
+                                                        {/* <div className="flex flex-col items-center">
+                                                            <span className={`text-select-item ${getColorForValue(gadget.extractionPowerMod)}`}>{gadget.extractionPowerMod ? gadget.extractionPowerMod : "--"}</span>
+                                                            <span className={`text-select-item ${getColorForValue(gadget.extractionPowerMod) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(gadget.extractionPowerMod)}`}>EXTRACT PWR MOD</span>
+                                                        </div> */}
                                                     </div>
                                                 </SelectItem>
                                             ))}
