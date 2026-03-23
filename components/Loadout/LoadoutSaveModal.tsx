@@ -1,8 +1,8 @@
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface LoadoutSaveModalProps {
@@ -18,12 +18,10 @@ export function LoadoutSaveModal({ open, initialName, onClose, onSave }: Loadout
     const [name, setName] = useState<string | undefined>(undefined);
     const [touched, setTouched] = useState(false);
 
-    // Remettre initialName dans l'input à chaque ouverture
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(() => {
+    useEffect(() => {
         if (open) {
-            setName(undefined); // force la réinit
-            setTimeout(() => setName(initialName), 0); // pour éviter le warning React sur l'input contrôlé
+            setName(undefined);
+            setTimeout(() => setName(initialName), 0);
         }
     }, [open, initialName]);
 

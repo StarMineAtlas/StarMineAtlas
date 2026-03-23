@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
 
 interface RefinerySingleResultProps {
@@ -7,7 +7,7 @@ interface RefinerySingleResultProps {
     value: number | null;
 }
 
-export const RefinerySingleResult: React.FC<RefinerySingleResultProps> = ({ mineral, location, value }) => {
+export const RefinerySingleResult: FC<RefinerySingleResultProps> = ({ mineral, location, value }) => {
     const { t } = useTranslation();
 
     const getColorForValue = (val: number | null) => {

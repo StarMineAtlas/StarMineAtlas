@@ -10,7 +10,7 @@ import {
 import { ModuleGadgetWithActive } from "@/models/Loadout";
 import { ModuleGadgetWithPrices } from "@/models/ModuleGadget";
 import { Trash } from "lucide-react";
-import React from "react";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Switch } from "../ui/switch";
 
@@ -45,7 +45,7 @@ const getTypeClass = (itemType: string) => {
     }
 };
 
-export const LoadoutInventory: React.FC<LoadoutBlocProps> = ({
+export const LoadoutInventory: FC<LoadoutBlocProps> = ({
     gadgetList,
     gadgets,
     onChange,

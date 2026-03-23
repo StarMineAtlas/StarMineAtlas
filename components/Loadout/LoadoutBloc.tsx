@@ -10,7 +10,7 @@ import {
 import { LoadoutBlocConfig, ModuleGadgetWithActive, ShipConfiguration } from "@/models/Loadout";
 import { MiningLaserWithPrices } from "@/models/MiningLaser";
 import { ModuleGadgetWithPrices } from "@/models/ModuleGadget";
-import React, { use, useEffect } from "react";
+import { FC, Fragment, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Switch } from "@/components/ui/switch";
@@ -50,7 +50,7 @@ const getTypeClass = (itemType: string) => {
     }
 };
 
-export const LoadoutBloc: React.FC<LoadoutBlocProps> = ({
+export const LoadoutBloc: FC<LoadoutBlocProps> = ({
     shipConfig,
     bloc,
     lasers,
@@ -60,7 +60,7 @@ export const LoadoutBloc: React.FC<LoadoutBlocProps> = ({
 }) => {
     const { t } = useTranslation();
 
-    const [sortedSizes, setSortedSizes] = React.useState<string[]>([]);
+    const [sortedSizes, setSortedSizes] = useState<string[]>([]);
 
     useEffect(() => {
         if (!shipConfig || !shipConfig.laserSizes) return;
@@ -115,7 +115,7 @@ export const LoadoutBloc: React.FC<LoadoutBlocProps> = ({
     }
 
     // Regroupement des lasers par taille
-    const lasersBySize = React.useMemo(() => {
+    const lasersBySize = useMemo(() => {
         const grouped: { [size: string]: MiningLaserWithPrices[] } = {};
         lasers.forEach(laser => {
             if (!grouped[laser.size]) grouped[laser.size] = [];
@@ -152,7 +152,7 @@ export const LoadoutBloc: React.FC<LoadoutBlocProps> = ({
                                 </SelectTrigger>
                                 <SelectContent className="border-slate-800 bg-slate-900">
                                     {sortedSizes.map(size => (
-                                        <React.Fragment key={size}>
+                                        <Fragment key={size}>
                                             <div className="px-2 py-1 text-xs font-bold text-cyan-300 bg-slate-800/80">{t(`loadout.laserSize.${size}`, { defaultValue: size })}</div>
                                             {lasersBySize[size].map((laser) => (
                                                 <SelectItem
@@ -204,7 +204,7 @@ export const LoadoutBloc: React.FC<LoadoutBlocProps> = ({
                                                     </div>
                                                 </SelectItem>
                                             ))}
-                                        </React.Fragment>
+                                        </Fragment>
                                     ))}
                                 </SelectContent>
                             </Select>

@@ -2,7 +2,7 @@
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Loadout, LoadoutResumeModel } from "@/models/Loadout";
-import React, { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface LoadoutBlocProps {
@@ -25,7 +25,7 @@ const formatValueWithSign = (val: string | undefined) => {
     return val ? `+${val}` : val;
 };
 
-export const LoadoutResume: React.FC<LoadoutBlocProps> = ({
+export const LoadoutResume: FC<LoadoutBlocProps> = ({
     loadout
 }) => {
     const { t } = useTranslation();

@@ -1,10 +1,10 @@
 "use client"
 
 import i18n from "@/lib/i18n"
-import { useEffect, useState } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { I18nextProvider } from "react-i18next"
 
-export function I18nProvider({ children }: { children: React.ReactNode }) {
+export function I18nProvider({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
