@@ -1,7 +1,7 @@
 "use client"
 
-import { Header } from "@/components/Header";
-import { LaserModuleGadgetFilter } from "@/components/LaserModuleGadgetFilter";
+import { Header } from "@/components/Header/Header";
+import { LaserModuleGadgetFilter } from "@/components/Filters/LaserModuleGadgetFilter";
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints";
 import { MiningLaser, MiningLaserAttributes, miningLaserAttributeType, MiningLaserPrices, MiningLaserRawData } from "@/models/MiningLaser";
 import { Drill } from "lucide-react";

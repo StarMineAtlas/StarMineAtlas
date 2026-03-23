@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { LanguageSelector } from "./LanguageSelector"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
 
 export function Header() {
   const { t } = useTranslation()

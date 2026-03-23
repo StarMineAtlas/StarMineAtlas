@@ -1,6 +1,6 @@
 "use client"
 
-import { Header } from "@/components/Header"
+import { Header } from "@/components/Header/Header"
 import { QualityChart } from "@/components/QualityChart"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"

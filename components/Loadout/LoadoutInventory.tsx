@@ -12,7 +12,7 @@ import { ModuleGadgetWithPrices } from "@/models/ModuleGadget";
 import { Trash } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Switch } from "./ui/switch";
+import { Switch } from "../ui/switch";
 
 
 interface LoadoutBlocProps {

@@ -1,6 +1,6 @@
 "use client"
 
-import { Header } from "@/components/Header"
+import { Header } from "@/components/Header/Header"
 import { API_BASE_URL, API_ENDPOINTS, API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
 import { Commodity, excludedIds, FormattedCommodityMaxPrice } from "@/models/Commodity"
 import { Mineral } from "@/models/Mineral"

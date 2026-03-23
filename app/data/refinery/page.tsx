@@ -1,7 +1,7 @@
 "use client"
 
-import { Header } from "@/components/Header"
-import { RefineryFilter } from "@/components/RefineryFilter"
+import { Header } from "@/components/Header/Header"
+import { RefineryFilter } from "@/components/Filters/RefineryFilter"
 import { RefinerySingleResult } from "@/components/RefinerySingleResult"
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
 import { RefineryMethod, RefineryRatingCost, RefineryRatingSpeed, RefineryRatingYield, RefineryYield } from "@/models/Refinery"

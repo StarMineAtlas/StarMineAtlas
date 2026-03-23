@@ -1,7 +1,7 @@
 "use client"
 
-import { Header } from "@/components/Header"
-import { MineralFilter } from "@/components/MineralFilter"
+import { Header } from "@/components/Header/Header"
+import { MineralFilter } from "@/components/Filters/MineralFilter"
 import { RockCard } from "@/components/RockCard"
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"
 import { Rock } from "@/models/Rock"
