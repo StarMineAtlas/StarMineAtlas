@@ -80,7 +80,21 @@
       "optimalChargeWindow": "Optimal Charge Window Modifier (max 50% of the total window)",
       "shatterDamage": "Shatter Damage Modifier",
       "extractionPower": "Total extraction power (All active lasers combined)"
-    }
+    },
+    "loadLoadout": "Load Loadout",
+    "loadLoadoutPlaceholder": "Select a saved loadout",
+    "saveLoadout": {
+      "title": "Save Loadout",
+      "nameLabel": "Loadout Name",
+      "namePlaceholder": "Enter loadout name...",
+      "nameRequired": "Name is required.",
+      "cancelButton": "Cancel",
+      "saveButton": "Save"
+    },
+    "confirmRemove": "Are you sure you want to delete this saved loadout?",
+    "resetButton": "Reset Loadout",
+    "saveButton": "Save",
+    "shopButton": "Shop"
   },
   "refinery": {
     "title": "Refinery",

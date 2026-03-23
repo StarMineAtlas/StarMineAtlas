@@ -80,7 +80,21 @@
       "optimalChargeWindow": "Modificateur de fenêtre de charge optimale (max 50% de la fenêtre totale)",
       "shatterDamage": "Modificateur de dégâts de fragmentation",
       "extractionPower": "Puissance totale d'extraction (Tous les lasers actifs combinés)"
-    }
+    },
+    "loadLoadout": "Charger un loadout sauvegardé",
+    "loadLoadoutPlaceholder": "Sélectionnez un loadout sauvegardé",
+    "saveLoadout": {
+      "title": "Sauvegarder le Loadout",
+      "nameLabel": "Nom du Loadout",
+      "namePlaceholder": "Entrez le nom du loadout...",
+      "nameRequired": "Le nom est requis.",
+      "cancelButton": "Annuler",
+      "saveButton": "Sauvegarder"
+    },
+    "confirmRemove": "Êtes-vous sûr de vouloir supprimer ce loadout sauvegardé ?",
+    "resetButton": "Réinitialiser le loadout",
+    "saveButton": "Sauvegarder",
+    "shopButton": "Acheter"
   },
   "refinery": {
     "title": "Raffinerie",

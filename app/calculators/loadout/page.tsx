@@ -11,7 +11,7 @@ import { Loadout, ModuleGadgetWithActive, ShipConfiguration } from "@/models/Loa
 import { miningLaserAttributeType, MiningLaserRawData, MiningLaserWithPrices } from "@/models/MiningLaser"
 import { gadgetAttributeType, moduleAttributeType, ModuleGadgetRawData, ModuleGadgetWithPrices } from "@/models/ModuleGadget"
 import { set } from "date-fns"
-import { RotateCcw, Save, Store, Toolbox } from "lucide-react"
+import { RotateCcw, Save, Store, Toolbox, Trash } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -54,7 +54,7 @@ export default function LoadoutPage() {
   // Modal state
   const [saveModalOpen, setSaveModalOpen] = useState(false);
 
-  // Loadouts sauvegardés
+  // Saved Loadouts
   const [savedLoadouts, setSavedLoadouts] = useState<Loadout[]>([]);
   const [selectedSavedLoadout, setSelectedSavedLoadout] = useState<string>("");
 
@@ -239,6 +239,7 @@ export default function LoadoutPage() {
       isSaved: false,
       name: ""
     };
+    setSelectedSavedLoadout("");
     setLoadout(resetedLoadout);
   }
 
@@ -288,16 +289,35 @@ export default function LoadoutPage() {
 
     setSelectedShip(saved.ship);
 
-    //timeout
     setTimeout(() => {
       setLoadout(saved);
       setLoading(false);
     }, 1000);
   }, [selectedSavedLoadout, savedLoadouts]);
 
-  // Sélection d'un loadout sauvegardé (déclenche l'effet ci-dessus)
   const handleSelectSavedLoadout = (idx: string) => {
     setSelectedSavedLoadout(idx);
+  };
+
+  const removeSavedLoadout = (idx: string) => {
+    // alert for confirmation
+    if (!confirm(t("loadout.confirmRemove"))) return;
+    try {
+      const existing = localStorage.getItem("mining-atlas-loadout-saved");
+      let arr = [];
+      if (existing) {
+        arr = JSON.parse(existing);
+        if (!Array.isArray(arr)) arr = [];
+      }
+      const indexToRemove = parseInt(idx);
+      if (isNaN(indexToRemove) || indexToRemove < 0 || indexToRemove >= arr.length) return;
+      arr.splice(indexToRemove, 1);
+      localStorage.setItem("mining-atlas-loadout-saved", JSON.stringify(arr));
+      setSavedLoadouts(arr);
+      setSelectedSavedLoadout("");
+    } catch (e) {
+      // Optionally handle error
+    }
   };
 
   return (
@@ -315,22 +335,29 @@ export default function LoadoutPage() {
             {t("loadout.description")}
           </p>
 
-          {/* Sélecteur de loadout sauvegardé */}
+          {/* Saved Loadouts Selector */}
           {savedLoadouts.length > 0 && (
             <div className="flex flex-col my-4 w-full max-w-xs">
-              <label className="block text-xs font-medium text-cyan-200 ms-2 mb-1">Charger un loadout sauvegardé</label>
-              <Select value={selectedSavedLoadout} onValueChange={handleSelectSavedLoadout}>
-                <SelectTrigger className="w-full border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
-                  <SelectValue placeholder="Sélectionner un loadout" />
-                </SelectTrigger>
-                <SelectContent className="border-slate-800 bg-slate-900">
-                  {savedLoadouts.map((l, idx) => (
-                    <SelectItem key={idx} value={String(idx)} className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300">
-                      {l.name || `Loadout ${idx + 1}`}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <label className="block text-xs font-medium text-cyan-200 ms-2 mb-1">{t("loadout.loadLoadout")}</label>
+              <div className="flex items-center gap-2">
+                <Select value={selectedSavedLoadout} onValueChange={handleSelectSavedLoadout}>
+                  <SelectTrigger className="w-full border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
+                    <SelectValue placeholder={t("loadout.loadLoadoutPlaceholder")} />
+                  </SelectTrigger>
+                  <SelectContent className="border-slate-800 bg-slate-900">
+                    {savedLoadouts.map((l, idx) => (
+                      <SelectItem key={idx} value={String(idx)} className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300">
+                        {l.name || `Loadout ${idx + 1}`}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {
+                  selectedSavedLoadout !== "" && (
+                    <Trash className="h-5 w-5 text-red-600 cursor-pointer" onClick={() => removeSavedLoadout(selectedSavedLoadout)} />
+                  )
+                }
+              </div>
             </div>
           )}
 
@@ -369,7 +396,7 @@ export default function LoadoutPage() {
                 <div className="flex flex-col md:flex-row justify-between items-center w-full mt-2">
                   <button onClick={resetActualLoadout} className="mt-6 inline-flex items-center gap-2 rounded bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
                     <RotateCcw className="h-4 w-4" />
-                    {t("loadout.reset", "Reset Loadout")}
+                    {t("loadout.resetButton", "Reset Loadout")}
                   </button>
                   <div className="mt-6 flex gap-3">
                     <button
@@ -378,11 +405,11 @@ export default function LoadoutPage() {
                       disabled={!loadout}
                     >
                       <Save className="h-4 w-4" />
-                      {t("loadout.save", "Save")}
+                      {t("loadout.saveButton", "Save")}
                     </button>
                     <button disabled className="inline-flex items-center gap-2 rounded bg-emerald-700/50 px-4 py-2 text-sm font-medium text-white opacity-60 cursor-not-allowed">
                       <Store className="h-4 w-4" />
-                      {t("loadout.shop", "Shop")}
+                      {t("loadout.shopButton", "Shop")}
                     </button>
                   </div>
                 </div>
