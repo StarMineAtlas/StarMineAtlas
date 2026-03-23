@@ -96,6 +96,18 @@
       "cancelButton": "Annuler",
       "saveButton": "Sauvegarder"
     },
+    "shopLoadout": {
+      "title": "Acheter le Loadout",
+      "description": "Découvrez où acheter les composants de votre loadout à travers le verse. Comparez les prix et la disponibilité dans différents endroits pour optimiser vos achats.",
+      "loading": "Chargement des données du magasin...",
+      "noData": "Aucune donnée de magasin disponible pour ce loadout",
+      "lasers": "Lasers",
+      "modules": "Modules",
+      "gadgets": "Gadgets",
+      "location": "Lieu",
+      "price": "Prix",
+      "closeButton": "Fermer"
+    },
     "confirmRemove": "Êtes-vous sûr de vouloir supprimer ce loadout sauvegardé ?",
     "resetButton": "Réinitialiser le loadout",
     "saveButton": "Sauvegarder",

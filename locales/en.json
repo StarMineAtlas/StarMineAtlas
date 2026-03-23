@@ -96,6 +96,18 @@
       "cancelButton": "Cancel",
       "saveButton": "Save"
     },
+    "shopLoadout": {
+      "title": "Shop this Loadout",
+      "description": "Discover where to buy the components of your loadout across the verse. Compare prices and availability at different locations to optimize your shopping.",
+      "loading": "Loading shop data...",
+      "noData": "No shop data available for this loadout",
+      "lasers": "Lasers",
+      "modules": "Modules",
+      "gadgets": "Gadgets",
+      "location": "Location",
+      "price": "Price",
+      "closeButton": "Close"
+    },
     "confirmRemove": "Are you sure you want to delete this saved loadout?",
     "resetButton": "Reset Loadout",
     "saveButton": "Save",

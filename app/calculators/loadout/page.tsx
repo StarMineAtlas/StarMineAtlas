@@ -5,6 +5,7 @@ import { LoadoutBloc } from "@/components/Loadout/LoadoutBloc"
 import { LoadoutInventory } from "@/components/Loadout/LoadoutInventory"
 import { LoadoutResume } from "@/components/Loadout/LoadoutResume"
 import { LoadoutSaveModal } from "@/components/Loadout/LoadoutSaveModal"
+import { LoadoutShopModal } from "@/components/Loadout/LoadoutShopModal"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints"
 import { Loadout, LoadoutBlocConfig, ModuleGadgetWithActive, ShipConfiguration } from "@/models/Loadout"
@@ -58,6 +59,7 @@ export default function LoadoutPage() {
 
   // Modal state
   const [saveModalOpen, setSaveModalOpen] = useState(false);
+  const [shopModalOpen, setShopModalOpen] = useState(false);
 
   // Saved Loadouts
   const [savedLoadouts, setSavedLoadouts] = useState<Loadout[]>([]);
@@ -388,7 +390,7 @@ export default function LoadoutPage() {
                   </label>
                   <Select value={selectedShip.name} onValueChange={handleSelectShip}>
                     <SelectTrigger className="w-[180px] border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
-                      <SelectValue placeholder={t("loadout.select_ship", "Select your ship")} />
+                      <SelectValue placeholder={t("loadout.selectShip", "Select your ship")} />
                     </SelectTrigger>
                     <SelectContent className="border-slate-800 bg-slate-900">
                       {ships.map((ship) => (
@@ -413,14 +415,18 @@ export default function LoadoutPage() {
                   </button>
                   <div className="mt-6 flex gap-3">
                     <button
-                      className="inline-flex items-center gap-2 rounded bg-cyan-700 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
+                      className="inline-flex items-center gap-2 rounded bg-cyan-700 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-cyan-700/30"
                       onClick={() => setSaveModalOpen(true)}
                       disabled={!loadout}
                     >
                       <Save className="h-4 w-4" />
                       {t("loadout.saveButton", "Save")}
                     </button>
-                    <button disabled className="inline-flex items-center gap-2 rounded bg-emerald-700/50 px-4 py-2 text-sm font-medium text-white opacity-60 cursor-not-allowed">
+                    <button
+                      className="inline-flex items-center gap-2 rounded bg-emerald-700/50 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-emerald-700/30"
+                      onClick={() => setShopModalOpen(true)}
+                      disabled={!loadout}
+                    >
                       <Store className="h-4 w-4" />
                       {t("loadout.shopButton", "Shop")}
                     </button>
@@ -432,6 +438,7 @@ export default function LoadoutPage() {
         </div>
       </div>
       <LoadoutSaveModal open={saveModalOpen} initialName={loadout?.name || ""} onClose={() => setSaveModalOpen(false)} onSave={handleSaveLoadout} />
+      <LoadoutShopModal open={shopModalOpen} loadout={loadout!} onClose={() => setShopModalOpen(false)} />
     </div>
   )
 }
