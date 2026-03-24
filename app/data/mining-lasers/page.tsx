@@ -4,10 +4,11 @@ import { Header } from "@/components/Header/Header";
 import { LaserModuleGadgetFilter } from "@/components/Filters/LaserModuleGadgetFilter";
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints";
 import { MiningLaser, MiningLaserAttributes, miningLaserAttributeType, MiningLaserPrices, MiningLaserRawData } from "@/models/MiningLaser";
-import { Drill } from "lucide-react";
+import { Drill, ChevronUp, ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Loader } from "@/components/Loader";
+
 
 // Function to get color class based on value (positive = green, negative = red, zero or non-numeric = gray), with optional inverse coloring
 const getColorForValue = (val: string | number | null | undefined, isInverse: boolean = false) => {
@@ -17,6 +18,18 @@ const getColorForValue = (val: string | number | null | undefined, isInverse: bo
     if (num > 0) return isInverse ? "text-red-400" : "text-green-400";
     if (num < 0) return isInverse ? "text-green-400" : "text-red-400";
     return "text-gray-400";
+};
+
+// Utilitaire pour comparer deux valeurs (string ou number)
+const compareValues = (a: any, b: any, direction: 'asc' | 'desc') => {
+    if (a === undefined || a === null) return direction === 'asc' ? 1 : -1;
+    if (b === undefined || b === null) return direction === 'asc' ? -1 : 1;
+    if (!isNaN(Number(a)) && !isNaN(Number(b))) {
+        return direction === 'asc' ? Number(a) - Number(b) : Number(b) - Number(a);
+    }
+    return direction === 'asc'
+        ? String(a).localeCompare(String(b))
+        : String(b).localeCompare(String(a));
 };
 
 export default function MiningLasersPage() {
@@ -29,6 +42,9 @@ export default function MiningLasersPage() {
     const [filterName, setFilterName] = useState("");
     const [filterSize, setFilterSize] = useState("");
     const [filterLocation, setFilterLocation] = useState("");
+    // Tri
+    const [sortColumn, setSortColumn] = useState<string>("");
+    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>("asc");
     // Loader
     const [loading, setLoading] = useState(true);
 
@@ -116,13 +132,32 @@ export default function MiningLasersPage() {
     const sizes = Array.from(new Set(formattedMiningLasers.map(l => l.size).filter((v): v is string => typeof v === 'string'))).sort();
     const locations = Array.from(new Set(formattedMiningLasers.flatMap(l => l.locations))).sort();
 
+
     // Applying filters
-    const filteredLasers = formattedMiningLasers.filter(laser => {
+    let filteredLasers = formattedMiningLasers.filter(laser => {
         const matchName = !filterName || laser.name === filterName;
         const matchSize = !filterSize || laser.size === filterSize;
         const matchLocation = !filterLocation || laser.locations.includes(filterLocation);
         return matchName && matchSize && matchLocation;
     });
+
+    if (sortColumn) {
+        filteredLasers = [...filteredLasers].sort((a, b) => {
+            if (allColumns.indexOf(sortColumn) > 12) {
+                const loc = sortColumn;
+                const aHas = a.locations.includes(loc) ? 1 : 0;
+                const bHas = b.locations.includes(loc) ? 1 : 0;
+                return sortDirection === 'asc' ? aHas - bHas : bHas - aHas;
+            }
+            const colKeyMap = [
+                'name', 'size', 'slots', 'optimal_range', 'max_range', 'min_power', 'max_power',
+                'extract_power', 'resistance', 'instability', 'optimal_charge_rate', 'optimal_charge_window', 'inert_materials'
+            ];
+            const idx = allColumns.indexOf(sortColumn);
+            const key = colKeyMap[idx] || sortColumn;
+            return compareValues(a[key], b[key], sortDirection);
+        });
+    }
 
     const getMinMaxPower = (miningLaser: MiningLaser) => {
         const sliptedValue = miningLaser?.min_power?.split('-');
@@ -174,31 +209,44 @@ export default function MiningLasersPage() {
                                     <table className="w-full table-auto border-collapse text-left">
                                         <thead>
                                             <tr className="bg-slate-900/80">
-                                                {allColumns.map((col, index) =>
-                                                    index === 0 ? (
+                                                {allColumns.map((col, index) => {
+                                                    const isSorted = sortColumn === col;
+                                                    return (
                                                         <th
                                                             key={index}
-                                                            className="px-6 py-4 text-cyan-300 font-semibold text-xs md:text-sm border border-slate-700 bg-slate-900 sticky left-0 z-10"
-                                                            style={{ minWidth: '10rem', maxWidth: '16rem', width: '10rem' }}
-                                                            suppressHydrationWarning
-                                                        >
-                                                            {col}
-                                                        </th>
-                                                    ) : (
-                                                        <th
-                                                            key={index}
-                                                            className="px-6 py-4 text-cyan-300 font-semibold md:text-sm border border-slate-700 bg-slate-900 text-center"
-                                                            style={{
-                                                                minWidth: col.length > 10 ? '12rem' : col.length + 'rem',
-                                                                width: col.length > 10 ? '12rem' : col.length + 'rem',
-                                                                fontSize: '0.65rem'
+                                                            className={
+                                                                index === 0
+                                                                    ? "px-6 py-4 text-cyan-300 font-semibold text-xs md:text-sm border border-slate-700 bg-slate-900 sticky left-0 z-10 cursor-pointer select-none"
+                                                                    : "px-6 py-4 text-cyan-300 font-semibold md:text-sm border border-slate-700 bg-slate-900 text-center cursor-pointer select-none"
+                                                            }
+                                                            style={
+                                                                index === 0
+                                                                    ? { minWidth: '10rem', maxWidth: '16rem', width: '10rem' }
+                                                                    : {
+                                                                        minWidth: col.length > 10 ? '12rem' : col.length + 'rem',
+                                                                        width: col.length > 10 ? '12rem' : col.length + 'rem',
+                                                                        fontSize: '0.65rem'
+                                                                    }
+                                                            }
+                                                            onClick={() => {
+                                                                if (sortColumn === col) {
+                                                                    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+                                                                } else {
+                                                                    setSortColumn(col);
+                                                                    setSortDirection('asc');
+                                                                }
                                                             }}
                                                             suppressHydrationWarning
                                                         >
-                                                            {col}
+                                                            <span className="flex items-center gap-1 justify-center">
+                                                                {col}
+                                                                {isSorted && (
+                                                                    sortDirection === 'asc' ? <ChevronUp className="inline w-4 h-4 text-cyan-400" /> : <ChevronDown className="inline w-4 h-4 text-cyan-400" />
+                                                                )}
+                                                            </span>
                                                         </th>
-                                                    )
-                                                )}
+                                                    );
+                                                })}
                                             </tr>
                                         </thead>
                                         <tbody>
