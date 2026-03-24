@@ -44,7 +44,8 @@
       "celestialBody": "Astre / Activité :",
       "system": "Système :",
       "quality": "Qualité :",
-      "median": "Médiane :"
+      "median": "Médiane :",
+      "radar": "Radar :"
     }
   },
   "qualityDistribution": {

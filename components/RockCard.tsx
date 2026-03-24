@@ -2,15 +2,15 @@
 
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { MineralType } from "@/models/Mineral"
+import { Mineral, MineralType } from "@/models/Mineral"
 import { Rock, RockSecondaries } from "@/models/Rock"
-import { CircleDot, Gem, Globe, Layers, MapPin, Pickaxe, Rocket } from "lucide-react"
+import { CircleDot, Gem, Globe, Layers, Pickaxe, Radar, Rocket } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 interface RockCardProps {
   rock: Rock
   secondaries: RockSecondaries[]
-  type: MineralType | null
+  mineral: Mineral | null
   showData?: boolean
 }
 
@@ -42,7 +42,7 @@ const getSystemColor = (system: string): string => {
 }
 
 
-export function RockCard({ rock, secondaries, showData, type }: RockCardProps) {
+export function RockCard({ rock, secondaries, showData, mineral }: RockCardProps) {
   const { t } = useTranslation()
   const [minPrimary, maxPrimary, medPrimary] = [rock.min, rock.max, rock.median]
   const minPrimaryPercent = (minPrimary / 1000) * 100
@@ -56,9 +56,9 @@ export function RockCard({ rock, secondaries, showData, type }: RockCardProps) {
 
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-base text-cyan-50">
-          {type === 'FPS' && <Pickaxe className="h-4 w-4 text-purple-400" />}
-          {type === 'Ship' && <Rocket className="h-4 w-4 text-blue-400" />}
-          {type === null && <Gem className="h-4 w-4 text-cyan-400" />}
+          {mineral?.type === MineralType.FPS && <Pickaxe className="h-4 w-4 text-purple-400" />}
+          {mineral?.type === MineralType.SHIP && <Rocket className="h-4 w-4 text-blue-400" />}
+          {mineral?.type === null && <Gem className="h-4 w-4 text-cyan-400" />}
           <span className="truncate w-4/5">{rock.name}</span>
         </CardTitle>
       </CardHeader>
@@ -75,8 +75,16 @@ export function RockCard({ rock, secondaries, showData, type }: RockCardProps) {
           <div className="flex items-center gap-2">
             <Globe className="h-3.5 w-3.5 text-slate-500" />
             <span className="text-slate-400" suppressHydrationWarning>{t("home.rockCard.system")}</span>
-            <span className={`text-cyan-200 ${getSystemColor(rock.system)}`} suppressHydrationWarning>{rock.system}</span>
+            <span className={`${getSystemColor(rock.system)}`} suppressHydrationWarning>{rock.system}</span>
           </div>
+
+          {mineral && mineral.radarValue && (
+            <div className="flex items-center gap-2">
+              <Radar className="h-3.5 w-3.5 text-slate-500" />
+              <span className="text-slate-400" suppressHydrationWarning>{t("home.rockCard.radar")}</span>
+              <span className={`text-yellow-100`} suppressHydrationWarning>{mineral.radarValue}</span>
+            </div>
+          )}
         </div>
         {/* Ressources (primaire + secondaires) */}
         <div className="flex flex-col gap-3">

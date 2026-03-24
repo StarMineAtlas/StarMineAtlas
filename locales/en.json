@@ -44,7 +44,8 @@
       "celestialBody": "Celestial Body / Activity:",
       "system": "System:",
       "quality": "Quality:",
-      "median": "Median:"
+      "median": "Median:",
+      "radar": "Radar:"
     }
   },
   "qualityDistribution": {

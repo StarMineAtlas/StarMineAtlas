@@ -113,10 +113,10 @@ export default function Home() {
     }))
   }
 
-  const getMineralType = (mineralName: string): MineralType | null => {
+  const getMineral = (mineralName: string): Mineral | null => {
     if (!mineralsList || mineralsList.length === 0) return null;
     const mineral = mineralsList.find(m => m.name === mineralName);
-    return mineral ? mineral.type : null;
+    return mineral ? mineral : null;
   }
 
   return (
@@ -168,7 +168,7 @@ export default function Home() {
         ) : rocks.length > 0 && filteredRocks.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {mineralsList && filteredRocks.map((rock, index) => (
-              <RockCard key={`${rock.name}-${rock.system}-${index}`} type={getMineralType(rock.primary)} rock={rock} secondaries={getSecondaryQualityStat(rock.secondary, rock.body)} showData={showData} />
+              <RockCard key={`${rock.name}-${rock.system}-${index}`} mineral={getMineral(rock.primary)} rock={rock} secondaries={getSecondaryQualityStat(rock.secondary, rock.body)} showData={showData} />
             ))}
           </div>
         ) : (
