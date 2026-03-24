@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next"
 
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"
 import { useEffect, useState } from "react"
+import { MineralType } from "@/models/Mineral"
 
 interface MineralFilterProps {
   selectedMineral: string
@@ -24,6 +25,29 @@ interface MineralFilterProps {
   searchQuery: string
   onSearchChange: (query: string) => void
 }
+
+const getTypeColor = (type: MineralType | null) => {
+  switch (type) {
+    case MineralType.FPS:
+      return "text-purple-400"
+    case MineralType.SHIP:
+      return "text-blue-400"
+    default:
+      return "text-cyan-400"
+  }
+}
+
+const getTypeColorMineral = (type: MineralType | null) => {
+  switch (type) {
+    case MineralType.FPS:
+      return "text-purple-200"
+    case MineralType.SHIP:
+      return "text-blue-200"
+    default:
+      return "text-cyan-200"
+  }
+}
+
 
 export function MineralFilter({
   selectedMineral,
@@ -201,14 +225,14 @@ export function MineralFilter({
               {/* Group minerals by type */}
               {Object.entries(mineralsByType).map(([type, mineralsList]) => (
                 <div key={type}>
-                  <div className="px-2 py-1 text-xs font-semibold text-cyan-300/80 uppercase select-none">
+                  <div className={`px-2 py-1 text-xs font-semibold uppercase select-none ${getTypeColor(type as MineralType)}`}>
                     {type}
                   </div>
                   {mineralsList.map((mineral) => (
                     <SelectItem
                       key={mineral.name}
                       value={mineral.name}
-                      className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
+                      className={`text-cyan-50 focus:bg-slate-800 focus:text-cyan-300 ${getTypeColorMineral(mineral.type as MineralType)}`}
                     >
                       {mineral.name}
                     </SelectItem>

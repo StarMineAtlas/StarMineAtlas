@@ -2,13 +2,15 @@
 
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { MineralType } from "@/models/Mineral"
 import { Rock, RockSecondaries } from "@/models/Rock"
-import { CircleDot, Gem, Globe, Layers, MapPin } from "lucide-react"
+import { CircleDot, Gem, Globe, Layers, MapPin, Pickaxe, Rocket } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 interface RockCardProps {
   rock: Rock
   secondaries: RockSecondaries[]
+  type: MineralType | null
   showData?: boolean
 }
 
@@ -40,7 +42,7 @@ const getSystemColor = (system: string): string => {
 }
 
 
-export function RockCard({ rock, secondaries, showData }: RockCardProps) {
+export function RockCard({ rock, secondaries, showData, type }: RockCardProps) {
   const { t } = useTranslation()
   const [minPrimary, maxPrimary, medPrimary] = [rock.min, rock.max, rock.median]
   const minPrimaryPercent = (minPrimary / 1000) * 100
@@ -54,7 +56,9 @@ export function RockCard({ rock, secondaries, showData }: RockCardProps) {
 
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-base text-cyan-50">
-          <Gem className="h-4 w-4 text-cyan-400" />
+          {type === 'FPS' && <Pickaxe className="h-4 w-4 text-purple-400" />}
+          {type === 'Ship' && <Rocket className="h-4 w-4 text-blue-400" />}
+          {type === null && <Gem className="h-4 w-4 text-cyan-400" />}
           <span className="truncate w-4/5">{rock.name}</span>
         </CardTitle>
       </CardHeader>
