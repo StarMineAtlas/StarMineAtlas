@@ -108,7 +108,6 @@ export default function Home() {
       <Header />
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <Loader />
           <div className="flex items-center gap-3 mb-2">
             <Stone className="h-8 w-8 text-cyan-400" />
             <h1 className="text-3xl font-bold tracking-tight text-cyan-50" suppressHydrationWarning>
@@ -147,10 +146,7 @@ export default function Home() {
         </div>
 
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16">
-            <Stone className="mb-4 h-12 w-12 text-slate-700 animate-spin" />
-            <p className="text-lg text-slate-400" suppressHydrationWarning>{t("home.loading")}</p>
-          </div>
+          <Loader loaderText={t("home.loading")} />
         ) : rocks.length > 0 && filteredRocks.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filteredRocks.map((rock, index) => (

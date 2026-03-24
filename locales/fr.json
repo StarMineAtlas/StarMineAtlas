@@ -23,7 +23,7 @@
     "showing": "Affichage de {{count}} sur {{total}} roches",
     "noRocksFound": "Aucune roche trouvée",
     "noRocksHint": "Essayez d'ajuster vos filtres ou votre recherche",
-    "loading": "Chargement des roches...",
+    "loading": "Chargement des roches",
     "filters": {
       "searchPlaceholder": "Recherche...",
       "filters": "Filtres :",
@@ -46,7 +46,7 @@
     "title": "Répartition qualité",
     "description": "Distribution des qualités de minerais par système stellaire.",
     "legend": "Chaque barre représente le pourcentage de roches dont la qualité se situe dans cet intervalle pour un système donné.",
-    "loading": "Chargement de la répartition de qualité...",
+    "loading": "Chargement de la répartition de qualité",
     "noData": "Aucune donnée disponible pour la répartition de qualité"
   },
   "miningProfit": {
@@ -56,7 +56,7 @@
   "loadout": {
     "title": "Calculateur de Loadout",
     "description": "Planifiez et optimisez votre équipement de minage avec notre calculateur de loadout. Comparez les modules, gadgets et lasers de minage pour créer la configuration parfaite pour vos opérations minières.",
-    "loading": "Chargement des données de loadout...",
+    "loading": "Chargement des données de loadout",
     "selectShip": "Sélectionnez votre vaisseau",
     "shipPlaceholder": "Choisissez un vaisseau...",
     "lasers": "Lasers de minage",
@@ -99,7 +99,7 @@
     "shopLoadout": {
       "title": "Acheter le Loadout",
       "description": "Découvrez où acheter les composants de votre loadout à travers le verse. Comparez les prix et la disponibilité dans différents endroits pour optimiser vos achats.",
-      "loading": "Chargement des données du magasin...",
+      "loading": "Chargement des données du magasin",
       "noData": "Aucune donnée de magasin disponible pour ce loadout",
       "lasers": "Lasers",
       "modules": "Modules",
@@ -116,7 +116,7 @@
   "refinery": {
     "title": "Raffinerie",
     "infoZone": "Note : Toutes les données des tableaux proviennent de UEX, après la sortie d'une nouvelle version de Star Citizen, il peut s'écouler un certain temps avant que ces données ne soient mises à jour.",
-    "loading": "Chargement des données de raffinage...",
+    "loading": "Chargement des données de raffinage",
     "methodTable": {
       "methodsTitle": "Méthodes de raffinage",
       "description": "Découvrez les méthodes de raffinage disponibles pour transformer vos minerais bruts en matériaux plus précieux. Comparez les différentes options de raffinage pour optimiser vos rendements et maximiser vos profits.",
@@ -158,7 +158,7 @@
   "marketPrices": {
     "title": "Prix du Marché",
     "infoZone": "Note : Toutes les données des tableaux proviennent de UEX, après la sortie d'une nouvelle version de Star Citizen, il peut s'écouler un certain temps avant que ces données ne soient mises à jour.",
-    "loading": "Chargement des prix du marché...",
+    "loading": "Chargement des prix du marché",
     "shipMinerals": {
       "title": "Minéraux en vaisseau",
       "description": "Découvrez le prix maximum par SCU pour les minéraux extraits en vaisseau. Comparez les prix bruts et raffinés pour maximiser vos profits de minage.",
@@ -190,7 +190,7 @@
   "miningLasers": {
     "title": "Lasers de minage",
     "infoZone": "Note : Toutes les données des tableaux proviennent de UEX, après la sortie d'une nouvelle version de Star Citizen, il peut s'écouler un certain temps avant que ces données ne soient mises à jour.",
-    "loading": "Chargement des lasers de minage...",
+    "loading": "Chargement des lasers de minage",
     "noResultForFilter": "Aucun laser de minage ne correspond à vos filtres. Essayez d'autres critères.",
     "filters": {
       "title": "Filtres",
@@ -222,7 +222,7 @@
   "modulesGadgets": {
     "title": "Modules et Gadgets",
     "infoZone": "Note : Toutes les données des tableaux proviennent de UEX, après la sortie d'une nouvelle version de Star Citizen, il peut s'écouler un certain temps avant que ces données ne soient mises à jour.",
-    "loading": "Chargement des modules et gadgets...",
+    "loading": "Chargement des modules et gadgets",
     "noResultForFilter": "Aucun module ou gadget ne correspond à vos filtres. Essayez d'autres critères.",
     "table": {
       "name": "Module / Gadget",

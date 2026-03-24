@@ -1,6 +1,7 @@
 "use client"
 
 import { Header } from "@/components/Header/Header"
+import { Loader } from "@/components/Loader"
 import { LoadoutBloc } from "@/components/Loadout/LoadoutBloc"
 import { LoadoutInventory } from "@/components/Loadout/LoadoutInventory"
 import { LoadoutResume } from "@/components/Loadout/LoadoutResume"
@@ -378,10 +379,7 @@ export default function LoadoutPage() {
 
           {
             loading ? (
-              <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16 w-full max-w-3xl mx-auto mt-8">
-                <Toolbox className="mb-4 h-12 w-12 text-slate-700 animate-spin" />
-                <p className="text-lg text-slate-400" suppressHydrationWarning>{t("loadout.loading")}</p>
-              </div>
+              <Loader loaderText={t("loadout.loading")} />
             ) : (
               <div className="w-full">
                 <div className="flex flex-col my-4">
