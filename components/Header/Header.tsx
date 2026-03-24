@@ -1,19 +1,38 @@
 "use client"
 
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"
 import { ChevronDown, Menu, X } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { LanguageSelector } from "./LanguageSelector"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import { LanguageSelector } from "./LanguageSelector"
+
+const getConfig = async () => {
+  if (typeof window === "undefined") return null;
+  const config = localStorage.getItem("star-mine-atlas-config");
+  // need to update config after this time (in minutes)
+  const needToUpdateAfter = 30;
+  let parsedConfig = null;
+  if (config) {
+    parsedConfig = JSON.parse(config);
+  }
+  if (!config || !parsedConfig?.lastUpdate || (Date.now() - parsedConfig.lastUpdate) > needToUpdateAfter * 60 * 1000) {
+    fetch(API_BASE_URL + API_ENDPOINTS.config)
+      .then((res) => res.json())
+      .then((data) => {
+        const formattedData = data.map((item: { name: string; value: string }) => ({ [item.name]: item.value })).reduce((acc: any, curr: any) => ({ ...acc, ...curr }), {});
+        const newConfig = { ...parsedConfig, ...formattedData, lastUpdate: Date.now() };
+        localStorage.setItem("star-mine-atlas-config", JSON.stringify(newConfig));
+      })
+      .catch((err) => {
+        console.error("Error fetching config:", err);
+      });
+  }
+}
 
 export function Header() {
-  const { t } = useTranslation()
-  const pathname = usePathname()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  // Suppression de l'état openDropdown, retour au comportement par défaut
-
   const navLinks = [
     { href: "/", label: "header.findMinerals" },
   ]
@@ -24,12 +43,37 @@ export function Header() {
   ]
 
   const dataLinks = [
-    { href: "/data/quality-distribution", label: "header.qualityDistribution" },
     { href: "/data/refinery", label: "header.data.refinery" },
     { href: "/data/market-prices", label: "header.data.marketPrices" },
     { href: "/data/mining-lasers", label: "header.data.miningLasers" },
     { href: "/data/modules-gadgets", label: "header.data.modulesGadgets" },
   ]
+
+  const { t } = useTranslation()
+  const pathname = usePathname()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const [showData, setShowData] = useState(false);
+
+  const [dataLinksState, setDataLinksState] = useState(dataLinks);
+
+  useEffect(() => {
+    getConfig().then(() => {
+      const configStr = localStorage.getItem("star-mine-atlas-config");
+      if (configStr) {
+        const config: { showData: string } = JSON.parse(configStr);
+        const showDataValue = config.showData.toLowerCase() === "true";
+        console.log("Config loaded, showData:", showDataValue);
+        setShowData(showDataValue);
+        if (showDataValue) {
+          dataLinks.unshift(
+            { href: "/data/quality-distribution", label: "header.qualityDistribution" },
+          )
+        }
+        setDataLinksState([...dataLinks])
+      }
+    });
+  }, [])
 
   return (
     <header className="sticky top-0 z-50 border-b border-cyan-900/50 bg-slate-950/80 backdrop-blur-md">
@@ -102,7 +146,7 @@ export function Header() {
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-slate-900 border border-cyan-900/50 shadow-lg rounded-md min-w-[200px]">
-                  {dataLinks.map((link) => (
+                  {dataLinksState.map((link) => (
                     <DropdownMenuItem
                       asChild
                       key={link.href}
@@ -175,7 +219,7 @@ export function Header() {
               }
               <span className="text-base font-medium text-slate-500 border-b border-slate-700 pb-2 mb-1 mt-4">{t("header.data.title")}</span>
               {
-                dataLinks.map((link) => (
+                dataLinksState.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}

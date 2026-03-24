@@ -16,6 +16,11 @@
       "loadout": "Loadout Calculator"
     }
   },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for does not exist or has been moved.",
+    "backToHome": "Back to Home"
+  },
   "home": {
     "title": "Find Minerals",
     "description": "Browse and filter minerals across the verse. Data updated for Star Citizen 4.7.",
@@ -23,7 +28,7 @@
     "showing": "Showing {{count}} of {{total}} rocks",
     "noRocksFound": "No rocks found",
     "noRocksHint": "Try adjusting your filters or search query",
-    "loading": "Loading rocks...",
+    "loading": "Loading rocks",
     "filters": {
       "searchPlaceholder": "Search...",
       "filters": "Filters:",
@@ -46,7 +51,7 @@
     "title": "Quality Distribution",
     "description": "Distribution of mineral qualities by star system.",
     "legend": "Each bar represents the percentage of rocks whose quality falls within that range for a given system.",
-    "loading": "Loading quality distribution...",
+    "loading": "Loading quality distribution",
     "noData": "No data available for quality distribution"
   },
   "miningProfit": {
@@ -56,7 +61,7 @@
   "loadout": {
     "title": "Loadout Calculator",
     "description": "Plan and optimize your mining loadout with our loadout calculator. Compare mining modules, gadgets, and lasers to create the perfect setup for your mining operations.",
-    "loading": "Loading loadout data...",
+    "loading": "Loading loadout data",
     "selectShip": "Select your ship",
     "shipPlaceholder": "Select a ship...",
     "lasers": "Mining Lasers",
@@ -99,7 +104,7 @@
     "shopLoadout": {
       "title": "Shop this Loadout",
       "description": "Discover where to buy the components of your loadout across the verse. Compare prices and availability at different locations to optimize your shopping.",
-      "loading": "Loading shop data...",
+      "loading": "Loading shop data",
       "noData": "No shop data available for this loadout",
       "lasers": "Lasers",
       "modules": "Modules",
@@ -116,7 +121,7 @@
   "refinery": {
     "title": "Refinery",
     "infoZone": "Note: All data from tables are sourced from UEX data, after a new version of Star Citizen is released, it may take some time to update those data.",
-    "loading": "Loading refinery data...",
+    "loading": "Loading refinery data",
     "methodTable": {
       "methodsTitle": "Refinery Methods",
       "description": "Discover the available refining methods to transform your raw minerals into more valuable materials. Compare different refining options to optimize your yields and maximize your profits.",
@@ -158,7 +163,7 @@
   "marketPrices": {
     "title": "Market Prices",
     "infoZone": "Note: All data from tables are sourced from UEX data, after a new version of Star Citizen is released, it may take some time to update those data.",
-    "loading": "Loading market prices...",
+    "loading": "Loading market prices",
     "shipMinerals": {
       "title": "Ship Minerals",
       "description": "Discorver the maximum price per SCU for minerals extracted by ship. Compare raw and refined prices to maximize your mining profits.",
@@ -190,7 +195,7 @@
   "miningLasers": {
     "title": "Mining Lasers",
     "infoZone": "Note: All data from tables are sourced from UEX data, after a new version of Star Citizen is released, it may take some time to update those data.",
-    "loading": "Loading mining lasers...",
+    "loading": "Loading mining lasers",
     "noResultForFilter": "No mining lasers match your filters. Try changing your criteria.",
     "table": {
       "laser": "Laser",
@@ -211,7 +216,7 @@
   "modulesGadgets": {
     "title": "Modules and Gadgets",
     "infoZone": "Note: All data from tables are sourced from UEX data, after a new version of Star Citizen is released, it may take some time to update those data.",
-    "loading": "Loading modules and gadgets...",
+    "loading": "Loading modules and gadgets",
     "noResultForFilter": "No modules or gadgets match your filters. Try changing your criteria.",
     "table": {
       "name": "Module / Gadget",

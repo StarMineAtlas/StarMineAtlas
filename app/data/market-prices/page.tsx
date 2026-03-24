@@ -1,6 +1,7 @@
 "use client"
 
 import { Header } from "@/components/Header/Header"
+import { Loader } from "@/components/Loader"
 import { API_BASE_URL, API_ENDPOINTS, API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
 import { Commodity, excludedIds, FormattedCommodityMaxPrice } from "@/models/Commodity"
 import { Mineral } from "@/models/Mineral"
@@ -57,7 +58,6 @@ export default function marketPrices() {
 
     useEffect(() => {
         if (mineralsShip.length > 0 && mineralsFPS.length > 0 && commoditiesPrices.length > 0 && commoditiesRawPrices.length > 0) {
-            // Regroupement par nom de minerai
             const mineralGroups: { [name: string]: { rawPrices: number[], refinedPrices: number[], ids: number[] } } = {};
             commoditiesPrices.forEach(commodity => {
                 let name = commodity.commodity_name;
@@ -115,10 +115,7 @@ export default function marketPrices() {
                     </div>
 
                     {loading ? (
-                        <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16 w-full max-w-3xl mx-auto mt-8">
-                            <TrendingUp className="mb-4 h-12 w-12 text-slate-700 animate-spin" />
-                            <p className="text-lg text-slate-400" suppressHydrationWarning>{t("marketPrices.loading")}</p>
-                        </div>
+                        <Loader loaderText={t("marketPrices.loading")} />
                     ) : (
                         <>
                             <div className="w-full mt-8 flex flex-col gap-4">

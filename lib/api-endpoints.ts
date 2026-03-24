@@ -5,6 +5,7 @@ export const API_BASE_URL = OPENSHEET_BASE_URL + GOOGLE_SHEET_ID + "/";
 export const API_UEX_BASE_URL = "https://api.uexcorp.space/2.0/";
 
 export const API_ENDPOINTS = {
+    config: "config",
     minerals: "minerals",
     systems: "systems",
     bodies: "bodies",

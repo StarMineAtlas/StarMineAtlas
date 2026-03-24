@@ -7,6 +7,7 @@ import { gadgetAttributeType, moduleAttributeType, type ModuleGadget, type Modul
 import { LayersPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Loader } from "@/components/Loader";
 
 // Function to get color class based on value (positive = green, negative = red, zero or non-numeric = gray), with optional inverse coloring
 const getColorForValue = (val: string | number | null | undefined, isInverse: boolean = false) => {
@@ -196,10 +197,7 @@ export default function ModulesGadgetsPage() {
                     </div>
 
                     {loading ? (
-                        <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16 w-full max-w-3xl mx-auto mt-8">
-                            <LayersPlus className="mb-4 h-12 w-12 text-slate-700 animate-spin" />
-                            <p className="text-lg text-slate-400" suppressHydrationWarning>{t("modulesGadgets.loading")}</p>
-                        </div>
+                        <Loader loaderText={t("modulesGadgets.loading")} />
                     ) : (
                         <div className="w-full mt-8 flex flex-col gap-4">
                             {/* Filters */}

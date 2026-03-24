@@ -21,9 +21,21 @@ export function LoadoutShopModal({ open, loadout, onClose }: LoadoutShopModalPro
     const [touched, setTouched] = useState(false);
     const [loading, setLoading] = useState(false);
 
+
     const [uniqueLasers, setUniqueLasers] = useState<number[]>([]);
     const [uniqueModules, setUniqueModules] = useState<number[]>([]);
     const [uniqueGadgets, setUniqueGadgets] = useState<number[]>([]);
+
+    // Add counting of quantities by id
+    const [itemCounts, setItemCounts] = useState<{
+        lasers: Record<number, number>;
+        modules: Record<number, number>;
+        gadgets: Record<number, number>;
+    }>({
+        lasers: {},
+        modules: {},
+        gadgets: {}
+    });
 
     //prices for all unique items in the loadout, grouped by type (laser, module, gadget) and unique id
     const [itemPrices, setItemPrices] = useState<{
@@ -42,10 +54,11 @@ export function LoadoutShopModal({ open, loadout, onClose }: LoadoutShopModalPro
         }
     }, [open]);
 
+
     useEffect(() => {
         if (!open || touched) return;
         setLoading(true);
-        extractUniqueItems();
+        extractUniqueItemsAndCounts();
     }, [loadout, open]);
 
     useEffect(() => {
@@ -60,18 +73,26 @@ export function LoadoutShopModal({ open, loadout, onClose }: LoadoutShopModalPro
         console.log("itemPrices:", itemPrices);
     }, [itemPrices, open]);
 
-    const extractUniqueItems = () => {
+
+    // New function that extracts unique ids AND counts quantities by id
+    const extractUniqueItemsAndCounts = () => {
         const lasers = new Set<number>();
         const modules = new Set<number>();
         const gadgets = new Set<number>();
 
+        const laserCounts: Record<number, number> = {};
+        const moduleCounts: Record<number, number> = {};
+        const gadgetCounts: Record<number, number> = {};
+
         loadout?.bloc?.forEach(b => {
             if (b.miningLaser) {
                 lasers.add(b.miningLaser.id);
+                laserCounts[b.miningLaser.id] = (laserCounts[b.miningLaser.id] || 0) + 1;
             }
             b.modules.forEach(m => {
                 if (m) {
                     modules.add(m.id);
+                    moduleCounts[m.id] = (moduleCounts[m.id] || 0) + 1;
                 }
             });
         });
@@ -79,12 +100,18 @@ export function LoadoutShopModal({ open, loadout, onClose }: LoadoutShopModalPro
         loadout?.gadgets?.forEach(g => {
             if (g) {
                 gadgets.add(g.id);
+                gadgetCounts[g.id] = (gadgetCounts[g.id] || 0) + 1;
             }
         });
 
         setUniqueLasers(Array.from(lasers).filter(id => id !== null && id !== undefined) as number[]);
         setUniqueModules(Array.from(modules).filter(id => id !== null && id !== undefined) as number[]);
         setUniqueGadgets(Array.from(gadgets).filter(id => id !== null && id !== undefined) as number[]);
+        setItemCounts({
+            lasers: laserCounts,
+            modules: moduleCounts,
+            gadgets: gadgetCounts
+        });
     };
 
     const fetchItemPrices = async () => {
@@ -153,7 +180,12 @@ export function LoadoutShopModal({ open, loadout, onClose }: LoadoutShopModalPro
                                                 {
                                                     uniqueLasers.map(id => (
                                                         <div className="flex flex-col" key={id}>
-                                                            <span className="text-slate-200 mb-2">{itemPrices.lasers[id]?.[0]?.item_name}</span>
+                                                            <span className="text-slate-200 mb-2">
+                                                                {itemPrices.lasers[id]?.[0]?.item_name}
+                                                                {itemCounts.lasers[id] ? (
+                                                                    <span className="ml-2 text-xs text-cyan-400">x{itemCounts.lasers[id]}</span>
+                                                                ) : null}
+                                                            </span>
                                                             <div style={{ maxHeight: '15rem', overflowY: 'scroll' }}>
                                                                 <div className="overflow-x-auto rounded-xl shadow-lg border border-slate-800 bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-md w-full">
                                                                     <table className="w-full table-auto border-collapse text-left">
@@ -173,7 +205,7 @@ export function LoadoutShopModal({ open, loadout, onClose }: LoadoutShopModalPro
                                                                                     itemPrices.lasers[id]?.length > 0 && itemPrices.lasers[id]?.map((offer, index) => (
                                                                                         <tr key={offer.item_name + index} className="bg-slate-950/70 hover:bg-cyan-950/40 hover:shadow-md transition-colors duration-200">
                                                                                             <td className="px-6 py-4 border border-slate-700 font-medium text-cyan-100 text-xs md:text-sm">{offer.terminal_name}</td>
-                                                                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-green-400">
+                                                                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">
                                                                                                 <span>{offer.price_buy}</span>
                                                                                                 <span className="device-font"> aUEC</span>
                                                                                             </td>
@@ -201,7 +233,12 @@ export function LoadoutShopModal({ open, loadout, onClose }: LoadoutShopModalPro
                                                 {
                                                     uniqueModules.map(id => (
                                                         <div className="flex flex-col" key={id}>
-                                                            <span className="text-slate-200 mb-2">{itemPrices.modules[id]?.[0]?.item_name}</span>
+                                                            <span className="text-slate-200 mb-2">
+                                                                {itemPrices.modules[id]?.[0]?.item_name}
+                                                                {itemCounts.modules[id] ? (
+                                                                    <span className="ml-2 text-xs text-cyan-400">x{itemCounts.modules[id]}</span>
+                                                                ) : null}
+                                                            </span>
                                                             <div style={{ maxHeight: '15rem', overflowY: 'scroll' }}>
                                                                 <div className="overflow-x-auto rounded-xl shadow-lg border border-slate-800 bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-md w-full">
                                                                     <table className="w-full table-auto border-collapse text-left">
@@ -221,7 +258,7 @@ export function LoadoutShopModal({ open, loadout, onClose }: LoadoutShopModalPro
                                                                                     itemPrices.modules[id]?.length > 0 && itemPrices.modules[id]?.map((offer, index) => (
                                                                                         <tr key={offer.item_name + index} className="bg-slate-950/70 hover:bg-cyan-950/40 hover:shadow-md transition-colors duration-200">
                                                                                             <td className="px-6 py-4 border border-slate-700 font-medium text-cyan-100 text-xs md:text-sm">{offer.terminal_name}</td>
-                                                                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-green-400">
+                                                                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">
                                                                                                 <span>{offer.price_buy}</span>
                                                                                                 <span className="device-font"> aUEC</span>
                                                                                             </td>
@@ -250,7 +287,12 @@ export function LoadoutShopModal({ open, loadout, onClose }: LoadoutShopModalPro
                                                 {
                                                     uniqueGadgets.map(id => (
                                                         <div className="flex flex-col" key={id}>
-                                                            <span className="text-slate-200 mb-2">{itemPrices.gadgets[id]?.[0]?.item_name}</span>
+                                                            <span className="text-slate-200 mb-2">
+                                                                {itemPrices.gadgets[id]?.[0]?.item_name}
+                                                                {itemCounts.gadgets[id] ? (
+                                                                    <span className="ml-2 text-xs text-cyan-400">x{itemCounts.gadgets[id]}</span>
+                                                                ) : null}
+                                                            </span>
                                                             <div style={{ maxHeight: '15rem', overflowY: 'scroll' }}>
                                                                 <div className="overflow-x-auto rounded-xl shadow-lg border border-slate-800 bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-md w-full">
                                                                     <table className="w-full table-auto border-collapse text-left">
@@ -270,7 +312,7 @@ export function LoadoutShopModal({ open, loadout, onClose }: LoadoutShopModalPro
                                                                                     itemPrices.gadgets[id]?.length > 0 && itemPrices.gadgets[id]?.map((offer, index) => (
                                                                                         <tr key={offer.item_name + index} className="bg-slate-950/70 hover:bg-cyan-950/40 hover:shadow-md transition-colors duration-200">
                                                                                             <td className="px-6 py-4 border border-slate-700 font-medium text-cyan-100 text-xs md:text-sm">{offer.terminal_name}</td>
-                                                                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-green-400">
+                                                                                            <td className="px-6 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">
                                                                                                 <span>{offer.price_buy}</span>
                                                                                                 <span className="device-font"> aUEC</span>
                                                                                             </td>

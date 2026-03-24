@@ -5,6 +5,7 @@ import { MineralFilter } from "@/components/Filters/MineralFilter"
 import { RockCard } from "@/components/RockCard"
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"
 import { Rock } from "@/models/Rock"
+import { Loader } from "@/components/Loader"
 import { Stone } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -18,6 +19,8 @@ export default function Home() {
 
   const [rocks, setRocks] = useState<Rock[]>([])
   const [isLoading, setIsLoading] = useState(true)
+
+  const [showData, setShowData] = useState(false)
 
   const filteredRocks = useMemo(() => {
     if (isLoading) return [];
@@ -62,6 +65,14 @@ export default function Home() {
 
   useEffect(() => {
     setIsLoading(true);
+    // get localstorage config to know if we need to show data or not
+    const configStr = localStorage.getItem("star-mine-atlas-config");
+    if (configStr) {
+      const config: { showData: string } = JSON.parse(configStr);
+      const showDataValue = config.showData.toLowerCase() === "true";
+      setShowData(showDataValue);
+    }
+
     fetch(API_BASE_URL + API_ENDPOINTS.rocks)
       .then(res => res.json())
       .then(data => {
@@ -107,12 +118,14 @@ export default function Home() {
             {t("home.description")}
           </p>
           {/* Info zone */}
-          <div
-            className="mt-6 rounded-xl border border-cyan-800 bg-gradient-to-br from-slate-900/80 to-cyan-950/80 p-5 shadow-lg flex items-center gap-3"
-            style={{ backdropFilter: 'blur(4px)' }}
-          >
-            <span className="text-cyan-100 text-xs font-medium tracking-wide" suppressHydrationWarning>{t("home.infoZone")}</span>
-          </div>
+          {showData && (
+            <div
+              className="mt-6 rounded-xl border border-cyan-800 bg-gradient-to-br from-slate-900/80 to-cyan-950/80 p-5 shadow-lg flex items-center gap-3"
+              style={{ backdropFilter: 'blur(4px)' }}
+            >
+              <span className="text-cyan-100 text-xs font-medium tracking-wide" suppressHydrationWarning>{t("home.infoZone")}</span>
+            </div>
+          )}
         </div>
 
         <div className="mb-8">
@@ -135,14 +148,11 @@ export default function Home() {
         </div>
 
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16">
-            <Stone className="mb-4 h-12 w-12 text-slate-700 animate-spin" />
-            <p className="text-lg text-slate-400" suppressHydrationWarning>{t("home.loading")}</p>
-          </div>
+          <Loader loaderText={t("home.loading")} />
         ) : rocks.length > 0 && filteredRocks.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filteredRocks.map((rock, index) => (
-              <RockCard key={`${rock.name}-${rock.system}-${index}`} rock={rock} secondaries={getSecondaryQualityStat(rock.secondary, rock.body)} />
+              <RockCard key={`${rock.name}-${rock.system}-${index}`} rock={rock} secondaries={getSecondaryQualityStat(rock.secondary, rock.body)} showData={showData} />
             ))}
           </div>
         ) : (

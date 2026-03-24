@@ -32,5 +32,5 @@ export interface FormattedCommodityMaxPrice {
     };
 }
 
-// Id a exclure de l'affichage car ce sont des minerais qui ne sont pas vendus sur le marché ou qui posent problème
+// Ids to exclude from display because they are minerals that are not sold on the market or that cause problems
 export const excludedIds = [35, 119, 21, 45, 172];

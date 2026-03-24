@@ -1,6 +1,7 @@
 "use client"
 
 import { Header } from "@/components/Header/Header"
+import { Loader } from "@/components/Loader"
 import { Calculator, Construction } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
@@ -29,6 +30,8 @@ export default function MiningProfitPage() {
               {t("utils.wip")}
             </span>
           </div>
+
+          <Loader loaderText={"Loading Data"} />
         </div>
       </main>
     </div>

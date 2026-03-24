@@ -122,32 +122,26 @@
   * {
     @apply border-border outline-ring/50;
 
-    /* Scrollbar globale (Chrome, Edge, Safari) */
+    /* Global Scrollbar (Chrome, Edge, Safari) */
     ::-webkit-scrollbar {
       height: 8px;
-      /* horizontal */
       width: 8px;
-      /* vertical si besoin */
     }
 
     ::-webkit-scrollbar-track {
       background: transparent;
-      /* invisible */
     }
 
     ::-webkit-scrollbar-thumb {
       background: rgba(255, 255, 255, 0.15);
-      /* discret */
       border-radius: 999px;
       transition: background 0.2s ease;
     }
 
     ::-webkit-scrollbar-thumb:hover {
       background: rgba(255, 255, 255, 0.3);
-      /* visible au hover */
     }
 
-    /* Option : effet plus "space" */
     ::-webkit-scrollbar-thumb {
       backdrop-filter: blur(4px);
     }

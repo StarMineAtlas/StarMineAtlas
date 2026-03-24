@@ -5,6 +5,8 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { ReactNode } from 'react'
 import '../styles/globals.css'
 
+import Footer from '@/components/Footer'
+
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
@@ -59,6 +61,7 @@ export default function RootLayout({
 }: Readonly<{
   children: ReactNode
 }>) {
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -71,6 +74,7 @@ export default function RootLayout({
         <I18nProvider>
           {children}
         </I18nProvider>
+        <Footer />
         <Analytics />
       </body>
     </html>

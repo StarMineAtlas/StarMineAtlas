@@ -1,6 +1,7 @@
 "use client"
 
 import { Header } from "@/components/Header/Header"
+import { Loader } from "@/components/Loader"
 import { QualityChart } from "@/components/QualityChart"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"
@@ -63,10 +64,7 @@ export default function QualityDistributionPage() {
                     </CardHeader>
                     <CardContent className="pt-6">
                         {isLoading ? (
-                            <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-16">
-                                <BarChart3 className="mb-4 h-12 w-12 text-slate-700 animate-spin" />
-                                <p className="text-lg text-center text-slate-400" suppressHydrationWarning>{t("qualityDistribution.loading")}</p>
-                            </div>
+                            <Loader loaderText={t("qualityDistribution.loading")} />
                         ) : (
                             <>
                                 {data.ranges && data.systems ? (
