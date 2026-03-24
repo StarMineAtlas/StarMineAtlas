@@ -88,8 +88,14 @@ export const Loader: FC = () => {
                         );
                     }
                     // Planètes
-                    // Calcul de l'angle animé
-                    const angle = ((tick / 1000) * (360 / obj.speed)) % 360;
+                    // Calcul de l'angle animé avec ease-in-out
+                    // Utilise une courbe easeInOutCubic pour un mouvement plus naturel
+                    const t = ((tick / 1000) % obj.speed) / obj.speed;
+                    // easeInOutCubic
+                    const easedT = t < 0.5
+                        ? 4 * t * t * t
+                        : 1 - Math.pow(-2 * t + 2, 3) / 2;
+                    const angle = (easedT * 360) % 360;
                     const rad = (angle * Math.PI) / 180;
                     const x = center + obj.distance * Math.cos(rad);
                     const y = center + obj.distance * Math.sin(rad);
