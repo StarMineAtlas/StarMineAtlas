@@ -13,7 +13,8 @@
     "calculators": {
       "title": "Calculateurs",
       "miningProfit": "Calculateur de Profit Minier",
-      "loadout": "Calculateur de Loadout"
+      "loadout": "Calculateur de Loadout",
+      "workOrder": "Planning de minage"
     }
   },
   "notFound": {
@@ -58,6 +59,10 @@
   "miningProfit": {
     "title": "Calculateur de Profit Minier",
     "description": "Suivez les prix des minéraux en temps réel dans les terminaux commerciaux de l'univers. Comparez les prix d'achat et de vente pour maximiser vos profits miniers."
+  },
+  "workOrder": {
+    "title": "Planning de minage",
+    "description": "Gérez et suivez vos sessions de minage efficacement. Gardez un aperçu du raffinage, de vos minerais et de vos ventes. Partagez vos gains entre amis et calculez vos profits en temps réel pour optimiser vos opérations minières."
   },
   "loadout": {
     "title": "Calculateur de Loadout",

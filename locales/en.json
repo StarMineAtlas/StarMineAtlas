@@ -13,7 +13,8 @@
     "calculators": {
       "title": "Calculators",
       "miningProfit": "Mining Profit Calculator",
-      "loadout": "Loadout Calculator"
+      "loadout": "Loadout Calculator",
+      "workOrder": "Work Order"
     }
   },
   "notFound": {
@@ -58,6 +59,10 @@
   "miningProfit": {
     "title": "Mining Profit",
     "description": "Track real-time mineral prices across trading terminals in the verse. Compare buy and sell prices to maximize your mining profits."
+  },
+  "workOrder": {
+    "title": "Work Order",
+    "description": "Manage and track your mining sessions effectively. Keep an overview of your refining, minerals, and sales. Share your gains with friends and calculate your profits in real-time to optimize your mining operations."
   },
   "loadout": {
     "title": "Loadout Calculator",
