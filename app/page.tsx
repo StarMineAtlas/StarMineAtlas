@@ -5,6 +5,7 @@ import { MineralFilter } from "@/components/Filters/MineralFilter"
 import { RockCard } from "@/components/RockCard"
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"
 import { Rock } from "@/models/Rock"
+import { Loader } from "@/components/Loader"
 import { Stone } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -107,6 +108,7 @@ export default function Home() {
       <Header />
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8">
+          <Loader />
           <div className="flex items-center gap-3 mb-2">
             <Stone className="h-8 w-8 text-cyan-400" />
             <h1 className="text-3xl font-bold tracking-tight text-cyan-50" suppressHydrationWarning>
