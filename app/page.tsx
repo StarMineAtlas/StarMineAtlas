@@ -118,12 +118,14 @@ export default function Home() {
             {t("home.description")}
           </p>
           {/* Info zone */}
-          <div
-            className="mt-6 rounded-xl border border-cyan-800 bg-gradient-to-br from-slate-900/80 to-cyan-950/80 p-5 shadow-lg flex items-center gap-3"
-            style={{ backdropFilter: 'blur(4px)' }}
-          >
-            <span className="text-cyan-100 text-xs font-medium tracking-wide" suppressHydrationWarning>{t("home.infoZone")}</span>
-          </div>
+          {showData && (
+            <div
+              className="mt-6 rounded-xl border border-cyan-800 bg-gradient-to-br from-slate-900/80 to-cyan-950/80 p-5 shadow-lg flex items-center gap-3"
+              style={{ backdropFilter: 'blur(4px)' }}
+            >
+              <span className="text-cyan-100 text-xs font-medium tracking-wide" suppressHydrationWarning>{t("home.infoZone")}</span>
+            </div>
+          )}
         </div>
 
         <div className="mb-8">
