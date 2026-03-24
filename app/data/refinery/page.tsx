@@ -5,7 +5,20 @@ import { RefineryFilter } from "@/components/Filters/RefineryFilter"
 import { RefinerySingleResult } from "@/components/RefinerySingleResult"
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
 import { RefineryMethod, RefineryRatingCost, RefineryRatingSpeed, RefineryRatingYield, RefineryYield } from "@/models/Refinery"
-import { Factory } from "lucide-react"
+import { Factory, ChevronUp, ChevronDown } from "lucide-react"
+
+const compareValues = (a: any, b: any, direction: 'asc' | 'desc') => {
+    const isEmpty = (v: any) => v === undefined || v === null || v === '';
+    if (isEmpty(a) && isEmpty(b)) return 0;
+    if (isEmpty(a)) return 1;
+    if (isEmpty(b)) return -1;
+    if (!isNaN(Number(a)) && !isNaN(Number(b))) {
+        return direction === 'asc' ? Number(a) - Number(b) : Number(b) - Number(a);
+    }
+    return direction === 'asc'
+        ? String(a).localeCompare(String(b))
+        : String(b).localeCompare(String(a));
+};
 import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Loader } from "@/components/Loader"
@@ -73,14 +86,39 @@ export default function refinery() {
     const [selectedMineral, setSelectedMineral] = useState("");
     const [selectedLocation, setSelectedLocation] = useState("");
 
-    // Filters applied on the yields
+    const [sortColumn, setSortColumn] = useState<string>("");
+    const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | 'none'>("none");
+    const [initialOrder, setInitialOrder] = useState<any[]>([]);
+
     const filteredYields = useMemo(() => {
-        return formattedYields.filter(yieldData => {
+        let yields = formattedYields.filter(yieldData => {
             const mineralMatch = selectedMineral ? yieldData!.mineral === selectedMineral : true;
             const locationMatch = selectedLocation ? yieldData!.name === selectedLocation : true;
             return mineralMatch && locationMatch;
         });
-    }, [formattedYields, selectedMineral, selectedLocation]);
+        if (sortColumn && sortDirection !== 'none') {
+            yields = [...yields].sort((a, b) => {
+                if (sortColumn === 'mineral') {
+                    return compareValues(a?.mineral, b?.mineral, sortDirection as 'asc' | 'desc');
+                } else {
+                    const aVal = a?.name === sortColumn ? a?.yield : null;
+                    const bVal = b?.name === sortColumn ? b?.yield : null;
+                    return compareValues(aVal, bVal, sortDirection as 'asc' | 'desc');
+                }
+            });
+        } else if (sortDirection === 'none' && initialOrder.length > 0) {
+            yields = initialOrder.filter(yieldData => {
+                const mineralMatch = selectedMineral ? yieldData!.mineral === selectedMineral : true;
+                const locationMatch = selectedLocation ? yieldData!.name === selectedLocation : true;
+                return mineralMatch && locationMatch;
+            });
+        }
+        return yields;
+    }, [formattedYields, selectedMineral, selectedLocation, sortColumn, sortDirection, initialOrder]);
+
+    useEffect(() => {
+        setInitialOrder(formattedYields);
+    }, [formattedYields]);
 
 
     // For the table, we want the unique minerals and locations filtered (after declaring the uniques)
@@ -105,12 +143,38 @@ export default function refinery() {
         return Array.from(locationsSet).sort();
     }, [refineriesYields]);
 
-    // Always keep only the values present in filteredYields
     const filteredMinerals = useMemo(() => {
         const mineralsSet = new Set<string>();
         filteredYields.forEach(yieldData => mineralsSet.add(yieldData!.mineral));
-        return Array.from(mineralsSet).sort();
-    }, [filteredYields]);
+        let mineralsArr = Array.from(mineralsSet);
+        if (sortColumn && sortDirection !== 'none') {
+            mineralsArr = [...mineralsArr].sort((a, b) => {
+                if (sortColumn === 'mineral') {
+                    return compareValues(a, b, sortDirection as 'asc' | 'desc');
+                } else {
+                    const aYield = filteredYields.find(y => y!.mineral === a && y!.name === sortColumn)?.yield;
+                    const bYield = filteredYields.find(y => y!.mineral === b && y!.name === sortColumn)?.yield;
+                    return compareValues(aYield, bYield, sortDirection as 'asc' | 'desc');
+                }
+            });
+        } else if (sortDirection === 'none' && initialOrder.length > 0) {
+            const initialMinerals = [] as string[];
+            initialOrder.forEach(yieldData => {
+                if (
+                    (!selectedMineral || yieldData!.mineral === selectedMineral) &&
+                    (!selectedLocation || yieldData!.name === selectedLocation)
+                ) {
+                    if (!initialMinerals.includes(yieldData!.mineral)) {
+                        initialMinerals.push(yieldData!.mineral);
+                    }
+                }
+            });
+            mineralsArr = initialMinerals;
+        } else {
+            mineralsArr = mineralsArr.sort();
+        }
+        return mineralsArr;
+    }, [filteredYields, sortColumn, sortDirection, initialOrder, selectedMineral, selectedLocation]);
 
     const filteredLocations = useMemo(() => {
         const locationsSet = new Set<string>();
@@ -169,20 +233,56 @@ export default function refinery() {
                                             <thead>
                                                 <tr className="bg-slate-900/80">
                                                     <th
-                                                        className="px-6 py-4 text-cyan-300 font-semibold text-xs md:text-sm border border-slate-700 bg-slate-900 sticky left-0 z-10"
+                                                        className="px-6 py-4 text-cyan-300 font-semibold text-xs md:text-sm border border-slate-700 bg-slate-900 sticky left-0 z-10 cursor-pointer select-none"
                                                         style={{ minWidth: "10rem", maxWidth: "10rem", width: "10rem" }}
+                                                        onClick={() => {
+                                                            if (sortColumn !== 'mineral') {
+                                                                setSortColumn('mineral');
+                                                                setSortDirection('asc');
+                                                            } else if (sortDirection === 'asc') {
+                                                                setSortDirection('desc');
+                                                            } else if (sortDirection === 'desc') {
+                                                                setSortDirection('none');
+                                                                setSortColumn("");
+                                                            } else {
+                                                                setSortDirection('asc');
+                                                            }
+                                                        }}
                                                         suppressHydrationWarning
                                                     >
-                                                        {t("refinery.yieldTable.mineral")}
+                                                        <span className="flex items-center gap-1 justify-center">
+                                                            {t("refinery.yieldTable.mineral")}
+                                                            {sortColumn === 'mineral' && sortDirection !== 'none' && (
+                                                                sortDirection === 'asc' ? <ChevronUp className="inline w-4 h-4 text-cyan-400" /> : <ChevronDown className="inline w-4 h-4 text-cyan-400" />
+                                                            )}
+                                                        </span>
                                                     </th>
                                                     {filteredLocations.length > 0 && filteredLocations.map((location, idx) => (
                                                         <th
                                                             key={idx}
-                                                            className="px-6 py-4 text-cyan-300 font-semibold text-xs md:text-sm border border-slate-700 text-center"
+                                                            className="px-6 py-4 text-cyan-300 font-semibold text-xs md:text-sm border border-slate-700 text-center cursor-pointer select-none"
                                                             style={{ minWidth: "10rem", maxWidth: "10rem", width: "10rem" }}
+                                                            onClick={() => {
+                                                                if (sortColumn !== location) {
+                                                                    setSortColumn(location);
+                                                                    setSortDirection('asc');
+                                                                } else if (sortDirection === 'asc') {
+                                                                    setSortDirection('desc');
+                                                                } else if (sortDirection === 'desc') {
+                                                                    setSortDirection('none');
+                                                                    setSortColumn("");
+                                                                } else {
+                                                                    setSortDirection('asc');
+                                                                }
+                                                            }}
                                                             suppressHydrationWarning
                                                         >
-                                                            {location}
+                                                            <span className="flex items-center gap-1 justify-center">
+                                                                {location}
+                                                                {sortColumn === location && sortDirection !== 'none' && (
+                                                                    sortDirection === 'asc' ? <ChevronUp className="inline w-4 h-4 text-cyan-400" /> : <ChevronDown className="inline w-4 h-4 text-cyan-400" />
+                                                                )}
+                                                            </span>
                                                         </th>
                                                     ))}
                                                 </tr>

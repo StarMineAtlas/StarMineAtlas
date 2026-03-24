@@ -20,10 +20,12 @@ const getColorForValue = (val: string | number | null | undefined, isInverse: bo
     return "text-gray-400";
 };
 
-// Utilitaire pour comparer deux valeurs (string ou number)
+// Utilitaire pour comparer deux valeurs (string ou number), en ignorant les vides (toujours à la fin)
 const compareValues = (a: any, b: any, direction: 'asc' | 'desc') => {
-    if (a === undefined || a === null) return direction === 'asc' ? 1 : -1;
-    if (b === undefined || b === null) return direction === 'asc' ? -1 : 1;
+    const isEmpty = (v: any) => v === undefined || v === null || v === '';
+    if (isEmpty(a) && isEmpty(b)) return 0;
+    if (isEmpty(a)) return 1;
+    if (isEmpty(b)) return -1;
     if (!isNaN(Number(a)) && !isNaN(Number(b))) {
         return direction === 'asc' ? Number(a) - Number(b) : Number(b) - Number(a);
     }
@@ -44,7 +46,8 @@ export default function MiningLasersPage() {
     const [filterLocation, setFilterLocation] = useState("");
     // Tri
     const [sortColumn, setSortColumn] = useState<string>("");
-    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>("asc");
+    const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | 'none'>("none");
+    const [initialOrder, setInitialOrder] = useState<any[]>([]);
     // Loader
     const [loading, setLoading] = useState(true);
 
@@ -94,7 +97,9 @@ export default function MiningLasersPage() {
             });
 
             Promise.all(miningLasersPromises).then((lasers) => {
-                setFormattedMiningLasers(lasers.sort((a, b) => a.name.localeCompare(b.name)));
+                const sorted = lasers.sort((a, b) => a.name.localeCompare(b.name));
+                setFormattedMiningLasers(sorted);
+                setInitialOrder(sorted);
                 setLoading(false);
             });
         }
@@ -141,7 +146,7 @@ export default function MiningLasersPage() {
         return matchName && matchSize && matchLocation;
     });
 
-    if (sortColumn) {
+    if (sortColumn && sortDirection !== 'none') {
         filteredLasers = [...filteredLasers].sort((a, b) => {
             if (allColumns.indexOf(sortColumn) > 12) {
                 const loc = sortColumn;
@@ -155,7 +160,14 @@ export default function MiningLasersPage() {
             ];
             const idx = allColumns.indexOf(sortColumn);
             const key = colKeyMap[idx] || sortColumn;
-            return compareValues(a[key], b[key], sortDirection);
+            return compareValues(a[key], b[key], sortDirection as 'asc' | 'desc');
+        });
+    } else if (sortDirection === 'none' && initialOrder.length > 0) {
+        filteredLasers = initialOrder.filter(laser => {
+            const matchName = !filterName || laser.name === filterName;
+            const matchSize = !filterSize || laser.size === filterSize;
+            const matchLocation = !filterLocation || laser.locations.includes(filterLocation);
+            return matchName && matchSize && matchLocation;
         });
     }
 
@@ -229,10 +241,15 @@ export default function MiningLasersPage() {
                                                                     }
                                                             }
                                                             onClick={() => {
-                                                                if (sortColumn === col) {
-                                                                    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-                                                                } else {
+                                                                if (sortColumn !== col) {
                                                                     setSortColumn(col);
+                                                                    setSortDirection('asc');
+                                                                } else if (sortDirection === 'asc') {
+                                                                    setSortDirection('desc');
+                                                                } else if (sortDirection === 'desc') {
+                                                                    setSortDirection('none');
+                                                                    setSortColumn("");
+                                                                } else {
                                                                     setSortDirection('asc');
                                                                 }
                                                             }}
@@ -240,7 +257,7 @@ export default function MiningLasersPage() {
                                                         >
                                                             <span className="flex items-center gap-1 justify-center">
                                                                 {col}
-                                                                {isSorted && (
+                                                                {isSorted && sortDirection !== 'none' && (
                                                                     sortDirection === 'asc' ? <ChevronUp className="inline w-4 h-4 text-cyan-400" /> : <ChevronDown className="inline w-4 h-4 text-cyan-400" />
                                                                 )}
                                                             </span>
