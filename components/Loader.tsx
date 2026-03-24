@@ -2,21 +2,21 @@ import { FC, useEffect, useState } from "react";
 import { Circle } from "lucide-react";
 
 
-// Configuration des planètes et du centre
+// Orbit Configuration: distance, size, color, speed
 const solarConfig = [
     {
-        icon: Circle, // composant Lucide
-        color: "#fbbf24", // jaune soleil
+        icon: Circle, // Lucide component
+        color: "#fbbf24", // yellow sun
         size: 20,
-        distance: 0, // centre
-        speed: 0, // pas de rotation
+        distance: 0, // center
+        speed: 0, // no rotation
     },
     {
         icon: Circle,
         color: "#da5c5c", // Hurston
         size: 4,
         distance: 22,
-        speed: 1, // secondes pour un tour
+        speed: 1, // seconds per orbit
     },
     {
         icon: Circle,
@@ -47,12 +47,12 @@ type LoaderProps = {
 };
 
 export const Loader: FC<LoaderProps> = ({ textAnimation = "shimmer", loaderText = "Loading data" }) => {
-    // Pour animer les orbites
-    // On utilise Date.now() pour éviter les problèmes de SSR/hydratation
+    // To animate the orbits
+    // We use Date.now() to avoid SSR/hydration issues
     const now = typeof window !== "undefined" ? Date.now() : 0;
     const [tick, setTick] = useState(now);
 
-    // Calcul dynamique du rayon max et padding
+    // Dynamic calculation of max radius and padding
     const maxDistance = Math.max(...solarConfig.map(p => p.distance + p.size / 2));
     const padding = 16;
     const svgSize = (maxDistance + padding) * 2;
@@ -81,7 +81,7 @@ export const Loader: FC<LoaderProps> = ({ textAnimation = "shimmer", loaderText 
         <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-8 w-full mt-8">
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", minHeight: 120 }}>
                 <svg width={svgSize} height={svgSize} viewBox={`0 0 ${svgSize} ${svgSize}`} style={{ display: "block" }}>
-                    {/* Orbites */}
+                    {/* Orbits */}
                     {solarConfig.filter(p => p.distance > 0).map((planet, i) => (
                         <circle
                             key={"orbit-" + i}
@@ -95,11 +95,11 @@ export const Loader: FC<LoaderProps> = ({ textAnimation = "shimmer", loaderText 
                             suppressHydrationWarning
                         />
                     ))}
-                    {/* Centre (Soleil) et planètes */}
+                    {/* Center (Sun) and planets */}
                     {solarConfig.map((obj, i) => {
                         const Icon = obj.icon;
                         if (obj.distance === 0) {
-                            // Centre
+                            // Center
                             return (
                                 <g key="center">
                                     <circle cx={center} cy={center} r={obj.size / 2} fill={obj.color} filter="url(#glow)" suppressHydrationWarning />
@@ -107,9 +107,9 @@ export const Loader: FC<LoaderProps> = ({ textAnimation = "shimmer", loaderText 
                                 </g>
                             );
                         }
-                        // Planètes
-                        // Calcul de l'angle animé avec ease-in-out (encore plus doux)
-                        // Utilise une courbe easeInOutSine pour un mouvement très fluide
+                        // Planets
+                        // Calculate animated angle with ease-in-out (even smoother)
+                        // Uses an easeInOutSine curve for very smooth movement
                         const t = ((tick / 1000) % obj.speed) / obj.speed;
                         // easeInOutSine
                         const easedT = -(Math.cos(Math.PI * t) - 1) / 2;
@@ -124,7 +124,7 @@ export const Loader: FC<LoaderProps> = ({ textAnimation = "shimmer", loaderText 
                             </g>
                         );
                     })}
-                    {/* Effet glow/ombre */}
+                    {/* Glow/Shadow effect */}
                     <defs>
                         <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
                             <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />

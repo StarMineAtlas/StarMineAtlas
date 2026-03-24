@@ -16,6 +16,11 @@
       "loadout": "Calculateur de Loadout"
     }
   },
+  "notFound": {
+    "title": "Page non trouvée",
+    "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "backToHome": "Retour à l'accueil"
+  },
   "home": {
     "title": "Rechercher des minerais",
     "description": "Parcourez et filtrez les minerais exploitables dans l'univers. Données mises à jour pour Star Citizen 4.7.",

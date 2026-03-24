@@ -58,7 +58,6 @@ export default function marketPrices() {
 
     useEffect(() => {
         if (mineralsShip.length > 0 && mineralsFPS.length > 0 && commoditiesPrices.length > 0 && commoditiesRawPrices.length > 0) {
-            // Regroupement par nom de minerai
             const mineralGroups: { [name: string]: { rawPrices: number[], refinedPrices: number[], ids: number[] } } = {};
             commoditiesPrices.forEach(commodity => {
                 let name = commodity.commodity_name;

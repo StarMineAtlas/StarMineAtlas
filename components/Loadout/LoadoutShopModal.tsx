@@ -26,7 +26,7 @@ export function LoadoutShopModal({ open, loadout, onClose }: LoadoutShopModalPro
     const [uniqueModules, setUniqueModules] = useState<number[]>([]);
     const [uniqueGadgets, setUniqueGadgets] = useState<number[]>([]);
 
-    // Ajout du comptage des quantités par id
+    // Add counting of quantities by id
     const [itemCounts, setItemCounts] = useState<{
         lasers: Record<number, number>;
         modules: Record<number, number>;
@@ -74,7 +74,7 @@ export function LoadoutShopModal({ open, loadout, onClose }: LoadoutShopModalPro
     }, [itemPrices, open]);
 
 
-    // Nouvelle fonction qui extrait les ids uniques ET compte les quantités par id
+    // New function that extracts unique ids AND counts quantities by id
     const extractUniqueItemsAndCounts = () => {
         const lasers = new Set<number>();
         const modules = new Set<number>();
