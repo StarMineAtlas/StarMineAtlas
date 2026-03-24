@@ -37,14 +37,17 @@ const getTypeColor = (type: MineralType | null) => {
   }
 }
 
-const getTypeColorMineral = (type: MineralType | null) => {
-  switch (type) {
-    case MineralType.FPS:
-      return "text-purple-200"
-    case MineralType.SHIP:
-      return "text-blue-200"
+
+const getSystemColor = (system: string): string => {
+  switch (system.toLowerCase()) {
+    case "stanton":
+      return "text-yellow-400"
+    case "pyro":
+      return "text-red-400"
+    case "nyx":
+      return "text-blue-400"
     default:
-      return "text-cyan-200"
+      return "text-slate-300"
   }
 }
 
@@ -157,7 +160,7 @@ export function MineralFilter({
                 <SelectItem
                   key={system.name}
                   value={system.name}
-                  className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
+                  className={`focus:bg-slate-800 focus:text-cyan-300 ${getSystemColor(system.name)}`}
                 >
                   {system.name}
                 </SelectItem>
@@ -189,7 +192,7 @@ export function MineralFilter({
                 }, {});
                 return Object.entries(bodiesBySystem).map(([system, bodiesList]) => (
                   <div key={system}>
-                    <div className="px-2 py-1 text-xs font-semibold text-cyan-300/80 uppercase select-none">
+                    <div className={`px-2 py-1 text-xs font-semibold text-cyan-300/80 uppercase select-none ${getSystemColor(system)}`}>
                       {system}
                     </div>
                     {bodiesList.map((body) => (
@@ -232,7 +235,7 @@ export function MineralFilter({
                     <SelectItem
                       key={mineral.name}
                       value={mineral.name}
-                      className={`text-cyan-50 focus:bg-slate-800 focus:text-cyan-300 ${getTypeColorMineral(mineral.type as MineralType)}`}
+                      className={`text-cyan-50 focus:bg-slate-800 focus:text-cyan-300`}
                     >
                       {mineral.name}
                     </SelectItem>
