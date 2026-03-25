@@ -19,4 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - User preferences management system (localStorage).
 - Automatic deployment via Vercel.
 
-[0.1.0]: https://github.com/your-repo/StarMineAtlas/releases/tag/0.1.0
+[0.1.0]: https://github.com/StarMineAtlas/StarMineAtlas/releases/tag/0.1.0
+
+## [0.2.0] - 2026-03-25
+### Added
+- Added page for work order (WIP until CIG add variable pricing based on quality)
+- Loadout Select items now have a mobile version
+- Tables now can be sorted
+- Added radar value on rock card (Data currently being collected)
+- Added a different icon and color to the rock card depending on ore type (FPS or Ship)
+
+[0.1.0]: https://github.com/StarMineAtlas/StarMineAtlas/releases/tag/0.2.0
