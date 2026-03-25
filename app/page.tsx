@@ -9,6 +9,7 @@ import { Loader } from "@/components/Loader"
 import { Stone } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { Mineral, MineralType } from "@/models/Mineral"
 
 export default function Home() {
   const { t } = useTranslation()
@@ -19,6 +20,8 @@ export default function Home() {
 
   const [rocks, setRocks] = useState<Rock[]>([])
   const [isLoading, setIsLoading] = useState(true)
+
+  const [mineralsList, setMineralsList] = useState<Mineral[]>([])
 
   const [showData, setShowData] = useState(false)
 
@@ -73,6 +76,13 @@ export default function Home() {
       setShowData(showDataValue);
     }
 
+    fetch(API_BASE_URL + API_ENDPOINTS.minerals)
+      .then(res => res.json())
+      .then(json => {
+        console.log("Minerals data fetched:", json);
+        setMineralsList(json);
+      })
+
     fetch(API_BASE_URL + API_ENDPOINTS.rocks)
       .then(res => res.json())
       .then(data => {
@@ -93,7 +103,7 @@ export default function Home() {
       .catch(() => setIsLoading(false));
   }, []);
 
-  function getSecondaryQualityStat(secondaries: string[], body: string): { mineral: string, min: number, max: number, median: number }[] {
+  const getSecondaryQualityStat = (secondaries: string[], body: string): { mineral: string, min: number, max: number, median: number }[] => {
     if (secondaries.length === 0) return [];
     return secondaries.map((mineral) => ({
       mineral,
@@ -101,6 +111,12 @@ export default function Home() {
       max: rocks.find(r => r.body === body && (r.primary === mineral))?.max || 0,
       median: rocks.find(r => r.body === body && (r.primary === mineral))?.median || 0,
     }))
+  }
+
+  const getMineral = (mineralName: string): Mineral | null => {
+    if (!mineralsList || mineralsList.length === 0) return null;
+    const mineral = mineralsList.find(m => m.name === mineralName);
+    return mineral ? mineral : null;
   }
 
   return (
@@ -151,8 +167,8 @@ export default function Home() {
           <Loader loaderText={t("home.loading")} />
         ) : rocks.length > 0 && filteredRocks.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredRocks.map((rock, index) => (
-              <RockCard key={`${rock.name}-${rock.system}-${index}`} rock={rock} secondaries={getSecondaryQualityStat(rock.secondary, rock.body)} showData={showData} />
+            {mineralsList && filteredRocks.map((rock, index) => (
+              <RockCard key={`${rock.name}-${rock.system}-${index}`} mineral={getMineral(rock.primary)} rock={rock} secondaries={getSecondaryQualityStat(rock.secondary, rock.body)} showData={showData} />
             ))}
           </div>
         ) : (

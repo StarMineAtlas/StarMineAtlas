@@ -38,6 +38,7 @@ export function Header() {
   ]
 
   const calculatorsLinks = [
+    { href: "/calculators/work-order", label: "header.calculators.workOrder" },
     { href: "/calculators/mining-profit", label: "header.calculators.miningProfit" },
     { href: "/calculators/loadout", label: "header.calculators.loadout" },
   ]

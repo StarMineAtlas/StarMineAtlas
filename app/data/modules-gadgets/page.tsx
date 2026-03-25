@@ -4,7 +4,7 @@ import { Header } from "@/components/Header/Header";
 import { LaserModuleGadgetFilter } from "@/components/Filters/LaserModuleGadgetFilter";
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints";
 import { gadgetAttributeType, moduleAttributeType, type ModuleGadget, type ModuleGadgetAttributes, type ModuleGadgetPrices, type ModuleGadgetRawData } from "@/models/ModuleGadget";
-import { LayersPlus } from "lucide-react";
+import { LayersPlus, ChevronUp, ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Loader } from "@/components/Loader";
@@ -17,6 +17,20 @@ const getColorForValue = (val: string | number | null | undefined, isInverse: bo
     if (num > 0) return isInverse ? "text-red-400" : "text-green-400";
     if (num < 0) return isInverse ? "text-green-400" : "text-red-400";
     return "text-gray-400";
+};
+
+// Utilitaire pour comparer deux valeurs (string ou number), en ignorant les vides (toujours à la fin)
+const compareValues = (a: any, b: any, direction: 'asc' | 'desc') => {
+    const isEmpty = (v: any) => v === undefined || v === null || v === '';
+    if (isEmpty(a) && isEmpty(b)) return 0;
+    if (isEmpty(a)) return 1;
+    if (isEmpty(b)) return -1;
+    if (!isNaN(Number(a)) && !isNaN(Number(b))) {
+        return direction === 'asc' ? Number(a) - Number(b) : Number(b) - Number(a);
+    }
+    return direction === 'asc'
+        ? String(a).localeCompare(String(b))
+        : String(b).localeCompare(String(a));
 };
 
 // Function to get color class based on item type
@@ -43,6 +57,10 @@ export default function ModulesGadgetsPage() {
     const [filterName, setFilterName] = useState("");
     const [filterItemType, setFilterItemType] = useState("");
     const [filterLocation, setFilterLocation] = useState("");
+    // Tri
+    const [sortColumn, setSortColumn] = useState<string>("");
+    const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | 'none'>("none");
+    const [initialOrder, setInitialOrder] = useState<ModuleGadget[]>([]);
     // Loader
     const [loading, setLoading] = useState(true);
 
@@ -112,7 +130,7 @@ export default function ModulesGadgetsPage() {
             });
 
             Promise.all(modulesGadgetsPromises).then((modules) => {
-                setFormattedModules(modules.sort((a, b) => {
+                const sorted = modules.sort((a, b) => {
                     const itemTypeOrder = ["Active", "Passive", "Gadget"];
                     const aTypeIndex = itemTypeOrder.indexOf(a.itemType || "");
                     const bTypeIndex = itemTypeOrder.indexOf(b.itemType || "");
@@ -120,7 +138,9 @@ export default function ModulesGadgetsPage() {
                         return aTypeIndex - bTypeIndex;
                     }
                     return a.name.localeCompare(b.name);
-                }));
+                });
+                setFormattedModules(sorted);
+                setInitialOrder(sorted);
                 setLoading(false);
             });
         }
@@ -168,13 +188,39 @@ export default function ModulesGadgetsPage() {
     });
     const locations = Array.from(new Set(formattedModules.flatMap(l => l.locations))).sort();
 
+
     // Applying filters
-    const filteredModules = formattedModules.filter(item => {
+    let filteredModules = formattedModules.filter(item => {
         const matchName = !filterName || item.name === filterName;
         const matchType = !filterItemType || item.itemType === filterItemType;
         const matchLocation = !filterLocation || item.locations.includes(filterLocation);
         return matchName && matchType && matchLocation;
     });
+
+    if (sortColumn && sortDirection !== 'none') {
+        filteredModules = [...filteredModules].sort((a, b) => {
+            if (allColumns.indexOf(sortColumn) > 13) {
+                const loc = sortColumn;
+                const aHas = a.locations.includes(loc) ? 1 : 0;
+                const bHas = b.locations.includes(loc) ? 1 : 0;
+                return sortDirection === 'asc' ? aHas - bHas : bHas - aHas;
+            }
+            const colKeyMap = [
+                'name', 'itemType', 'laserPowerMod', 'resistance', 'instability', 'optimalChargeRate', 'optimalChargeWindow',
+                'inertMaterials', 'overchargeRate', 'clustering', 'shatterDamage', 'extractionPowerMod', 'uses', 'duration'
+            ];
+            const idx = allColumns.indexOf(sortColumn);
+            const key = colKeyMap[idx] as keyof ModuleGadget || sortColumn;
+            return compareValues(a[key], b[key], sortDirection as 'asc' | 'desc');
+        });
+    } else if (sortDirection === 'none' && initialOrder.length > 0) {
+        filteredModules = initialOrder.filter(item => {
+            const matchName = !filterName || item.name === filterName;
+            const matchType = !filterItemType || item.itemType === filterItemType;
+            const matchLocation = !filterLocation || item.locations.includes(filterLocation);
+            return matchName && matchType && matchLocation;
+        });
+    }
 
 
 
@@ -221,31 +267,49 @@ export default function ModulesGadgetsPage() {
                                     <table className="w-full table-auto border-collapse text-left">
                                         <thead>
                                             <tr className="bg-slate-900/80">
-                                                {allColumns.map((col, index) =>
-                                                    index === 0 ? (
+                                                {allColumns.map((col, index) => {
+                                                    const isSorted = sortColumn === col;
+                                                    return (
                                                         <th
                                                             key={index}
-                                                            className="px-6 py-4 text-cyan-300 font-semibold text-xs md:text-sm border border-slate-700 bg-slate-900 sticky left-0 z-10"
-                                                            style={{ minWidth: '10rem', maxWidth: '16rem', width: '10rem' }}
-                                                            suppressHydrationWarning
-                                                        >
-                                                            {col}
-                                                        </th>
-                                                    ) : (
-                                                        <th
-                                                            key={index}
-                                                            className="px-6 py-4 text-cyan-300 font-semibold md:text-sm border border-slate-700 bg-slate-900 text-center"
-                                                            style={{
-                                                                minWidth: index > 13 ? '12rem' : '8rem',
-                                                                width: index > 13 ? '12rem' : '8rem',
-                                                                fontSize: '0.65rem'
+                                                            className={
+                                                                index === 0
+                                                                    ? "px-6 py-4 text-cyan-300 font-semibold text-xs md:text-sm border border-slate-700 bg-slate-900 sticky left-0 z-10 cursor-pointer select-none"
+                                                                    : "px-6 py-4 text-cyan-300 font-semibold md:text-sm border border-slate-700 bg-slate-900 text-center cursor-pointer select-none"
+                                                            }
+                                                            style={
+                                                                index === 0
+                                                                    ? { minWidth: '10rem', maxWidth: '16rem', width: '10rem' }
+                                                                    : {
+                                                                        minWidth: index > 13 ? '12rem' : '8rem',
+                                                                        width: index > 13 ? '12rem' : '8rem',
+                                                                        fontSize: '0.65rem'
+                                                                    }
+                                                            }
+                                                            onClick={() => {
+                                                                if (sortColumn !== col) {
+                                                                    setSortColumn(col);
+                                                                    setSortDirection('asc');
+                                                                } else if (sortDirection === 'asc') {
+                                                                    setSortDirection('desc');
+                                                                } else if (sortDirection === 'desc') {
+                                                                    setSortDirection('none');
+                                                                    setSortColumn("");
+                                                                } else {
+                                                                    setSortDirection('asc');
+                                                                }
                                                             }}
                                                             suppressHydrationWarning
                                                         >
-                                                            {col}
+                                                            <span className="flex items-center gap-1 justify-center">
+                                                                {col}
+                                                                {isSorted && sortDirection !== 'none' && (
+                                                                    sortDirection === 'asc' ? <ChevronUp className="inline w-4 h-4 text-cyan-400" /> : <ChevronDown className="inline w-4 h-4 text-cyan-400" />
+                                                                )}
+                                                            </span>
                                                         </th>
-                                                    )
-                                                )}
+                                                    );
+                                                })}
                                             </tr>
                                         </thead>
                                         <tbody>

@@ -7,5 +7,7 @@ export interface Mineral {
     name: string;
     secondary: string;
     type: MineralType;
+    foundOneRock: boolean;
+    radarValue: number;
 }
 
