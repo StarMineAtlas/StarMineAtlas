@@ -62,7 +62,13 @@
   },
   "workOrder": {
     "title": "Planning de minage",
-    "description": "Gérez et suivez vos sessions de minage efficacement. Gardez un aperçu du raffinage, de vos minerais et de vos ventes. Partagez vos gains entre amis et calculez vos profits en temps réel pour optimiser vos opérations minières."
+    "description": "Gérez et suivez vos sessions de minage efficacement. Gardez un aperçu du raffinage, de vos minerais et de vos ventes. Partagez vos gains entre amis et calculez vos profits en temps réel pour optimiser vos opérations minières.",
+    "refinerySection": {
+      "title": "Minerais / Raffinage"
+    },
+    "sellingSection": {
+      "title": "Vente / Profit"
+    }
   },
   "loadout": {
     "title": "Calculateur de Loadout",

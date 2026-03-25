@@ -62,7 +62,13 @@
   },
   "workOrder": {
     "title": "Work Order",
-    "description": "Manage and track your mining sessions effectively. Keep an overview of your refining, minerals, and sales. Share your gains with friends and calculate your profits in real-time to optimize your mining operations."
+    "description": "Manage and track your mining sessions effectively. Keep an overview of your refining, minerals, and sales. Share your gains with friends and calculate your profits in real-time to optimize your mining operations.",
+    "refinerySection": {
+      "title": "Ores / Refining"
+    },
+    "sellingSection": {
+      "title": "Selling / Profit"
+    }
   },
   "loadout": {
     "title": "Loadout Calculator",

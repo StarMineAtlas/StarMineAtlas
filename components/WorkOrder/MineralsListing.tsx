@@ -1,0 +1,217 @@
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"
+import { Mineral, MineralToSell } from "@/models/Mineral"
+import { use, useEffect, useState } from "react"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { MineralType } from "@/models/Mineral"
+import { Trash, PlusCircle } from "lucide-react"
+import { Button } from "@/components/ui/button"
+
+interface MineralsListingProps {
+    mineralsList?: MineralToSell[]
+    updateMineralsList?: (minerals: MineralToSell[]) => void
+}
+
+const getTypeColor = (type: MineralType | null) => {
+    switch (type) {
+        case MineralType.FPS:
+            return "text-purple-400"
+        case MineralType.SHIP:
+            return "text-blue-400"
+        default:
+            return "text-cyan-400"
+    }
+}
+
+export default function MineralsListing({ mineralsList: initialMineralsList = [], updateMineralsList }: MineralsListingProps) {
+
+    const [minerals, setMinerals] = useState<Mineral[]>([])
+
+    const [mineralsList, setMineralsList] = useState<MineralToSell[]>(initialMineralsList)
+
+    const [mineralsByType, setMineralsByType] = useState<{ [key: string]: Mineral[] }>({})
+
+    useEffect(() => {
+        fetch(API_BASE_URL + API_ENDPOINTS.minerals)
+            .then(response => response.json())
+            .then(data => setMinerals(data))
+    }, [])
+
+    const handleAddMineral = (mineral: Mineral) => {
+        if (mineralsList.length >= 20) return
+        const mineralToSell: MineralToSell = {
+            ...mineral,
+            quantity: 0,
+            yield: 0,
+            quality: 0,
+        }
+        setMineralsList(prevList => [...prevList, mineralToSell])
+    }
+
+    useEffect(() => {
+        const grouped = minerals.reduce<{ [key: string]: Mineral[] }>((acc, m) => {
+            if (!acc[m.type]) acc[m.type] = [];
+            acc[m.type].push(m);
+            return acc;
+        }, {});
+        setMineralsByType(grouped)
+    }, [minerals])
+
+    useEffect(() => {
+        if (updateMineralsList) updateMineralsList(mineralsList)
+    }, [mineralsList, updateMineralsList])
+
+    const handleRemoveMineral = (index: number) => {
+        setMineralsList(prevList => prevList.filter((_, i) => i !== index))
+    }
+
+    const handleCleanAll = () => {
+        setMineralsList([])
+    }
+
+    const handleSelectMineral = (index: number, mineral: Mineral) => {
+        setMineralsList(prevList => prevList.map((m, i) => i === index ? { ...m, ...mineral } : m))
+    }
+
+    const handleMineralQualityChange = (index: number, quality: number) => {
+        if (quality < 0) quality = 0
+        if (quality > 1000) quality = 1000
+        setMineralsList(prevList => prevList.map((m, i) => i === index ? { ...m, quality } : m))
+    }
+
+    const handleMineralQuantityChange = (index: number, quantity: number) => {
+        if (quantity < 0) quantity = 0
+        if (quantity > 999999) quantity = 999999
+        setMineralsList(prevList => prevList.map((m, i) => i === index ? { ...m, quantity, yield: quantity } : m))
+    }
+
+    return (
+        <div className="flex flex-col gap-4">
+            <div className={`flex justify-between ${mineralsList.length >= 20 ? "flex-row-reverse" : "flex-row"}`}>
+                {mineralsList.length < 20 && (
+                    <Button
+                        variant="default"
+                        className="self-start bg-cyan-400 text-white shadow-lg hover:bg-cyan-500 hover:cursor-pointer transition-all flex items-center gap-2 px-6 py-3 text-base font-semibold rounded-lg"
+                        onClick={() => handleAddMineral(minerals[0])}
+                    >
+                        <PlusCircle className="w-5 h-5" />
+                        Ajouter un minerai
+                    </Button>
+                )}
+                {mineralsList.length > 0 && (
+                    <Button
+                        variant="default"
+                        className="self-start bg-red-500 text-white shadow-lg hover:bg-red-600 hover:cursor-pointer transition-all flex items-center gap-2 px-6 py-3 text-base font-semibold rounded-lg"
+                        onClick={handleCleanAll}
+                    >
+                        <Trash className="w-5 h-5" />
+                        Clean All
+                    </Button>
+                )}
+            </div>
+
+            {mineralsList.map((mineral, index) => {
+                // Regroupement par type pour le selecteur
+
+
+                return (
+                    <div
+                        key={index}
+                        className="flex items-end flex-wrap relative gap-4 p-4 border border-slate-800 rounded-lg bg-slate-900/70 shadow-md"
+                    >
+                        {/* Sélecteur de minerai (design MineralFilter) */}
+                        <div className="flex flex-col items-start w-3/4 lg:w-3/12 xl:w-4/12">
+                            <label className="text-xs text-slate-400 mb-1" htmlFor={`mineral-${index}`}>Minerai</label>
+                            <Select
+                                value={mineral.name}
+                                onValueChange={value => {
+                                    const selected = minerals.find(m => m.name === value)
+                                    if (!selected) return
+                                    handleSelectMineral(index, selected)
+                                }}
+                            >
+                                <SelectTrigger className="w-full border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
+                                    <SelectValue placeholder="Minerai" />
+                                </SelectTrigger>
+                                <SelectContent className="border-slate-800 bg-slate-900">
+                                    {Object.entries(mineralsByType).map(([type, mineralsList]) => (
+                                        <div key={type}>
+                                            <div className={`px-2 py-1 text-xs font-semibold uppercase select-none ${getTypeColor(type as MineralType)}`}>
+                                                {type}
+                                            </div>
+                                            {mineralsList.map((m) => (
+                                                <SelectItem
+                                                    key={m.name}
+                                                    value={m.name}
+                                                    className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
+                                                >
+                                                    {m.name}
+                                                </SelectItem>
+                                            ))}
+                                        </div>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {/* Supprimer le minéral - mobile*/}
+                        <div className="flex lg:hidden justify-end items-end self-center absolute top-4 right-4 w-6">
+                            <Trash className="text-red-500 hover:text-red-600 hover:cursor-pointer" onClick={() => handleRemoveMineral(index)}></Trash>
+                        </div>
+
+                        {/* Input qualité */}
+                        <div className="flex flex-col items-start w-1/4 lg:w-2/12">
+                            <label className="text-xs text-slate-400 mb-1" htmlFor={`quality-${index}`}>Qualité</label>
+                            <input
+                                id={`quality-${index}`}
+                                type="number"
+                                min={0}
+                                max={100}
+                                className="w-full px-2 py-1 rounded bg-slate-800 text-slate-50 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
+                                value={mineral.quality}
+                                onChange={e => {
+                                    const value = Number(e.target.value)
+                                    handleMineralQualityChange(index, value)
+                                }}
+                            />
+                        </div>
+
+                        {/* Input quantité */}
+                        <div className="flex flex-col items-start w-1/4 lg:w-2/12">
+                            <label className="text-xs text-slate-400 mb-1" htmlFor={`quantity-${index}`}>Quantité (mSCU)</label>
+                            <input
+                                id={`quantity-${index}`}
+                                type="number"
+                                min={0}
+                                className="w-full px-2 py-1 rounded bg-slate-800 text-slate-50 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
+                                value={mineral.quantity}
+                                onChange={e => {
+                                    const value = Number(e.target.value)
+                                    handleMineralQuantityChange(index, value)
+                                }}
+                            />
+                        </div>
+
+                        {/* Affichage du yield */}
+                        <div className="flex flex-col items-start w-1/4 lg:w-2/12">
+                            <span className="text-xs text-slate-400 mb-1">Yield (mSCU)</span>
+                            <span className="px-3 py-1 w-full rounded bg-cyan-600/20 text-cyan-400 font-semibold border border-cyan-700">
+                                {mineral.yield}
+                            </span>
+                        </div>
+
+                        {/* Supprimer le minéral - desktop */}
+                        <div className="hidden lg:flex justify-center items-center self-center w-6">
+                            <Trash className="text-red-500 hover:text-red-600 hover:cursor-pointer" onClick={() => handleRemoveMineral(index)}></Trash>
+                        </div>
+                    </div>
+                )
+            })}
+        </div>
+    )
+}
