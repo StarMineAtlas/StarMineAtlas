@@ -11,6 +11,7 @@ import { LoadoutBlocConfig, ModuleGadgetWithActive, ShipConfiguration } from "@/
 import { MiningLaserWithPrices } from "@/models/MiningLaser";
 import { ModuleGadgetWithPrices } from "@/models/ModuleGadget";
 import { FC, Fragment, useEffect, useMemo, useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useTranslation } from "react-i18next";
 
 import { Switch } from "@/components/ui/switch";
@@ -59,6 +60,8 @@ export const LoadoutBloc: FC<LoadoutBlocProps> = ({
     onChange,
 }) => {
     const { t } = useTranslation();
+
+    const isMobile = useIsMobile();
 
     const [sortedSizes, setSortedSizes] = useState<string[]>([]);
 
@@ -131,169 +134,211 @@ export const LoadoutBloc: FC<LoadoutBlocProps> = ({
                 {bloc && (
                     <>
                         {/* Laser */}
-                        <div className="flex items-center w-full gap-2">
-                            <Switch
-                                checked={bloc.isLaserActive}
-                                onCheckedChange={() => handleSwitchLaserChange(index)}
-                                className="mr-2"
-                            />
-                            <Select
-                                value={bloc.miningLaser?.name || ""}
-                                onValueChange={handleLaserChange}
-                                disabled={!shipConfig?.canChangeLasers}
-                            >
-                                <SelectTrigger className="w-full border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
-                                    {/* Display only the name of the selected laser */}
-                                    {bloc.miningLaser ? (
-                                        <span>{bloc.miningLaser.name}</span>
-                                    ) : (
-                                        <SelectValue placeholder={t("loadout.laserPlaceholder") || "Laser"} />
-                                    )}
-                                </SelectTrigger>
-                                <SelectContent className="border-slate-800 bg-slate-900">
-                                    {sortedSizes.map(size => (
-                                        <Fragment key={size}>
-                                            <div className="px-2 py-1 text-xs font-bold text-cyan-300 bg-slate-800/80">{t(`loadout.laserSize.${size}`, { defaultValue: size })}</div>
-                                            {lasersBySize[size].map((laser) => (
-                                                <SelectItem
-                                                    key={laser.name}
-                                                    value={laser.name}
-                                                    className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
-                                                >
-                                                    <div className="flex flex-row items-center text-select-item text-slate-400 gap-4">
-                                                        <div className="font-semibold text-cyan-100 text-select-item w-[100px]">{laser.name}</div>
-                                                        <div className="flex gap-1 w-[40px]">
-                                                            <Layers className="text-cyan-400"></Layers> {laser.slots ? laser.slots : "0"}
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item`}>{laser.min_power ? laser.min_power : "--"} - {laser.max_power ? laser.max_power : "--"}</span>
-                                                            <span className={`text-select-item text-slate-500`}>PWR</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item`}>{laser.optimal_range ? laser.optimal_range : "--"}</span>
-                                                            <span className={`text-select-item text-slate-500`}>OPT RNG</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item`}>{laser.max_range ? laser.max_range : "--"}</span>
-                                                            <span className={`text-select-item text-slate-500`}>MAX RNG</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item ${getColorForValue(laser.resistance, true)}`}>{laser.resistance ? laser.resistance : "--"}</span>
-                                                            <span className={`text-select-item ${getColorForValue(laser.resistance, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(laser.resistance, true)}`}>RESISTANCE</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item ${getColorForValue(laser.instability, true)}`}>{laser.instability ? laser.instability : "--"}</span>
-                                                            <span className={`text-select-item ${getColorForValue(laser.instability, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(laser.instability, true)}`}>INSTABILITY</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item ${getColorForValue(laser.inert_materials, true)}`}>{laser.inert_materials ? laser.inert_materials : "--"}</span>
-                                                            <span className={`text-select-item ${getColorForValue(laser.inert_materials, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(laser.inert_materials, true)}`}>INERT</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item ${getColorForValue(laser.optimal_charge_rate)}`}>{laser.optimal_charge_rate ? laser.optimal_charge_rate : "--"}</span>
-                                                            <span className={`text-select-item ${getColorForValue(laser.optimal_charge_rate) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(laser.optimal_charge_rate)}`}>OPT CHRG RT</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item ${getColorForValue(laser.optimal_charge_window)}`}>{laser.optimal_charge_window ? laser.optimal_charge_window : "--"}</span>
-                                                            <span className={`text-select-item ${getColorForValue(laser.optimal_charge_window) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(laser.optimal_charge_window)}`}>OPT CHRG WIN</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item`}>{laser.extract_power ? laser.extract_power : "--"}</span>
-                                                            <span className={`text-select-item text-slate-500`}>EXTRACT PWR</span>
-                                                        </div>
-                                                    </div>
-                                                </SelectItem>
-                                            ))}
-                                        </Fragment>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                        <div className={isMobile ? "flex flex-col w-full gap-1" : "flex items-center w-full gap-2"}>
+                            <div className={isMobile ? "flex items-center w-full gap-2" : "flex items-center w-full gap-2"}>
+                                <Switch
+                                    checked={bloc.isLaserActive}
+                                    onCheckedChange={() => handleSwitchLaserChange(index)}
+                                    className="mr-2"
+                                />
+                                <Select
+                                    value={bloc.miningLaser?.name || ""}
+                                    onValueChange={handleLaserChange}
+                                    disabled={!shipConfig?.canChangeLasers}
+                                >
+                                    <SelectTrigger className="w-full border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
+                                        {bloc.miningLaser ? (
+                                            <span>{bloc.miningLaser.name}</span>
+                                        ) : (
+                                            <SelectValue placeholder={t("loadout.laserPlaceholder") || "Laser"} />
+                                        )}
+                                    </SelectTrigger>
+                                    <SelectContent className="border-slate-800 bg-slate-900">
+                                        {sortedSizes.map(size => (
+                                            <Fragment key={size}>
+                                                <div className="px-2 py-1 text-xs font-bold text-cyan-300 bg-slate-800/80">{t(`loadout.laserSize.${size}`, { defaultValue: size })}</div>
+                                                {lasersBySize[size].map((laser) => (
+                                                    <SelectItem
+                                                        key={laser.name}
+                                                        value={laser.name}
+                                                        className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
+                                                    >
+                                                        {isMobile ? (
+                                                            <div className="flex flex-col w-full">
+                                                                <div className="flex flex-row items-center gap-2 w-full">
+                                                                    <span className="font-semibold text-cyan-100 text-select-item truncate w-[60px] md:w-[90px]">{laser.name}</span>
+                                                                    <span className="flex gap-1 w-[32px] items-center text-xs"><Layers className="text-cyan-400" />{laser.slots ? laser.slots : "0"}</span>
+                                                                    <span className="text-xs text-slate-400">PWR: {laser.min_power ?? "--"} - {laser.max_power ?? "--"}</span>
+                                                                    <span className="text-xs text-slate-400">OPT: {laser.optimal_range ?? "--"}</span>
+                                                                    <span className="text-xs text-slate-400">MAX: {laser.max_range ?? "--"}</span>
+                                                                </div>
+                                                                <div className="flex flex-wrap gap-x-2 gap-y-0.5 text-[11px] text-slate-400 pl-2 pt-0.5">
+                                                                    <span>RES: <span className={getColorForValue(laser.resistance, true)}>{laser.resistance ?? "--"}</span></span>
+                                                                    <span>INST: <span className={getColorForValue(laser.instability, true)}>{laser.instability ?? "--"}</span></span>
+                                                                    <span>INERT: <span className={getColorForValue(laser.inert_materials, true)}>{laser.inert_materials ?? "--"}</span></span>
+                                                                    <span>CHG RT: <span className={getColorForValue(laser.optimal_charge_rate)}>{laser.optimal_charge_rate ?? "--"}</span></span>
+                                                                    <span>CHG WIN: <span className={getColorForValue(laser.optimal_charge_window)}>{laser.optimal_charge_window ?? "--"}</span></span>
+                                                                    <span>EXTR: {laser.extract_power ?? "--"}</span>
+                                                                </div>
+                                                            </div>
+                                                        ) : (
+                                                            <div className="flex flex-row items-center text-select-item text-slate-400 gap-4">
+                                                                <div className="font-semibold text-cyan-100 text-select-item w-[100px]">{laser.name}</div>
+                                                                <div className="flex gap-1 w-[40px]">
+                                                                    <Layers className="text-cyan-400"></Layers> {laser.slots ? laser.slots : "0"}
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item`}>{laser.min_power ? laser.min_power : "--"} - {laser.max_power ? laser.max_power : "--"}</span>
+                                                                    <span className={`text-select-item text-slate-500`}>PWR</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item`}>{laser.optimal_range ? laser.optimal_range : "--"}</span>
+                                                                    <span className={`text-select-item text-slate-500`}>OPT RNG</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item`}>{laser.max_range ? laser.max_range : "--"}</span>
+                                                                    <span className={`text-select-item text-slate-500`}>MAX RNG</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item ${getColorForValue(laser.resistance, true)}`}>{laser.resistance ? laser.resistance : "--"}</span>
+                                                                    <span className={`text-select-item ${getColorForValue(laser.resistance, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(laser.resistance, true)}`}>RESISTANCE</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item ${getColorForValue(laser.instability, true)}`}>{laser.instability ? laser.instability : "--"}</span>
+                                                                    <span className={`text-select-item ${getColorForValue(laser.instability, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(laser.instability, true)}`}>INSTABILITY</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item ${getColorForValue(laser.inert_materials, true)}`}>{laser.inert_materials ? laser.inert_materials : "--"}</span>
+                                                                    <span className={`text-select-item ${getColorForValue(laser.inert_materials, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(laser.inert_materials, true)}`}>INERT</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item ${getColorForValue(laser.optimal_charge_rate)}`}>{laser.optimal_charge_rate ? laser.optimal_charge_rate : "--"}</span>
+                                                                    <span className={`text-select-item ${getColorForValue(laser.optimal_charge_rate) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(laser.optimal_charge_rate)}`}>OPT CHRG RT</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item ${getColorForValue(laser.optimal_charge_window)}`}>{laser.optimal_charge_window ? laser.optimal_charge_window : "--"}</span>
+                                                                    <span className={`text-select-item ${getColorForValue(laser.optimal_charge_window) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(laser.optimal_charge_window)}`}>OPT CHRG WIN</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item`}>{laser.extract_power ? laser.extract_power : "--"}</span>
+                                                                    <span className={`text-select-item text-slate-500`}>EXTRACT PWR</span>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </SelectItem>
+                                                ))}
+                                            </Fragment>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </div>
                         {/* Modules */}
                         <div className="flex flex-col items-center w-full gap-2">
                             {Array.from({ length: bloc.modules.length }).map((_, idx) => (
-                                <div className="flex items-center w-full gap-2" key={idx}>
-                                    {bloc.modules[idx]?.itemType === "Active" && (
-                                        <Switch
-                                            checked={bloc.modules[idx]?.isActive || false}
-                                            onCheckedChange={() => handleSwitchModuleChange(idx)}
-                                            className="mr-2"
-                                        />
-                                    )}
-                                    <Select
-                                        value={bloc.modules[idx]?.name || ""}
-                                        onValueChange={(value) => handleModuleChange(value, idx)}
-                                    >
-                                        <SelectTrigger className="w-full border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
-                                            {/* Display only the name of the selected module */}
-                                            {bloc.modules[idx] && bloc.modules[idx].name ? (
-                                                <span>{bloc.modules[idx].name}</span>
-                                            ) : (
-                                                <SelectValue placeholder={t("loadout.modulePlaceholder") || "Module"} />
-                                            )}
-                                        </SelectTrigger>
-                                        <SelectContent className="border-slate-800 bg-slate-900">
-                                            {modules.map((module) => (
-                                                <SelectItem
-                                                    key={module.name}
-                                                    value={module.name}
-                                                    className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
-                                                >
-                                                    <div className="flex flex-row items-center text-select-item text-slate-400 gap-4">
-                                                        <div className="font-semibold text-cyan-100 text-select-item w-[60px]">{module.name}</div>
-                                                        <div className="font-semibold text-select-item w-[60px]">
-                                                            <span className={getTypeClass(module.itemType)}>{module.itemType}</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item ${getColorForValue(module.laserPowerMod)}`}>{module.laserPowerMod ? module.laserPowerMod : "--"}</span>
-                                                            <span className={`text-select-item ${getColorForValue(module.laserPowerMod) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.laserPowerMod)}`}>LASER PWR MOD</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item ${getColorForValue(module.resistance, true)}`}>{module.resistance ? module.resistance : "--"}</span>
-                                                            <span className={`text-select-item ${getColorForValue(module.resistance, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.resistance, true)}`}>RESISTANCE</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item ${getColorForValue(module.instability, true)}`}>{module.instability ? module.instability : "--"}</span>
-                                                            <span className={`text-select-item ${getColorForValue(module.instability, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.instability, true)}`}>INSTABILITY</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item ${getColorForValue(module.optimalChargeRate)}`}>{module.optimalChargeRate ? module.optimalChargeRate : "--"}</span>
-                                                            <span className={`text-select-item ${getColorForValue(module.optimalChargeRate) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.optimalChargeRate)}`}>OPT CHRG RT</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item ${getColorForValue(module.optimalChargeWindow)}`}>{module.optimalChargeWindow ? module.optimalChargeWindow : "--"}</span>
-                                                            <span className={`text-select-item ${getColorForValue(module.optimalChargeWindow) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.optimalChargeWindow)}`}>OPT CHRG WIN</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item ${getColorForValue(module.inertMaterials, true)}`}>{module.inertMaterials ? module.inertMaterials : "--"}</span>
-                                                            <span className={`text-select-item ${getColorForValue(module.inertMaterials, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.inertMaterials, true)}`}>INERT</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item ${getColorForValue(module.overchargeRate, true)}`}>{module.overchargeRate ? module.overchargeRate : "--"}</span>
-                                                            <span className={`text-select-item ${getColorForValue(module.overchargeRate, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.overchargeRate, true)}`}>OVERCHARGE</span>
-                                                        </div>
-                                                        {/* <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item ${getColorForValue(module.clustering, true)}`}>{module.clustering ? module.clustering : "--"}</span>
-                                                            <span className={`text-select-item ${getColorForValue(module.clustering, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.clustering, true)}`}>CLUSTERING</span>
-                                                        </div> */}
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item ${getColorForValue(module.shatterDamage, true)}`}>{module.shatterDamage ? module.shatterDamage : "--"}</span>
-                                                            <span className={`text-select-item ${getColorForValue(module.shatterDamage, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.shatterDamage, true)}`}>SHATTER DMG</span>
-                                                        </div>
-                                                        <div className="flex flex-col items-center">
-                                                            <span className={`text-select-item ${getColorForValue(module.extractionPowerMod, true)}`}>{module.extractionPowerMod ? module.extractionPowerMod : "--"}</span>
-                                                            <span className={`text-select-item ${getColorForValue(module.extractionPowerMod, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.extractionPowerMod, true)}`}>EXTRACT PWR MOD</span>
-                                                        </div>
-                                                    </div>
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    {
-                                        bloc.modules[idx] && bloc.modules[idx].name && (
-                                            <Trash className="hover:cursor-pointer text-red-500" onClick={() => handleRemoveModule(idx)}></Trash>
-                                        )
-                                    }
+                                <div className={isMobile ? "flex flex-col w-full gap-1" : "flex items-center w-full gap-2"} key={idx}>
+                                    <div className={isMobile ? "flex items-center w-full gap-2" : "flex items-center w-full gap-2"}>
+                                        {bloc.modules[idx]?.itemType === "Active" && (
+                                            <Switch
+                                                checked={bloc.modules[idx]?.isActive || false}
+                                                onCheckedChange={() => handleSwitchModuleChange(idx)}
+                                                className="mr-2"
+                                            />
+                                        )}
+                                        <Select
+                                            value={bloc.modules[idx]?.name || ""}
+                                            onValueChange={(value) => handleModuleChange(value, idx)}
+                                        >
+                                            <SelectTrigger className="w-full border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
+                                                {bloc.modules[idx] && bloc.modules[idx].name ? (
+                                                    <span>{bloc.modules[idx].name}</span>
+                                                ) : (
+                                                    <SelectValue placeholder={t("loadout.modulePlaceholder") || "Module"} />
+                                                )}
+                                            </SelectTrigger>
+                                            <SelectContent className="border-slate-800 bg-slate-900">
+                                                {modules.map((module) => (
+                                                    <SelectItem
+                                                        key={module.name}
+                                                        value={module.name}
+                                                        className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
+                                                    >
+                                                        {isMobile ? (
+                                                            <div className="flex flex-col w-full">
+                                                                <div className="flex flex-row items-center gap-2 w-full">
+                                                                    <span className="font-semibold text-cyan-100 text-select-item truncate w-[60px]">{module.name}</span>
+                                                                    <span className={"font-semibold text-select-item w-[60px] " + getTypeClass(module.itemType)}>{module.itemType}</span>
+                                                                    <span className="text-xs text-slate-400">PWR: <span className={getColorForValue(module.laserPowerMod)}>{module.laserPowerMod ?? "--"}</span></span>
+                                                                    <span className="text-xs text-slate-400">RES: <span className={getColorForValue(module.resistance, true)}>{module.resistance ?? "--"}</span></span>
+                                                                    <span className="text-xs text-slate-400">INST: <span className={getColorForValue(module.instability, true)}>{module.instability ?? "--"}</span></span>
+                                                                </div>
+                                                                <div className="flex flex-wrap gap-x-2 gap-y-0.5 text-[11px] text-slate-400 pl-2 pt-0.5">
+                                                                    <span>OPT RT: <span className={getColorForValue(module.optimalChargeRate)}>{module.optimalChargeRate ?? "--"}</span></span>
+                                                                    <span>OPT WIN: <span className={getColorForValue(module.optimalChargeWindow)}>{module.optimalChargeWindow ?? "--"}</span></span>
+                                                                    <span>INERT: <span className={getColorForValue(module.inertMaterials, true)}>{module.inertMaterials ?? "--"}</span></span>
+                                                                    <span>OVER: <span className={getColorForValue(module.overchargeRate, true)}>{module.overchargeRate ?? "--"}</span></span>
+                                                                    <span>SHAT: <span className={getColorForValue(module.shatterDamage, true)}>{module.shatterDamage ?? "--"}</span></span>
+                                                                    <span>EXTR: <span className={getColorForValue(module.extractionPowerMod, true)}>{module.extractionPowerMod ?? "--"}</span></span>
+                                                                </div>
+                                                            </div>
+                                                        ) : (
+                                                            <div className="flex flex-row items-center text-select-item text-slate-400 gap-4">
+                                                                <div className="font-semibold text-cyan-100 text-select-item w-[60px]">{module.name}</div>
+                                                                <div className="font-semibold text-select-item w-[60px]">
+                                                                    <span className={getTypeClass(module.itemType)}>{module.itemType}</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item ${getColorForValue(module.laserPowerMod)}`}>{module.laserPowerMod ? module.laserPowerMod : "--"}</span>
+                                                                    <span className={`text-select-item ${getColorForValue(module.laserPowerMod) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.laserPowerMod)}`}>LASER PWR MOD</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item ${getColorForValue(module.resistance, true)}`}>{module.resistance ? module.resistance : "--"}</span>
+                                                                    <span className={`text-select-item ${getColorForValue(module.resistance, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.resistance, true)}`}>RESISTANCE</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item ${getColorForValue(module.instability, true)}`}>{module.instability ? module.instability : "--"}</span>
+                                                                    <span className={`text-select-item ${getColorForValue(module.instability, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.instability, true)}`}>INSTABILITY</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item ${getColorForValue(module.optimalChargeRate)}`}>{module.optimalChargeRate ? module.optimalChargeRate : "--"}</span>
+                                                                    <span className={`text-select-item ${getColorForValue(module.optimalChargeRate) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.optimalChargeRate)}`}>OPT CHRG RT</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item ${getColorForValue(module.optimalChargeWindow)}`}>{module.optimalChargeWindow ? module.optimalChargeWindow : "--"}</span>
+                                                                    <span className={`text-select-item ${getColorForValue(module.optimalChargeWindow) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.optimalChargeWindow)}`}>OPT CHRG WIN</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item ${getColorForValue(module.inertMaterials, true)}`}>{module.inertMaterials ? module.inertMaterials : "--"}</span>
+                                                                    <span className={`text-select-item ${getColorForValue(module.inertMaterials, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.inertMaterials, true)}`}>INERT</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item ${getColorForValue(module.overchargeRate, true)}`}>{module.overchargeRate ? module.overchargeRate : "--"}</span>
+                                                                    <span className={`text-select-item ${getColorForValue(module.overchargeRate, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.overchargeRate, true)}`}>OVERCHARGE</span>
+                                                                </div>
+                                                                {/* <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item ${getColorForValue(module.clustering, true)}`}>{module.clustering ? module.clustering : "--"}</span>
+                                                                    <span className={`text-select-item ${getColorForValue(module.clustering, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.clustering, true)}`}>CLUSTERING</span>
+                                                                </div> */}
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item ${getColorForValue(module.shatterDamage, true)}`}>{module.shatterDamage ? module.shatterDamage : "--"}</span>
+                                                                    <span className={`text-select-item ${getColorForValue(module.shatterDamage, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.shatterDamage, true)}`}>SHATTER DMG</span>
+                                                                </div>
+                                                                <div className="flex flex-col items-center">
+                                                                    <span className={`text-select-item ${getColorForValue(module.extractionPowerMod, true)}`}>{module.extractionPowerMod ? module.extractionPowerMod : "--"}</span>
+                                                                    <span className={`text-select-item ${getColorForValue(module.extractionPowerMod, true) === 'text-gray-400' ? 'text-slate-500' : getColorForValue(module.extractionPowerMod, true)}`}>EXTRACT PWR MOD</span>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        {
+                                            bloc.modules[idx] && bloc.modules[idx].name && (
+                                                <Trash className="hover:cursor-pointer text-red-500" onClick={() => handleRemoveModule(idx)}></Trash>
+                                            )
+                                        }
+                                    </div>
                                 </div>
                             ))}
                         </div>
