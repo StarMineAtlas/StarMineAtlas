@@ -11,6 +11,7 @@ import {
 import { MineralType } from "@/models/Mineral"
 import { Trash, PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useTranslation } from "react-i18next"
 
 interface MineralsListingProps {
     mineralsList?: MineralToSell[]
@@ -29,6 +30,7 @@ const getTypeColor = (type: MineralType | null) => {
 }
 
 export default function MineralsListing({ mineralsList: initialMineralsList = [], updateMineralsList }: MineralsListingProps) {
+    const { t } = useTranslation()
 
     const [minerals, setMinerals] = useState<Mineral[]>([])
 
@@ -100,7 +102,7 @@ export default function MineralsListing({ mineralsList: initialMineralsList = []
                         onClick={() => handleAddMineral(minerals[0])}
                     >
                         <PlusCircle className="w-5 h-5" />
-                        Ajouter un minerai
+                        {t("workOrder.refinerySection.mineralsListing.addMineral")}
                     </Button>
                 )}
                 {mineralsList.length > 0 && (
@@ -110,7 +112,7 @@ export default function MineralsListing({ mineralsList: initialMineralsList = []
                         onClick={handleCleanAll}
                     >
                         <Trash className="w-5 h-5" />
-                        Clean All
+                        {t("workOrder.refinerySection.mineralsListing.cleanAll")}
                     </Button>
                 )}
             </div>
@@ -126,7 +128,7 @@ export default function MineralsListing({ mineralsList: initialMineralsList = []
                     >
                         {/* Sélecteur de minerai (design MineralFilter) */}
                         <div className="flex flex-col items-start w-3/4 lg:w-3/12 xl:w-4/12">
-                            <label className="text-xs text-slate-400 mb-1" htmlFor={`mineral-${index}`}>Minerai</label>
+                            <label className="text-xs text-slate-400 mb-1" htmlFor={`mineral-${index}`}>{t("workOrder.refinerySection.mineralsListing.mineral")}</label>
                             <Select
                                 value={mineral.name}
                                 onValueChange={value => {
@@ -136,7 +138,7 @@ export default function MineralsListing({ mineralsList: initialMineralsList = []
                                 }}
                             >
                                 <SelectTrigger className="w-full border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
-                                    <SelectValue placeholder="Minerai" />
+                                    <SelectValue placeholder={t("workOrder.refinerySection.mineralsListing.mineral")} />
                                 </SelectTrigger>
                                 <SelectContent className="border-slate-800 bg-slate-900">
                                     {Object.entries(mineralsByType).map(([type, mineralsList]) => (
@@ -166,7 +168,7 @@ export default function MineralsListing({ mineralsList: initialMineralsList = []
 
                         {/* Input qualité */}
                         <div className="flex flex-col items-start w-1/4 lg:w-2/12">
-                            <label className="text-xs text-slate-400 mb-1" htmlFor={`quality-${index}`}>Qualité</label>
+                            <label className="text-xs text-slate-400 mb-1" htmlFor={`quality-${index}`}>{t("workOrder.refinerySection.mineralsListing.quality")}</label>
                             <input
                                 id={`quality-${index}`}
                                 type="number"
@@ -183,7 +185,7 @@ export default function MineralsListing({ mineralsList: initialMineralsList = []
 
                         {/* Input quantité */}
                         <div className="flex flex-col items-start w-1/4 lg:w-2/12">
-                            <label className="text-xs text-slate-400 mb-1" htmlFor={`quantity-${index}`}>Quantité (mSCU)</label>
+                            <label className="text-xs text-slate-400 mb-1" htmlFor={`quantity-${index}`}>{t("workOrder.refinerySection.mineralsListing.quantity")}</label>
                             <input
                                 id={`quantity-${index}`}
                                 type="number"
@@ -199,7 +201,7 @@ export default function MineralsListing({ mineralsList: initialMineralsList = []
 
                         {/* Affichage du yield */}
                         <div className="flex flex-col items-start w-1/4 lg:w-2/12">
-                            <span className="text-xs text-slate-400 mb-1">Yield (mSCU)</span>
+                            <span className="text-xs text-slate-400 mb-1">{t("workOrder.refinerySection.mineralsListing.yield")}</span>
                             <span className="px-3 py-1 w-full rounded bg-cyan-600/20 text-cyan-400 font-semibold border border-cyan-700">
                                 {mineral.yield}
                             </span>
