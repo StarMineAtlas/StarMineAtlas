@@ -64,7 +64,15 @@
     "title": "Planning de minage",
     "description": "Gérez et suivez vos sessions de minage efficacement. Gardez un aperçu du raffinage, de vos minerais et de vos ventes. Partagez vos gains entre amis et calculez vos profits en temps réel pour optimiser vos opérations minières.",
     "refinerySection": {
-      "title": "Minerais / Raffinage"
+      "title": "Minerais / Raffinage",
+      "mineralsListing": {
+        "addMineral": "Ajouter un minerai",
+        "cleanAll": "Tout supprimer",
+        "mineral": "Minerai",
+        "quantity": "Quantité (mSCU)",
+        "quality": "Qualité",
+        "yield": "Rendement (mSCU)"
+      }
     },
     "sellingSection": {
       "title": "Vente / Profit"

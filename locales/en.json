@@ -64,7 +64,15 @@
     "title": "Work Order",
     "description": "Manage and track your mining sessions effectively. Keep an overview of your refining, minerals, and sales. Share your gains with friends and calculate your profits in real-time to optimize your mining operations.",
     "refinerySection": {
-      "title": "Ores / Refining"
+      "title": "Ores / Refining",
+      "mineralsListing": {
+        "addMineral": "Add Mineral",
+        "cleanAll": "Clean All",
+        "mineral": "Mineral",
+        "quantity": "Quantity (mSCU)",
+        "quality": "Quality",
+        "yield": "Yield (mSCU)"
+      }
     },
     "sellingSection": {
       "title": "Selling / Profit"
