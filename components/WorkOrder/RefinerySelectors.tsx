@@ -1,7 +1,7 @@
-import { RefineryMethod, RefineryRatingCost, RefineryRatingSpeed, RefineryRatingYield, RefineryWithLocationAndBonuses, RefineryYield } from "@/models/Refinery"
-import { useEffect, useState } from "react"
-import { useTranslation } from "react-i18next"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
+import { RefineryMethod, RefineryRatingCost, RefineryRatingSpeed, RefineryRatingYield, RefineryWithLocationAndBonuses, RefineryYield } from "@/models/Refinery";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 interface RefinerySelectorsProps {
     refineryYield: RefineryYield[];
@@ -64,10 +64,6 @@ export default function RefinerySelectors({ refineryYield, refineryMethod, updat
         })
         setUniqueRefinery(uniqueRefineries)
     }, [refineryYield])
-
-    useEffect(() => {
-        console.log("Unique Refineries with Location:", uniqueRefinery)
-    }, [uniqueRefinery])
 
     const handleRefineryChange = (value: string) => {
         const refinery = uniqueRefinery.find(r => r.terminal_name === value)

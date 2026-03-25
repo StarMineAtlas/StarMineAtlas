@@ -77,7 +77,7 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
         if (!updateMineralsList) return
         if (quantity < 0) quantity = 0
         if (quantity > 999999) quantity = 999999
-        updateMineralsList(mineralsList.map((m, i) => i === index ? { ...m, quantity, yield: quantity } : m))
+        updateMineralsList(mineralsList.map((m, i) => i === index ? { ...m, quantity } : m))
     }
 
     return (

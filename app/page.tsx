@@ -79,7 +79,6 @@ export default function Home() {
     fetch(API_BASE_URL + API_ENDPOINTS.minerals)
       .then(res => res.json())
       .then(json => {
-        console.log("Minerals data fetched:", json);
         setMineralsList(json);
       })
 

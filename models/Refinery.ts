@@ -27,6 +27,12 @@ export const RefineryRatingSpeed = {
     3: "refinery.methodTable.speed.high",
 }
 
+export const RefineryMethodsPourcentages = {
+    1: 0.31,
+    2: 0.38,
+    3: 0.45,
+}
+
 export interface RefineryYield {
     id: number;
     id_commodity: number;

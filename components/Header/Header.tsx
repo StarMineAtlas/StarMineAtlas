@@ -64,7 +64,6 @@ export function Header() {
       if (configStr) {
         const config: { showData: string } = JSON.parse(configStr);
         const showDataValue = config.showData.toLowerCase() === "true";
-        console.log("Config loaded, showData:", showDataValue);
         setShowData(showDataValue);
         if (showDataValue) {
           dataLinks.unshift(

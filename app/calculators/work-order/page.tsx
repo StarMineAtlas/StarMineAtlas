@@ -6,7 +6,7 @@ import MineralsListing from "@/components/WorkOrder/MineralsListing"
 import RefinerySelectors from "@/components/WorkOrder/RefinerySelectors"
 import { API_BASE_URL, API_ENDPOINTS, API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
 import { Mineral, MineralToSell } from "@/models/Mineral"
-import { RefineryMethod, RefineryYield } from "@/models/Refinery"
+import { RefineryMethod, RefineryMethodsPourcentages, RefineryWithLocationAndBonuses, RefineryYield } from "@/models/Refinery"
 import { ClipboardList } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -14,14 +14,17 @@ import { useTranslation } from "react-i18next"
 export default function WorkOrderPage() {
   const { t } = useTranslation()
 
-  const [refineryYield, setRefineryYield] = useState<RefineryYield[]>([])
-  const [refineryMethod, setRefineryMethod] = useState<RefineryMethod[]>([])
   const [minerals, setMinerals] = useState<Mineral[]>([])
 
+  const [refineryYield, setRefineryYield] = useState<RefineryYield[]>([])
+  const [refineryMethod, setRefineryMethod] = useState<RefineryMethod[]>([])
+  const [selectedRefinery, setSelectedRefinery] = useState<RefineryWithLocationAndBonuses | null>(null)
+  const [selectedMethod, setSelectedMethod] = useState<RefineryMethod | null>(null)
 
   const [loading, setLoading] = useState(true)
 
   const [mineralsList, setMineralsList] = useState<MineralToSell[]>([])
+  const [needToUpdateMineralsList, setNeedToUpdateMineralsList] = useState(false)
 
   useEffect(() => {
     Promise.all([
@@ -36,6 +39,57 @@ export default function WorkOrderPage() {
         .then(data => setMinerals(data))
     ]).finally(() => setLoading(false))
   }, [])
+
+  useEffect(() => {
+    if (needToUpdateMineralsList) {
+      updateMineralsListYield()
+      setNeedToUpdateMineralsList(false)
+    }
+  }, [needToUpdateMineralsList])
+
+  useEffect(() => {
+    updateMineralsListYield()
+  }, [selectedMethod, selectedRefinery])
+
+  const handleRefineryMethodChange = (method: RefineryMethod | null) => {
+    setSelectedMethod(method)
+  }
+
+  const handleRefineryChange = (refinery: RefineryWithLocationAndBonuses | null) => {
+    setSelectedRefinery(refinery)
+  }
+
+  const handleUpdateMineralsList = (newList: MineralToSell[]) => {
+    setMineralsList(newList)
+    setNeedToUpdateMineralsList(true)
+  }
+
+  const updateMineralsListYield = () => {
+    if (!selectedMethod) {
+      const resetList = mineralsList.map(mineral => ({
+        ...mineral,
+        quantity: mineral.quantity,
+        yield: mineral.quantity
+      }))
+      setMineralsList(resetList)
+      return
+    }
+
+    const newMineralsList = mineralsList.map(mineral => {
+      const bonus = (selectedRefinery?.bonuses.find(b => b.mineral.replace(/\s*\(Raw\)|\s*\(Ore\)|\s*Raw|\s*Ore|\s*Pressurized/gi, "").trim() === mineral.name.replace(/\s*\(Raw\)|\s*\(Ore\)|\s*Raw|\s*Ore|\s*Pressurized/gi, "").trim())?.value || 0) / 100
+      const methodYieldBonus = RefineryMethodsPourcentages[selectedMethod.rating_yield as keyof typeof RefineryMethodsPourcentages] || 0
+      let refinedQuantity = mineral.quantity * methodYieldBonus
+      if (bonus) {
+        refinedQuantity += refinedQuantity * bonus
+      }
+      console.log("Refined Quantity for", mineral.name, ":", refinedQuantity)
+      return {
+        ...mineral,
+        yield: refinedQuantity
+      }
+    })
+    setMineralsList(newMineralsList)
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
@@ -60,12 +114,12 @@ export default function WorkOrderPage() {
               <div className="rounded-xl flex flex-col border border-slate-800 bg-slate-900/50">
                 <h2 className="text-lg text-cyan-400 py-4 border-b w-full border-slate-800" suppressHydrationWarning>{t("workOrder.refinerySection.title")}</h2>
                 <div className="flex flex-col gap-4 p-4">
-                  <MineralsListing minerals={minerals} mineralsList={mineralsList} updateMineralsList={setMineralsList}></MineralsListing>
+                  <MineralsListing minerals={minerals} mineralsList={mineralsList} updateMineralsList={handleUpdateMineralsList}></MineralsListing>
                   <RefinerySelectors
                     refineryYield={refineryYield}
                     refineryMethod={refineryMethod}
-                    updateSelectedRefinery={() => { }}
-                    updateSelectedMethod={() => { }}
+                    updateSelectedRefinery={handleRefineryChange}
+                    updateSelectedMethod={handleRefineryMethodChange}
                   ></RefinerySelectors>
                   <div>
                     TIMER
