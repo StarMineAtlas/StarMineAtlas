@@ -56,3 +56,10 @@ export interface RefineryYield {
     poi_name: string | null;
     terminal_name: string | null;
 }
+
+export interface RefineryWithLocationAndBonuses {
+    terminal_name: string;
+    space_station_name: string;
+    star_system_name: string;
+    bonuses: { mineral: string, value: number }[];
+}

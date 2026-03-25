@@ -72,6 +72,14 @@
         "quantity": "Quantity (mSCU)",
         "quality": "Quality",
         "yield": "Yield (mSCU)"
+      },
+      "refinerySelectors": {
+        "title": "Refining Selectors",
+        "method": "Refining Method",
+        "refinery": "Refinery",
+        "yield": "Yield",
+        "cost": "Cost",
+        "speed": "Speed"
       }
     },
     "sellingSection": {

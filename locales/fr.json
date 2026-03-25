@@ -72,6 +72,14 @@
         "quantity": "Quantité (mSCU)",
         "quality": "Qualité",
         "yield": "Rendement (mSCU)"
+      },
+      "refinerySelectors": {
+        "title": "Sélecteurs de Raffinage",
+        "method": "Méthode de Raffinage",
+        "refinery": "Raffinerie",
+        "yield": "Rendement",
+        "cost": "Coût",
+        "speed": "Vitesse"
       }
     },
     "sellingSection": {

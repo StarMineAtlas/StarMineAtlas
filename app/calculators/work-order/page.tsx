@@ -3,26 +3,38 @@
 import { Header } from "@/components/Header/Header"
 import { Loader } from "@/components/Loader"
 import MineralsListing from "@/components/WorkOrder/MineralsListing"
-import { MineralToSell } from "@/models/Mineral"
-import { set } from "date-fns"
-import { ClipboardList, Construction } from "lucide-react"
+import RefinerySelectors from "@/components/WorkOrder/RefinerySelectors"
+import { API_BASE_URL, API_ENDPOINTS, API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
+import { Mineral, MineralToSell } from "@/models/Mineral"
+import { RefineryMethod, RefineryYield } from "@/models/Refinery"
+import { ClipboardList } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 export default function WorkOrderPage() {
   const { t } = useTranslation()
 
+  const [refineryYield, setRefineryYield] = useState<RefineryYield[]>([])
+  const [refineryMethod, setRefineryMethod] = useState<RefineryMethod[]>([])
+  const [minerals, setMinerals] = useState<Mineral[]>([])
+
+
   const [loading, setLoading] = useState(true)
 
   const [mineralsList, setMineralsList] = useState<MineralToSell[]>([])
 
   useEffect(() => {
-    // Simulate data loading
-    const timer = setTimeout(() => {
-      setLoading(false)
-    }, 2000)
-
-    return () => clearTimeout(timer)
+    Promise.all([
+      fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.refineriesYields)
+        .then(response => response.json())
+        .then(json => setRefineryYield(json?.data)),
+      fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.refineriesMethods)
+        .then(response => response.json())
+        .then(json => setRefineryMethod(json?.data)),
+      fetch(API_BASE_URL + API_ENDPOINTS.minerals)
+        .then(response => response.json())
+        .then(data => setMinerals(data))
+    ]).finally(() => setLoading(false))
   }, [])
 
   return (
@@ -48,10 +60,13 @@ export default function WorkOrderPage() {
               <div className="rounded-xl flex flex-col border border-slate-800 bg-slate-900/50">
                 <h2 className="text-lg text-cyan-400 py-4 border-b w-full border-slate-800" suppressHydrationWarning>{t("workOrder.refinerySection.title")}</h2>
                 <div className="flex flex-col gap-4 p-4">
-                  <MineralsListing updateMineralsList={setMineralsList}></MineralsListing>
-                  <div>
-                    SELECT REFINERY / METHOD
-                  </div>
+                  <MineralsListing minerals={minerals} mineralsList={mineralsList} updateMineralsList={setMineralsList}></MineralsListing>
+                  <RefinerySelectors
+                    refineryYield={refineryYield}
+                    refineryMethod={refineryMethod}
+                    updateSelectedRefinery={() => { }}
+                    updateSelectedMethod={() => { }}
+                  ></RefinerySelectors>
                   <div>
                     TIMER
                   </div>

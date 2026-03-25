@@ -1,6 +1,4 @@
-import { API_BASE_URL, API_ENDPOINTS } from "@/lib/api-endpoints"
-import { Mineral, MineralToSell } from "@/models/Mineral"
-import { use, useEffect, useState } from "react"
+import { Button } from "@/components/ui/button"
 import {
     Select,
     SelectContent,
@@ -8,12 +6,13 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { MineralType } from "@/models/Mineral"
-import { Trash, PlusCircle } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Mineral, MineralToSell, MineralType } from "@/models/Mineral"
+import { PlusCircle, Trash } from "lucide-react"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 interface MineralsListingProps {
+    minerals: Mineral[];
     mineralsList?: MineralToSell[]
     updateMineralsList?: (minerals: MineralToSell[]) => void
 }
@@ -29,22 +28,19 @@ const getTypeColor = (type: MineralType | null) => {
     }
 }
 
-export default function MineralsListing({ mineralsList: initialMineralsList = [], updateMineralsList }: MineralsListingProps) {
+export default function MineralsListing({ minerals, mineralsList = [], updateMineralsList }: MineralsListingProps) {
     const { t } = useTranslation()
 
-    const [minerals, setMinerals] = useState<Mineral[]>([])
+    // Regroupement des minerais par type pour le selecteur
+    const mineralsByType = minerals.reduce<{ [key: string]: Mineral[] }>((acc, m) => {
+        if (!acc[m.type]) acc[m.type] = [];
+        acc[m.type].push(m);
+        return acc;
+    }, {});
 
-    const [mineralsList, setMineralsList] = useState<MineralToSell[]>(initialMineralsList)
-
-    const [mineralsByType, setMineralsByType] = useState<{ [key: string]: Mineral[] }>({})
-
-    useEffect(() => {
-        fetch(API_BASE_URL + API_ENDPOINTS.minerals)
-            .then(response => response.json())
-            .then(data => setMinerals(data))
-    }, [])
-
+    // Handlers qui utilisent updateMineralsList
     const handleAddMineral = (mineral: Mineral) => {
+        if (!updateMineralsList) return
         if (mineralsList.length >= 20) return
         const mineralToSell: MineralToSell = {
             ...mineral,
@@ -52,44 +48,36 @@ export default function MineralsListing({ mineralsList: initialMineralsList = []
             yield: 0,
             quality: 0,
         }
-        setMineralsList(prevList => [...prevList, mineralToSell])
+        updateMineralsList([...mineralsList, mineralToSell])
     }
 
-    useEffect(() => {
-        const grouped = minerals.reduce<{ [key: string]: Mineral[] }>((acc, m) => {
-            if (!acc[m.type]) acc[m.type] = [];
-            acc[m.type].push(m);
-            return acc;
-        }, {});
-        setMineralsByType(grouped)
-    }, [minerals])
-
-    useEffect(() => {
-        if (updateMineralsList) updateMineralsList(mineralsList)
-    }, [mineralsList, updateMineralsList])
-
     const handleRemoveMineral = (index: number) => {
-        setMineralsList(prevList => prevList.filter((_, i) => i !== index))
+        if (!updateMineralsList) return
+        updateMineralsList(mineralsList.filter((_, i) => i !== index))
     }
 
     const handleCleanAll = () => {
-        setMineralsList([])
+        if (!updateMineralsList) return
+        updateMineralsList([])
     }
 
     const handleSelectMineral = (index: number, mineral: Mineral) => {
-        setMineralsList(prevList => prevList.map((m, i) => i === index ? { ...m, ...mineral } : m))
+        if (!updateMineralsList) return
+        updateMineralsList(mineralsList.map((m, i) => i === index ? { ...m, ...mineral } : m))
     }
 
     const handleMineralQualityChange = (index: number, quality: number) => {
+        if (!updateMineralsList) return
         if (quality < 0) quality = 0
         if (quality > 1000) quality = 1000
-        setMineralsList(prevList => prevList.map((m, i) => i === index ? { ...m, quality } : m))
+        updateMineralsList(mineralsList.map((m, i) => i === index ? { ...m, quality } : m))
     }
 
     const handleMineralQuantityChange = (index: number, quantity: number) => {
+        if (!updateMineralsList) return
         if (quantity < 0) quantity = 0
         if (quantity > 999999) quantity = 999999
-        setMineralsList(prevList => prevList.map((m, i) => i === index ? { ...m, quantity, yield: quantity } : m))
+        updateMineralsList(mineralsList.map((m, i) => i === index ? { ...m, quantity, yield: quantity } : m))
     }
 
     return (
@@ -118,9 +106,6 @@ export default function MineralsListing({ mineralsList: initialMineralsList = []
             </div>
 
             {mineralsList.map((mineral, index) => {
-                // Regroupement par type pour le selecteur
-
-
                 return (
                     <div
                         key={index}
