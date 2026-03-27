@@ -80,7 +80,8 @@
         "yield": "Yield",
         "cost": "Cost",
         "speed": "Speed"
-      }
+      },
+      "timerComplete": "Refining Complete"
     },
     "sellingSection": {
       "title": "Selling / Profit"

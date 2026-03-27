@@ -80,7 +80,8 @@
         "yield": "Rendement",
         "cost": "Coût",
         "speed": "Vitesse"
-      }
+      },
+      "timerComplete": "Raffinage terminé"
     },
     "sellingSection": {
       "title": "Vente / Profit"

@@ -31,14 +31,14 @@ const getTypeColor = (type: MineralType | null) => {
 export default function MineralsListing({ minerals, mineralsList = [], updateMineralsList }: MineralsListingProps) {
     const { t } = useTranslation()
 
-    // Regroupement des minerais par type pour le selecteur
+    // Grouping minerals by type for the selector
     const mineralsByType = minerals.reduce<{ [key: string]: Mineral[] }>((acc, m) => {
         if (!acc[m.type]) acc[m.type] = [];
         acc[m.type].push(m);
         return acc;
     }, {});
 
-    // Handlers qui utilisent updateMineralsList
+    // Handlers that use updateMineralsList
     const handleAddMineral = (mineral: Mineral) => {
         if (!updateMineralsList) return
         if (mineralsList.length >= 20) return
@@ -66,7 +66,7 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
         updateMineralsList(mineralsList.map((m, i) => i === index ? { ...m, ...mineral } : m))
     }
 
-    // State local pour les valeurs d'input
+    // Local state for input values
     const [localInputs, setLocalInputs] = useState<{ [key: number]: { quality: number; quantity: number } }>(() => {
         const initial: { [key: number]: { quality: number; quantity: number } } = {};
         mineralsList.forEach((m, i) => {
@@ -75,7 +75,7 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
         return initial;
     });
 
-    // Synchronise localInputs si mineralsList change (ex: ajout/suppression)
+    // Synchronize localInputs if mineralsList changes (e.g., add/remove)
     useEffect(() => {
         setLocalInputs(prev => {
             const next: { [key: number]: { quality: number; quantity: number } } = {};
@@ -86,7 +86,7 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
         });
     }, [mineralsList]);
 
-    // Debounce pour updateMineralsList
+    // Debounce for updateMineralsList
     const debounceTimeouts = useState<{ [key: string]: NodeJS.Timeout }>({})[0];
 
     const handleMineralQualityChange = (index: number, quality: number) => {
@@ -158,7 +158,7 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
                         key={index}
                         className="flex items-end flex-wrap relative gap-4 p-4 border border-slate-800 rounded-lg bg-slate-900/70 shadow-md"
                     >
-                        {/* Sélecteur de minerai (design MineralFilter) */}
+                        {/* Mineral selector */}
                         <div className="flex flex-col items-start w-3/4 lg:w-3/12 xl:w-4/12">
                             <label className="text-xs text-slate-400 mb-1" htmlFor={`mineral-${index}`}>{t("workOrder.refinerySection.mineralsListing.mineral")}</label>
                             <Select
@@ -193,12 +193,12 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
                             </Select>
                         </div>
 
-                        {/* Supprimer le minéral - mobile*/}
+                        {/* Remove mineral - mobile */}
                         <div className="flex lg:hidden justify-end items-end self-center absolute top-4 right-4 w-6">
                             <Trash className="text-red-500 hover:text-red-600 hover:cursor-pointer" onClick={() => handleRemoveMineral(index)}></Trash>
                         </div>
 
-                        {/* Input qualité */}
+                        {/* Quality input */}
                         <div className="flex flex-col items-start w-1/4 lg:w-2/12">
                             <label className="text-xs text-slate-400 mb-1" htmlFor={`quality-${index}`}>{t("workOrder.refinerySection.mineralsListing.quality")}</label>
                             <input
@@ -215,7 +215,7 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
                             />
                         </div>
 
-                        {/* Input quantité */}
+                        {/* Quantity input */}
                         <div className="flex flex-col items-start w-1/4 lg:w-2/12">
                             <label className="text-xs text-slate-400 mb-1" htmlFor={`quantity-${index}`}>{t("workOrder.refinerySection.mineralsListing.quantity")}</label>
                             <input
@@ -231,7 +231,7 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
                             />
                         </div>
 
-                        {/* Affichage du yield */}
+                        {/* Yield display */}
                         <div className="flex flex-col items-start w-1/4 lg:w-2/12">
                             <span className="text-xs text-slate-400 mb-1">{t("workOrder.refinerySection.mineralsListing.yield")}</span>
                             <span className="px-3 py-1 w-full rounded bg-cyan-600/20 text-cyan-400 font-semibold border border-cyan-700">
@@ -239,7 +239,7 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
                             </span>
                         </div>
 
-                        {/* Supprimer le minéral - desktop */}
+                        {/* Remove mineral - desktop */}
                         <div className="hidden lg:flex justify-center items-center self-center w-6">
                             <Trash className="text-red-500 hover:text-red-600 hover:cursor-pointer" onClick={() => handleRemoveMineral(index)}></Trash>
                         </div>

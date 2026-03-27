@@ -4,6 +4,7 @@ import { Header } from "@/components/Header/Header"
 import { Loader } from "@/components/Loader"
 import MineralsListing from "@/components/WorkOrder/MineralsListing"
 import RefinerySelectors from "@/components/WorkOrder/RefinerySelectors"
+import Timer from "@/components/WorkOrder/Timer"
 import { API_BASE_URL, API_ENDPOINTS, API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
 import { Mineral, MineralToSell } from "@/models/Mineral"
 import { RefineryMethod, RefineryMethodsPourcentages, RefineryWithLocationAndBonuses, RefineryYield } from "@/models/Refinery"
@@ -120,9 +121,7 @@ export default function WorkOrderPage() {
                     updateSelectedRefinery={handleRefineryChange}
                     updateSelectedMethod={handleRefineryMethodChange}
                   ></RefinerySelectors>
-                  <div>
-                    TIMER
-                  </div>
+                  <Timer></Timer>
                 </div>
               </div>
               <div className="rounded-xl flex flex-col border border-slate-800 bg-slate-900/50">
