@@ -28,9 +28,9 @@ export const RefineryRatingSpeed = {
 }
 
 export const RefineryMethodsPourcentages = {
-    1: 0.31,
-    2: 0.38,
-    3: 0.45,
+    1: 0.315,
+    2: 0.383,
+    3: 0.450,
 }
 
 export interface RefineryYield {

@@ -82,10 +82,9 @@ export default function WorkOrderPage() {
       if (bonus) {
         refinedQuantity += refinedQuantity * bonus
       }
-      console.log("Refined Quantity for", mineral.name, ":", refinedQuantity)
       return {
         ...mineral,
-        yield: refinedQuantity
+        yield: parseFloat((refinedQuantity).toFixed(2))
       }
     })
     setMineralsList(newMineralsList)

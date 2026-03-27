@@ -66,19 +66,66 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
         updateMineralsList(mineralsList.map((m, i) => i === index ? { ...m, ...mineral } : m))
     }
 
+    // State local pour les valeurs d'input
+    const [localInputs, setLocalInputs] = useState<{ [key: number]: { quality: number; quantity: number } }>(() => {
+        const initial: { [key: number]: { quality: number; quantity: number } } = {};
+        mineralsList.forEach((m, i) => {
+            initial[i] = { quality: m.quality, quantity: m.quantity };
+        });
+        return initial;
+    });
+
+    // Synchronise localInputs si mineralsList change (ex: ajout/suppression)
+    useEffect(() => {
+        setLocalInputs(prev => {
+            const next: { [key: number]: { quality: number; quantity: number } } = {};
+            mineralsList.forEach((m, i) => {
+                next[i] = prev[i] || { quality: m.quality, quantity: m.quantity };
+            });
+            return next;
+        });
+    }, [mineralsList]);
+
+    // Debounce pour updateMineralsList
+    const debounceTimeouts = useState<{ [key: string]: NodeJS.Timeout }>({})[0];
+
     const handleMineralQualityChange = (index: number, quality: number) => {
-        if (!updateMineralsList) return
-        if (quality < 0) quality = 0
-        if (quality > 1000) quality = 1000
-        updateMineralsList(mineralsList.map((m, i) => i === index ? { ...m, quality } : m))
-    }
+        if (quality < 0) quality = 0;
+        if (quality > 1000) quality = 1000;
+        setLocalInputs(prev => ({
+            ...prev,
+            [index]: { ...prev[index], quality }
+        }));
+        if (!updateMineralsList) return;
+        const key = `quality-${index}`;
+        if (debounceTimeouts[key]) clearTimeout(debounceTimeouts[key]);
+        debounceTimeouts[key] = setTimeout(() => {
+            updateMineralsList(
+                mineralsList.map((m, i) =>
+                    i === index ? { ...m, quality: quality } : m
+                )
+            );
+        }, 600);
+    };
 
     const handleMineralQuantityChange = (index: number, quantity: number) => {
-        if (!updateMineralsList) return
-        if (quantity < 0) quantity = 0
-        if (quantity > 999999) quantity = 999999
-        updateMineralsList(mineralsList.map((m, i) => i === index ? { ...m, quantity } : m))
-    }
+        if (quantity < 0) quantity = 0;
+        if (quantity > 9999) quantity = 9999;
+        setLocalInputs(prev => ({
+            ...prev,
+            [index]: { ...prev[index], quantity }
+        }));
+        if (!updateMineralsList) return;
+        const key = `quantity-${index}`;
+        if (debounceTimeouts[key]) clearTimeout(debounceTimeouts[key]);
+        debounceTimeouts[key] = setTimeout(() => {
+            updateMineralsList(
+                mineralsList.map((m, i) =>
+                    i === index ? { ...m, quantity: quantity } : m
+                )
+            );
+        }, 600);
+    };
 
     return (
         <div className="flex flex-col gap-4">
@@ -160,7 +207,7 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
                                 min={0}
                                 max={100}
                                 className="w-full px-2 py-1 rounded bg-slate-800 text-slate-50 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
-                                value={mineral.quality}
+                                value={localInputs[index]?.quality ?? mineral.quality}
                                 onChange={e => {
                                     const value = Number(e.target.value)
                                     handleMineralQualityChange(index, value)
@@ -176,7 +223,7 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
                                 type="number"
                                 min={0}
                                 className="w-full px-2 py-1 rounded bg-slate-800 text-slate-50 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
-                                value={mineral.quantity}
+                                value={localInputs[index]?.quantity ?? mineral.quantity}
                                 onChange={e => {
                                     const value = Number(e.target.value)
                                     handleMineralQuantityChange(index, value)
