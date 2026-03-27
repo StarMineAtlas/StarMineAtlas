@@ -44,7 +44,7 @@ export default function SelectSellingLocation({ pricingAll, mineralsList, update
                     .then(json => getFullName(json?.data?.[0] as Terminal)) || location.terminal_name
                 const existingSum = sums.find(s => s.terminal_name === location.terminal_name)
                 if (existingSum) {
-                    existingSum.price_sell_sum += location.price_sell * (mineral.yield / 1000)!
+                    existingSum.price_sell_sum += parseFloat((location.price_sell * (mineral.yield / 1000)!).toFixed(0))
                     if (!existingSum.minerals.some(m => m.name.toLowerCase() === location.commodity_name.toLowerCase())) {
                         existingSum.minerals.push(mineral)
                     }
@@ -52,7 +52,7 @@ export default function SelectSellingLocation({ pricingAll, mineralsList, update
                     sums.push({
                         full_name: fullname,
                         terminal_name: location.terminal_name,
-                        price_sell_sum: location.price_sell * (mineral.yield / 1000)!,
+                        price_sell_sum: parseFloat((location.price_sell * (mineral.yield / 1000)!).toFixed(0)),
                         minerals: [mineral]
                     })
                 }
@@ -78,19 +78,21 @@ export default function SelectSellingLocation({ pricingAll, mineralsList, update
         return `${terminal.star_system_name ? terminal.star_system_name + ' - ' : ''} ${terminal.planet_name ? terminal.planet_name + ' - ' : ''} ${terminal.moon_name ? terminal.moon_name + ' - ' : ''} ${terminal.space_station_name || terminal.outpost_name || terminal.poi_name || terminal.city_name || terminal.faction_name || terminal.company_name || terminal.name}`
     }
 
+    const handleComodityChange = (terminal_name: string) => {
+        const found = comodityPriceSums.find(c => c.terminal_name === terminal_name)
+        setSelectedComodity(found || null)
+        if (updateSelectedPrice) {
+            updateSelectedPrice(found ? found.price_sell_sum : 0)
+        }
+    }
+
     return (
         <div className="w-full flex flex-col gap-2">
             <h3 className="text-sm text-slate-400">{t("workOrder.sellingSection.selectSellingLocation")}</h3>
             {comodityPriceSums.length > 0 && (
                 <Select
                     value={selectedComodity?.terminal_name || ''}
-                    onValueChange={val => {
-                        const found = comodityPriceSums.find(c => c.terminal_name === val)
-                        setSelectedComodity(found || null)
-                        if (updateSelectedPrice) {
-                            updateSelectedPrice(found ? found.price_sell_sum : 0)
-                        }
-                    }}
+                    onValueChange={handleComodityChange}
                 >
                     <SelectTrigger className="w-full border-slate-800 bg-slate-900/50 text-cyan-50 focus:border-cyan-700 focus:ring-cyan-700/20">
                         <SelectValue placeholder={t("workOrder.sellingSection.selectLocation")}>
