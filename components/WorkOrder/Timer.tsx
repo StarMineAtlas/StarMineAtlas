@@ -118,7 +118,7 @@ export default function Timer() {
     // Show timer
     return (
         <div
-            className="text-2xl text-center w-full py-2 font-mono select-none"
+            className="text-2xl text-center w-full py-2 font-mono select-none border-t border-slate-800"
             title={running ? "Timer en cours" : "Cliquez pour configurer"}
         >
             {wasStarted && remaining === 0 && !editing && !showTimer ? (
