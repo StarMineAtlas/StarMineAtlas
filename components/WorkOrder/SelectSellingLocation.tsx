@@ -80,6 +80,7 @@ export default function SelectSellingLocation({ pricingAll, mineralsList, update
 
     return (
         <div className="w-full flex flex-col gap-2">
+            <h3 className="text-sm text-slate-400">{t("workOrder.sellingSection.selectSellingLocation")}</h3>
             {comodityPriceSums.length > 0 && (
                 <Select
                     value={selectedComodity?.terminal_name || ''}

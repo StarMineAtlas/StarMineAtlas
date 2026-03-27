@@ -84,7 +84,8 @@
       "timerComplete": "Refining Complete"
     },
     "sellingSection": {
-      "title": "Selling / Profit"
+      "title": "Selling / Profit",
+      "selectSellingLocation": "Select a selling location (prices based on UEX)"
     }
   },
   "loadout": {

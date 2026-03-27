@@ -84,7 +84,8 @@
       "timerComplete": "Raffinage terminé"
     },
     "sellingSection": {
-      "title": "Vente / Profit"
+      "title": "Vente / Profit",
+      "selectSellingLocation": "Sélectionnez un lieu de vente (prix basé sur UEX)"
     }
   },
   "loadout": {
