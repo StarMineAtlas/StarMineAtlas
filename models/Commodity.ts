@@ -1,3 +1,5 @@
+import { Mineral } from "./Mineral";
+
 export interface Commodity {
     id: number;
     id_commodity: number;
@@ -30,6 +32,13 @@ export interface FormattedCommodityMaxPrice {
     refined: {
         price_sell: number;
     };
+}
+
+export interface ComodityPriceSum {
+    full_name: string;
+    terminal_name: string;
+    price_sell_sum: number;
+    minerals: Mineral[];
 }
 
 // Ids to exclude from display because they are minerals that are not sold on the market or that cause problems

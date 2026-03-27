@@ -1,5 +1,5 @@
 import { RefineryMethod, RefineryRatingCost, RefineryRatingSpeed, RefineryRatingYield, RefineryWithLocationAndBonuses, RefineryYield } from "@/models/Refinery";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
@@ -70,6 +70,22 @@ export default function RefinerySelectors({ refineryYield, refineryMethod, updat
         })
         setUniqueRefinery(uniqueRefineries)
     }, [refineryYield])
+
+    // Set default selected refinery when uniqueRefinery changes and is not empty
+    useEffect(() => {
+        if (uniqueRefinery.length > 0 && !selectedRefinery) {
+            setSelectedRefinery(uniqueRefinery[0]);
+            updateSelectedRefinery(uniqueRefinery[0]);
+        }
+    }, [uniqueRefinery]);
+
+    // Set default selected method when refineryMethod changes and is not empty
+    useEffect(() => {
+        if (refineryMethod.length > 0 && !selectedMethod) {
+            setSelectedMethod(refineryMethod[0]);
+            updateSelectedMethod(refineryMethod[0]);
+        }
+    }, [refineryMethod]);
 
     const handleRefineryChange = (value: string) => {
         const refinery = uniqueRefinery.find(r => r.terminal_name === value)
