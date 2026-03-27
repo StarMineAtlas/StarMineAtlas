@@ -86,7 +86,18 @@
     "sellingSection": {
       "title": "Vente / Profit",
       "selectSellingLocation": "Sélectionnez un lieu de vente (prix basé sur UEX)",
-      "finalSellingPrice": "Prix de vente final"
+      "finalSellingPrice": "Prix de vente final",
+      "expenses": {
+        "title": "Dépenses",
+        "addExpense": "Ajouter une dépense",
+        "cleanAll": "Tout supprimer",
+        "name": "Nom",
+        "namePlaceholder": "Entrez le nom...",
+        "amount": "Montant",
+        "amountPlaceholder": "Entrez le montant...",
+        "user": "Utilisateur",
+        "userPlaceholder": "Sélectionnez un utilisateur..."
+      }
     }
   },
   "loadout": {

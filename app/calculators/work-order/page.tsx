@@ -2,6 +2,7 @@
 
 import { Header } from "@/components/Header/Header"
 import { Loader } from "@/components/Loader"
+import Expenses from "@/components/WorkOrder/Expenses"
 import FinalSellingPrice from "@/components/WorkOrder/FinalSellingPrice"
 import MineralsListing from "@/components/WorkOrder/MineralsListing"
 import RefinerySelectors from "@/components/WorkOrder/RefinerySelectors"
@@ -11,8 +12,9 @@ import { API_BASE_URL, API_ENDPOINTS, API_UEX_BASE_URL, UEX_API_ENDPOINTS } from
 import { Commodity, excludedIds } from "@/models/Commodity"
 import { Mineral, MineralToSell } from "@/models/Mineral"
 import { RefineryMethod, RefineryMethodsPourcentages, RefineryWithLocationAndBonuses, RefineryYield } from "@/models/Refinery"
+import { Expense, User } from "@/models/WorkOrder"
 import { ClipboardList } from "lucide-react"
-import { use, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 export default function WorkOrderPage() {
@@ -33,6 +35,9 @@ export default function WorkOrderPage() {
   const [pricingAll, setPricingAll] = useState<Commodity[]>([])
   const [selectedPrice, setSelectedPrice] = useState<number>(0)
   const [finalPrice, setFinalPrice] = useState<number>(0)
+
+  const [usersList, setUsersList] = useState<User[]>([{ id: 0, username: "You" }])
+  const [expensesList, setExpensesList] = useState<Expense[]>([{ id: 0, name: "Transfer fee", amount: 0, userId: 0 }])
 
   useEffect(() => {
     Promise.all([
@@ -147,9 +152,7 @@ export default function WorkOrderPage() {
                 <div className="flex flex-col gap-4 p-4">
                   <SelectSellingLocation pricingAll={pricingAll} mineralsList={mineralsList} updateSelectedPrice={setSelectedPrice}></SelectSellingLocation>
                   <FinalSellingPrice price={selectedPrice} updatePrice={setFinalPrice}></FinalSellingPrice>
-                  <div>
-                    EXPENSES : {finalPrice} aUEC
-                  </div>
+                  <Expenses expensesList={expensesList} usersList={usersList} updateExpenseList={setExpensesList}></Expenses>
                   <div>
                     PROFIT SHARES
                   </div>

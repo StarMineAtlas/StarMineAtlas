@@ -86,7 +86,18 @@
     "sellingSection": {
       "title": "Selling / Profit",
       "selectSellingLocation": "Select a selling location (prices based on UEX)",
-      "finalSellingPrice": "Final Selling Price"
+      "finalSellingPrice": "Final Selling Price",
+      "expenses": {
+        "title": "Expenses",
+        "addExpense": "Add Expense",
+        "cleanAll": "Clean All",
+        "name": "Name",
+        "namePlaceholder": "Expense name...",
+        "amount": "Amount",
+        "amountPlaceholder": "Expense amount...",
+        "user": "User",
+        "userPlaceholder": "Select a user..."
+      }
     }
   },
   "loadout": {

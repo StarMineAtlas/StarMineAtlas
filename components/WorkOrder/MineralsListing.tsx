@@ -129,7 +129,7 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
 
     return (
         <div className="flex flex-col gap-4">
-            <div className={`flex justify-between ${mineralsList.length >= 20 ? "flex-row-reverse" : "flex-row"}`}>
+            <div className={`flex justify-between flex-col gap-4 ${mineralsList.length >= 20 ? "md:flex-row-reverse" : "md:flex-row"}`}>
                 {mineralsList.length < 20 && (
                     <Button
                         variant="default"
