@@ -2,6 +2,7 @@
 
 import { Header } from "@/components/Header/Header"
 import { Loader } from "@/components/Loader"
+import FinalSellingPrice from "@/components/WorkOrder/FinalSellingPrice"
 import MineralsListing from "@/components/WorkOrder/MineralsListing"
 import RefinerySelectors from "@/components/WorkOrder/RefinerySelectors"
 import SelectSellingLocation from "@/components/WorkOrder/SelectSellingLocation"
@@ -31,6 +32,7 @@ export default function WorkOrderPage() {
 
   const [pricingAll, setPricingAll] = useState<Commodity[]>([])
   const [selectedPrice, setSelectedPrice] = useState<number>(0)
+  const [finalPrice, setFinalPrice] = useState<number>(0)
 
   useEffect(() => {
     Promise.all([
@@ -144,11 +146,9 @@ export default function WorkOrderPage() {
                 <h2 className="text-lg text-cyan-400 py-4 border-b w-full border-slate-800" suppressHydrationWarning>{t("workOrder.sellingSection.title")}</h2>
                 <div className="flex flex-col gap-4 p-4">
                   <SelectSellingLocation pricingAll={pricingAll} mineralsList={mineralsList} updateSelectedPrice={setSelectedPrice}></SelectSellingLocation>
+                  <FinalSellingPrice price={selectedPrice} updatePrice={setFinalPrice}></FinalSellingPrice>
                   <div>
-                    FINAL SELL PRICE: {selectedPrice.toLocaleString()} aUEC
-                  </div>
-                  <div>
-                    EXPENSES
+                    EXPENSES : {finalPrice} aUEC
                   </div>
                   <div>
                     PROFIT SHARES

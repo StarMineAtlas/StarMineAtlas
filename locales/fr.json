@@ -85,7 +85,8 @@
     },
     "sellingSection": {
       "title": "Vente / Profit",
-      "selectSellingLocation": "Sélectionnez un lieu de vente (prix basé sur UEX)"
+      "selectSellingLocation": "Sélectionnez un lieu de vente (prix basé sur UEX)",
+      "finalSellingPrice": "Prix de vente final"
     }
   },
   "loadout": {
