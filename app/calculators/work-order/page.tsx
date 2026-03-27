@@ -9,7 +9,7 @@ import { API_BASE_URL, API_ENDPOINTS, API_UEX_BASE_URL, UEX_API_ENDPOINTS } from
 import { Mineral, MineralToSell } from "@/models/Mineral"
 import { RefineryMethod, RefineryMethodsPourcentages, RefineryWithLocationAndBonuses, RefineryYield } from "@/models/Refinery"
 import { ClipboardList } from "lucide-react"
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 export default function WorkOrderPage() {
@@ -40,6 +40,10 @@ export default function WorkOrderPage() {
         .then(data => setMinerals(data))
     ]).finally(() => setLoading(false))
   }, [])
+
+  useEffect(() => {
+    console.log("Refinery:", refineryYield)
+  }, [refineryYield])
 
   useEffect(() => {
     if (needToUpdateMineralsList) {

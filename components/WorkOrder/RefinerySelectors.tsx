@@ -40,9 +40,9 @@ export default function RefinerySelectors({ refineryYield, refineryMethod, updat
             const existing = acc.find(r => r.terminal_name === current.terminal_name && r.star_system_name === current.star_system_name);
             if (!existing) {
                 acc.push({
-                    terminal_name: current.terminal_name || "Unknown Terminal",
-                    space_station_name: current.space_station_name || "Unknown Space Station",
-                    star_system_name: current.star_system_name || "Unknown Star System",
+                    terminal_name: current.terminal_name,
+                    space_station_name: current.space_station_name,
+                    star_system_name: current.star_system_name,
                     bonuses: [bonus]
                 });
             } else {
@@ -52,14 +52,20 @@ export default function RefinerySelectors({ refineryYield, refineryMethod, updat
         }, []);
         uniqueRefineries = uniqueRefineries.sort((a, b) => {
             // Sort by star system name first
-            if (a.star_system_name < b.star_system_name) return -1;
-            if (a.star_system_name > b.star_system_name) return 1;
+            if (a.star_system_name && b.star_system_name) {
+                if (a.star_system_name < b.star_system_name) return -1;
+                if (a.star_system_name > b.star_system_name) return 1;
+            }
             // If star system names are the same, sort by space station name
-            if (a.space_station_name < b.space_station_name) return -1;
-            if (a.space_station_name > b.space_station_name) return 1;
+            if (a.space_station_name && b.space_station_name) {
+                if (a.space_station_name < b.space_station_name) return -1;
+                if (a.space_station_name > b.space_station_name) return 1;
+            }
             // If space station names are the same, sort by terminal name
-            if (a.terminal_name < b.terminal_name) return -1;
-            if (a.terminal_name > b.terminal_name) return 1;
+            if (a.terminal_name && b.terminal_name) {
+                if (a.terminal_name < b.terminal_name) return -1;
+                if (a.terminal_name > b.terminal_name) return 1;
+            }
             return 0;
         })
         setUniqueRefinery(uniqueRefineries)
@@ -90,8 +96,8 @@ export default function RefinerySelectors({ refineryYield, refineryMethod, updat
                     {/* Regroupement par système stellaire avec titres */}
                     {Object.entries(
                         uniqueRefinery.reduce((acc, refinery) => {
-                            if (!acc[refinery.star_system_name]) acc[refinery.star_system_name] = [];
-                            acc[refinery.star_system_name].push(refinery);
+                            if (!acc[refinery.star_system_name!]) acc[refinery.star_system_name!] = [];
+                            acc[refinery.star_system_name!].push(refinery);
                             return acc;
                         }, {} as Record<string, RefineryWithLocationAndBonuses[]>)
                     ).map(([system, refineries]) => (
@@ -100,8 +106,8 @@ export default function RefinerySelectors({ refineryYield, refineryMethod, updat
                                 {system}
                             </div>
                             {refineries.map((refinery, idx) => (
-                                <SelectItem key={refinery.terminal_name + idx} value={refinery.terminal_name} className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300">
-                                    {refinery.space_station_name}
+                                <SelectItem key={refinery.terminal_name! + idx} value={refinery.terminal_name!} className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300">
+                                    {refinery.space_station_name ? refinery.space_station_name : refinery.terminal_name}
                                 </SelectItem>
                             ))}
                         </div>
