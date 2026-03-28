@@ -222,7 +222,7 @@ export default function Expenses({
                                 key={expense.id}
                                 className="flex flex-col md:flex-row md:items-center justify-between gap-2 border border-slate-700 rounded-lg px-4 py-2"
                             >
-                                <div className="flex flex-col md:flex-row md:items-center gap-2 flex-1">
+                                <div className="flex flex-row flex-wrap md:flex-nowrap items-center gap-2 flex-1">
                                     {/* USER SELECT */}
                                     <Select
                                         value={String(local.userId)}
@@ -245,6 +245,7 @@ export default function Expenses({
                                                 <SelectItem
                                                     key={u.id}
                                                     value={String(u.id)}
+                                                    className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
                                                 >
                                                     {u.username}
                                                 </SelectItem>
@@ -266,7 +267,7 @@ export default function Expenses({
                                         placeholder={t(
                                             "workOrder.sellingSection.expenses.namePlaceholder"
                                         )}
-                                        className="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm w-32"
+                                        className="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm w-20 md:w-32"
                                     />
 
                                     {/* AMOUNT */}
@@ -285,23 +286,24 @@ export default function Expenses({
                                         placeholder={t(
                                             "workOrder.sellingSection.expenses.amountPlaceholder"
                                         )}
-                                        className="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm w-24"
+                                        className="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm w-18 md:w-24 text-end"
                                     />
 
-                                    <span className="text-xs text-slate-400">
+                                    <span className="text-slate-400 device-font">
                                         aUEC
                                     </span>
-                                </div>
 
-                                {/* DELETE */}
-                                <button
-                                    onClick={() =>
-                                        handleDeleteExpense(expense.id)
-                                    }
-                                    className="text-red-500 hover:text-red-700 p-1"
-                                >
-                                    <Trash className="w-5 h-5" />
-                                </button>
+                                    {/* DELETE */}
+                                    <div
+                                        className="text-red-500 hover:text-red-700 p-1 w-1/2 flex items-center justify-end"
+                                    >
+                                        <Trash
+                                            onClick={() =>
+                                                handleDeleteExpense(expense.id)
+                                            }
+                                            className="w-5 h-5" />
+                                    </div>
+                                </div>
                             </div>
                         )
                     })}

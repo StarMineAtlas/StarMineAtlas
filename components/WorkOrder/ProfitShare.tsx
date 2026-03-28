@@ -110,6 +110,18 @@ export default function ProfitShare({ usersList, expensesList, finalPrice, updat
         }
     }
 
+    const handleRemoveUser = (userId: number) => {
+        const newUsersList = usersList?.filter(u => u.id !== userId) ?? []
+        if (updateUsersList) {
+            updateUsersList(newUsersList)
+        }
+        const newProfitShares = profitShares.filter(share => share.userId !== userId)
+        setProfitShares(newProfitShares)
+        if (updateProfitShares) {
+            updateProfitShares(newProfitShares)
+        }
+    }
+
     return (
         <div className="w-full flex flex-col gap-2 border-t border-slate-800 pt-4">
             {/* ACTIONS */}
@@ -133,7 +145,7 @@ export default function ProfitShare({ usersList, expensesList, finalPrice, updat
                             value={newUsername}
                             onChange={e => setNewUsername(e.target.value)}
                             placeholder={t("workOrder.sellingSection.profitShare.addUser")}
-                            className="self-start border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                            className="self-start border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400 w-2/3 md:w-auto"
                         />
                         <Button
                             type="submit"
@@ -164,7 +176,20 @@ export default function ProfitShare({ usersList, expensesList, finalPrice, updat
                         return (
                             <div key={index} className="flex justify-between items-center border border-slate-800 rounded-lg p-4">
                                 <span>{user ? user.username : "Unknown User"}</span>
-                                <span>{share.share} aUEC</span>
+                                <div className="flex">
+                                    <span>
+                                        {share.share}
+                                        <span className={`device-font ms-1 ${share.userId === 0 ? "me-8" : ""}`}>aUEC</span>
+                                    </span>
+                                    {
+                                        share.userId !== 0 && (
+                                            <Trash
+                                                className="ms-4 w-5 h-5 text-red-500 cursor-pointer"
+                                                onClick={() => handleRemoveUser(share.userId)}
+                                            />
+                                        )
+                                    }
+                                </div>
                             </div>
                         )
                     })}
