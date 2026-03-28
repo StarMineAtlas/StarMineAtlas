@@ -70,7 +70,6 @@ export function LoadoutShopModal({ open, loadout, onClose }: LoadoutShopModalPro
 
     useEffect(() => {
         if (!open) return;
-        console.log("itemPrices:", itemPrices);
     }, [itemPrices, open]);
 
 

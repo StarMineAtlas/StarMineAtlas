@@ -62,7 +62,53 @@
   },
   "workOrder": {
     "title": "Planning de minage",
-    "description": "Gérez et suivez vos sessions de minage efficacement. Gardez un aperçu du raffinage, de vos minerais et de vos ventes. Partagez vos gains entre amis et calculez vos profits en temps réel pour optimiser vos opérations minières."
+    "description": "Gérez et suivez vos sessions de minage efficacement. Gardez un aperçu du raffinage, de vos minerais et de vos ventes. Partagez vos gains entre amis et calculez vos profits en temps réel pour optimiser vos opérations minières.",
+    "refinerySection": {
+      "title": "Minerais / Raffinage",
+      "mineralsListing": {
+        "addMineral": "Ajouter un minerai",
+        "cleanAll": "Tout supprimer",
+        "mineral": "Minerai",
+        "quantity": "Quantité (mSCU)",
+        "quality": "Qualité",
+        "yield": "Rendement (mSCU)"
+      },
+      "refinerySelectors": {
+        "title": "Sélecteurs de Raffinage",
+        "method": "Méthode de Raffinage",
+        "refinery": "Raffinerie",
+        "yield": "Rendement",
+        "cost": "Coût",
+        "speed": "Vitesse"
+      },
+      "timerComplete": "Raffinage terminé"
+    },
+    "sellingSection": {
+      "title": "Vente / Profit",
+      "selectSellingLocation": "Sélectionnez un lieu de vente (prix basé sur UEX)",
+      "finalSellingPrice": "Prix de vente final",
+      "profitShare": {
+        "title": "Partage des profits",
+        "addUser": "Ajouter un utilisateur",
+        "cleanAll": "Tout supprimer",
+        "user": "Utilisateur",
+        "userPlaceholder": "Sélectionnez un utilisateur...",
+        "share": "Part (%)",
+        "amount": "Montant"
+      },
+      "expenses": {
+        "title": "Dépenses",
+        "addExpense": "Ajouter une dépense",
+        "cleanAll": "Tout supprimer",
+        "name": "Nom",
+        "namePlaceholder": "Entrez le nom...",
+        "amount": "Montant",
+        "amountPlaceholder": "Entrez le montant...",
+        "user": "Utilisateur",
+        "userPlaceholder": "Sélectionnez un utilisateur...",
+        "includeTransferFee": "Inclure les frais de transfert"
+      }
+    }
   },
   "loadout": {
     "title": "Calculateur de Loadout",

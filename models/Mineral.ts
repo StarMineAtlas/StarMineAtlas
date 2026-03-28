@@ -11,3 +11,8 @@ export interface Mineral {
     radarValue: number;
 }
 
+export interface MineralToSell extends Mineral {
+    quantity: number;
+    yield: number;
+    quality: number;
+}

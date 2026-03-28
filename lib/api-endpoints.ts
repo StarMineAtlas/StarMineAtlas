@@ -21,6 +21,7 @@ export const UEX_API_ENDPOINTS = {
     itemsCategory: "items?id_category=",
     itemsPrices: "items_prices?id_item=",
     itemsAttributes: "items_attributes?id_item=",
+    terminals: "terminals?name="
 };
 
 export const UEX_API_ITEM_CATEGORIES = {

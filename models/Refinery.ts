@@ -27,6 +27,12 @@ export const RefineryRatingSpeed = {
     3: "refinery.methodTable.speed.high",
 }
 
+export const RefineryMethodsPourcentages = {
+    1: 0.315,
+    2: 0.383,
+    3: 0.450,
+}
+
 export interface RefineryYield {
     id: number;
     id_commodity: number;
@@ -55,4 +61,11 @@ export interface RefineryYield {
     outpost_name: string | null;
     poi_name: string | null;
     terminal_name: string | null;
+}
+
+export interface RefineryWithLocationAndBonuses {
+    terminal_name: string | null;
+    space_station_name: string | null;
+    star_system_name: string | null;
+    bonuses: { mineral: string, value: number }[];
 }

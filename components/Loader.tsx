@@ -78,7 +78,7 @@ export const Loader: FC<LoaderProps> = ({ textAnimation = "shimmer", loaderText 
         : baseText + "...";
 
     return (
-        <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-8 w-full mt-8">
+        <div className="flex flex-col items-center justify-center rounded-lg border border-slate-800 bg-slate-900/30 py-8 w-full mt-8 mx-4 md:mx-0">
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", minHeight: 120 }}>
                 <svg width={svgSize} height={svgSize} viewBox={`0 0 ${svgSize} ${svgSize}`} style={{ display: "block" }}>
                     {/* Orbits */}
