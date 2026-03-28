@@ -28,6 +28,12 @@ const getTypeColor = (type: MineralType | null) => {
     }
 }
 
+const MIN_QUALITY = 0
+const MAX_QUALITY = 1000
+
+const MIN_QUANTITY = 0
+const MAX_QUANTITY = 999999
+
 export default function MineralsListing({ minerals, mineralsList = [], updateMineralsList }: MineralsListingProps) {
     const { t } = useTranslation()
 
@@ -90,8 +96,8 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
     const debounceTimeouts = useState<{ [key: string]: NodeJS.Timeout }>({})[0];
 
     const handleMineralQualityChange = (index: number, quality: number) => {
-        if (quality < 0) quality = 0;
-        if (quality > 1000) quality = 1000;
+        if (quality < MIN_QUALITY) quality = MIN_QUALITY;
+        if (quality > MAX_QUALITY) quality = MAX_QUALITY;
         setLocalInputs(prev => ({
             ...prev,
             [index]: { ...prev[index], quality }
@@ -109,8 +115,8 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
     };
 
     const handleMineralQuantityChange = (index: number, quantity: number) => {
-        if (quantity < 0) quantity = 0;
-        if (quantity > 9999) quantity = 9999;
+        if (quantity < MIN_QUANTITY) quantity = MIN_QUANTITY;
+        if (quantity > MAX_QUANTITY) quantity = MAX_QUANTITY;
         setLocalInputs(prev => ({
             ...prev,
             [index]: { ...prev[index], quantity }
@@ -198,8 +204,8 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
                             <Trash className="text-red-500 hover:text-red-600 hover:cursor-pointer" onClick={() => handleRemoveMineral(index)}></Trash>
                         </div>
 
-                        {/* Quality input */}
-                        <div className="flex flex-col items-start w-1/4 lg:w-2/12">
+                        {/* Quality input - Hidden until quality have an impact on price */}
+                        {/* <div className="flex flex-col items-start w-1/4 lg:w-2/12">
                             <label className="text-xs text-slate-400 mb-1" htmlFor={`quality-${index}`}>{t("workOrder.refinerySection.mineralsListing.quality")}</label>
                             <input
                                 id={`quality-${index}`}
@@ -213,10 +219,10 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
                                     handleMineralQualityChange(index, value)
                                 }}
                             />
-                        </div>
+                        </div> */}
 
                         {/* Quantity input */}
-                        <div className="flex flex-col items-start w-1/4 lg:w-2/12">
+                        <div className="flex flex-col items-start w-1/3 lg:w-3/12">
                             <label className="text-xs text-slate-400 mb-1" htmlFor={`quantity-${index}`}>{t("workOrder.refinerySection.mineralsListing.quantity")}</label>
                             <input
                                 id={`quantity-${index}`}
@@ -232,7 +238,7 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
                         </div>
 
                         {/* Yield display */}
-                        <div className="flex flex-col items-start w-1/4 lg:w-2/12">
+                        <div className="flex flex-col items-start w-1/3 lg:w-3/12">
                             <span className="text-xs text-slate-400 mb-1">{t("workOrder.refinerySection.mineralsListing.yield")}</span>
                             <span className="px-3 py-1 w-full rounded bg-cyan-600/20 text-cyan-400 font-semibold border border-cyan-700">
                                 {mineral.yield}
