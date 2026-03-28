@@ -87,6 +87,15 @@
       "title": "Selling / Profit",
       "selectSellingLocation": "Select a selling location (prices based on UEX)",
       "finalSellingPrice": "Final Selling Price",
+      "profitShare": {
+        "title": "Profit Share",
+        "addUser": "Add User",
+        "cleanAll": "Clean All",
+        "user": "User",
+        "userPlaceholder": "Select a user...",
+        "share": "Share (%)",
+        "amount": "Amount"
+      },
       "expenses": {
         "title": "Expenses",
         "addExpense": "Add Expense",

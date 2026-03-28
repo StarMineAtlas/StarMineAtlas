@@ -87,6 +87,15 @@
       "title": "Vente / Profit",
       "selectSellingLocation": "Sélectionnez un lieu de vente (prix basé sur UEX)",
       "finalSellingPrice": "Prix de vente final",
+      "profitShare": {
+        "title": "Partage des profits",
+        "addUser": "Ajouter un utilisateur",
+        "cleanAll": "Tout supprimer",
+        "user": "Utilisateur",
+        "userPlaceholder": "Sélectionnez un utilisateur...",
+        "share": "Part (%)",
+        "amount": "Montant"
+      },
       "expenses": {
         "title": "Dépenses",
         "addExpense": "Ajouter une dépense",

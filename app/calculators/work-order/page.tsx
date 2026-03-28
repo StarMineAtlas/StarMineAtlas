@@ -5,6 +5,7 @@ import { Loader } from "@/components/Loader"
 import Expenses from "@/components/WorkOrder/Expenses"
 import FinalSellingPrice from "@/components/WorkOrder/FinalSellingPrice"
 import MineralsListing from "@/components/WorkOrder/MineralsListing"
+import ProfitShare from "@/components/WorkOrder/ProfitShare"
 import RefinerySelectors from "@/components/WorkOrder/RefinerySelectors"
 import SelectSellingLocation from "@/components/WorkOrder/SelectSellingLocation"
 import Timer from "@/components/WorkOrder/Timer"
@@ -55,10 +56,6 @@ export default function WorkOrderPage() {
         .then(json => setPricingAll(removeExcludedIdsFromPricing(json?.data)))
     ]).finally(() => setLoading(false))
   }, [])
-
-  useEffect(() => {
-    console.log("ICI:", pricingAll.filter(p => p.commodity_name.toLowerCase().includes("gold")))
-  }, [pricingAll])
 
   useEffect(() => {
     if (needToUpdateMineralsList) {
@@ -136,7 +133,7 @@ export default function WorkOrderPage() {
             <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="rounded-xl flex flex-col border border-slate-800 bg-slate-900/50">
                 <h2 className="text-lg text-cyan-400 py-4 border-b w-full border-slate-800" suppressHydrationWarning>{t("workOrder.refinerySection.title")}</h2>
-                <div className="flex flex-col gap-4 p-4">
+                <div className="flex flex-col justify-start h-full gap-4 p-4">
                   <MineralsListing minerals={minerals} mineralsList={mineralsList} updateMineralsList={handleUpdateMineralsList}></MineralsListing>
                   <RefinerySelectors
                     refineryYield={refineryYield}
@@ -149,13 +146,11 @@ export default function WorkOrderPage() {
               </div>
               <div className="rounded-xl flex flex-col border border-slate-800 bg-slate-900/50">
                 <h2 className="text-lg text-cyan-400 py-4 border-b w-full border-slate-800" suppressHydrationWarning>{t("workOrder.sellingSection.title")}</h2>
-                <div className="flex flex-col gap-4 p-4">
+                <div className="flex flex-col justify-start h-full gap-4 p-4">
                   <SelectSellingLocation pricingAll={pricingAll} mineralsList={mineralsList} updateSelectedPrice={setSelectedPrice}></SelectSellingLocation>
                   <FinalSellingPrice price={selectedPrice} updatePrice={setFinalPrice}></FinalSellingPrice>
+                  <ProfitShare usersList={usersList} expensesList={expensesList} finalPrice={finalPrice} updateUsersList={setUsersList}></ProfitShare>
                   <Expenses expensesList={expensesList} usersList={usersList} updateExpenseList={setExpensesList}></Expenses>
-                  <div>
-                    PROFIT SHARES
-                  </div>
                 </div>
               </div>
             </div>
