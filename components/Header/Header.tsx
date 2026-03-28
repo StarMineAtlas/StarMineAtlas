@@ -45,6 +45,7 @@ export function Header() {
 
   const dataLinks = [
     { href: "/data/refinery", label: "header.data.refinery" },
+    { href: "/data/radar", label: "header.data.radar" },
     { href: "/data/market-prices", label: "header.data.marketPrices" },
     { href: "/data/mining-lasers", label: "header.data.miningLasers" },
     { href: "/data/modules-gadgets", label: "header.data.modulesGadgets" },

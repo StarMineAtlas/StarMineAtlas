@@ -6,6 +6,7 @@
     "data": {
       "title": "Data",
       "refinery": "Refinery",
+      "radar": "Radar",
       "marketPrices": "Market Prices",
       "miningLasers": "Mining Lasers",
       "modulesGadgets": "Modules & Gadgets"
@@ -286,6 +287,15 @@
       "uses": "Uses",
       "duration": "Duration (s)"
     }
+  },
+  "radar": {
+    "title": "Radar",
+    "description": "Discover the radar echoes of minerals based on the number of rocks, quickly find the mineral associated with a radar echo to optimize your mining time thanks to the search.",
+    "loading": "Loading radar data",
+    "noData": "No radar data available for the selected filters",
+    "mineral": "Mineral",
+    "searchEcho": "Search by Echo",
+    "searchEchoPlaceholder": "Search by echo number..."
   },
   "utils": {
     "wip": "Work in Progress - Coming Soon"
