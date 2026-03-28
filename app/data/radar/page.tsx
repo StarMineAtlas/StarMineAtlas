@@ -56,7 +56,7 @@ export default function RadarPage() {
         return Array.from(set).sort();
     }, [radarData]);
 
-    // Application des filtres
+    // Application des filtres + repérage de la colonne d'écho qui matche
     const filteredRadarData = useMemo(() => {
         let data = radarData;
         if (selectedMineral) {
@@ -64,11 +64,18 @@ export default function RadarPage() {
         }
         if (searchEcho.trim() !== "") {
             const search = searchEcho.trim().toLowerCase();
-            data = data.filter(row =>
-                Object.keys(row)
+            data = data.map(row => {
+                // Trouver la première colonne d'écho qui matche la recherche
+                const matchingEcho = Object.keys(row)
                     .filter(key => !isNaN(Number(key)))
-                    .some(key => String(row[key as keyof RadarData]).toLowerCase().includes(search))
-            );
+                    .find(key => String(row[key as keyof RadarData]).toLowerCase().includes(search));
+                return { ...row, __highlightEcho: matchingEcho };
+            }).filter(row => row.__highlightEcho);
+        } else {
+            data = data.map(row => {
+                const { __highlightEcho, ...rest } = row as any;
+                return rest;
+            });
         }
         return data;
     }, [radarData, selectedMineral, searchEcho]);
@@ -187,11 +194,17 @@ export default function RadarPage() {
                                                 <td className="px-6 py-4 border border-slate-700 font-medium text-cyan-100 text-xs md:text-sm bg-slate-950 sticky left-0 z-10" style={{ minWidth: "10rem", maxWidth: "10rem", width: "10rem", backgroundColor: '#0f172a' }}>
                                                     {row.name}
                                                 </td>
-                                                {radarColumns.map((col) => (
-                                                    <td key={col} className="px-4 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200">
-                                                        {row[col as keyof RadarData] ?? "-"}
-                                                    </td>
-                                                ))}
+                                                {radarColumns.map((col) => {
+                                                    const highlight = searchEcho.trim() !== "" && (row as any).__highlightEcho === col;
+                                                    return (
+                                                        <td
+                                                            key={col}
+                                                            className={`px-4 py-4 border border-slate-700 font-semibold text-xs md:text-sm text-center text-cyan-200 ${highlight ? "bg-cyan-900/70 text-cyan-300 ring-2 ring-cyan-400" : ""}`}
+                                                        >
+                                                            {row[col as keyof RadarData] ?? "-"}
+                                                        </td>
+                                                    );
+                                                })}
                                             </tr>
                                         )) : (
                                             <tr>
