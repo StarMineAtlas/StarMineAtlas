@@ -11,7 +11,7 @@ import SelectSellingLocation from "@/components/WorkOrder/SelectSellingLocation"
 import Timer from "@/components/WorkOrder/Timer"
 import { API_BASE_URL, API_ENDPOINTS, API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
 import { Commodity, excludedIds } from "@/models/Commodity"
-import { Mineral, MineralToSell } from "@/models/Mineral"
+import { Mineral, MineralToSell, MineralType } from "@/models/Mineral"
 import { RefineryMethod, RefineryMethodsPourcentages, RefineryWithLocationAndBonuses, RefineryYield } from "@/models/Refinery"
 import { Expense, User } from "@/models/WorkOrder"
 import { ClipboardList } from "lucide-react"
@@ -93,15 +93,22 @@ export default function WorkOrderPage() {
     }
 
     const newMineralsList = mineralsList.map(mineral => {
-      const bonus = (selectedRefinery?.bonuses.find(b => b.mineral.replace(/\s*\(Raw\)|\s*\(Ore\)|\s*Raw|\s*Ore|\s*Pressurized/gi, "").trim() === mineral.name.replace(/\s*\(Raw\)|\s*\(Ore\)|\s*Raw|\s*Ore|\s*Pressurized/gi, "").trim())?.value || 0) / 100
-      const methodYieldBonus = RefineryMethodsPourcentages[selectedMethod.rating_yield as keyof typeof RefineryMethodsPourcentages] || 0
-      let refinedQuantity = mineral.quantity * methodYieldBonus
-      if (bonus) {
-        refinedQuantity += refinedQuantity * bonus
-      }
-      return {
-        ...mineral,
-        yield: parseFloat((refinedQuantity).toFixed(2))
+      if (mineral.type === MineralType.FPS) {
+        return {
+          ...mineral,
+          yield: mineral.quantity
+        }
+      } else {
+        const bonus = (selectedRefinery?.bonuses.find(b => b.mineral.replace(/\s*\(Raw\)|\s*\(Ore\)|\s*Raw|\s*Ore|\s*Pressurized/gi, "").trim() === mineral.name.replace(/\s*\(Raw\)|\s*\(Ore\)|\s*Raw|\s*Ore|\s*Pressurized/gi, "").trim())?.value || 0) / 100
+        const methodYieldBonus = RefineryMethodsPourcentages[selectedMethod.rating_yield as keyof typeof RefineryMethodsPourcentages] || 0
+        let refinedQuantity = mineral.quantity * methodYieldBonus
+        if (bonus) {
+          refinedQuantity += refinedQuantity * bonus
+        }
+        return {
+          ...mineral,
+          yield: parseFloat((refinedQuantity).toFixed(2))
+        }
       }
     })
     setMineralsList(newMineralsList)
