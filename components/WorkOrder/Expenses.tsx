@@ -10,10 +10,12 @@ import {
     SelectTrigger,
     SelectValue
 } from "../ui/select"
+import { Switch } from "../ui/switch"
 
 interface ExpensesProps {
     expensesList: Expense[]
     usersList?: User[]
+    finalSellingPrice: number
     updateExpenseList: (expenses: Expense[]) => void
 }
 
@@ -26,29 +28,29 @@ type LocalInput = {
 export default function Expenses({
     expensesList,
     usersList,
+    finalSellingPrice,
     updateExpenseList
 }: ExpensesProps) {
     const { t } = useTranslation()
 
     const [localInputs, setLocalInputs] = useState<Record<number, LocalInput>>({})
 
-    useEffect(() => {
-        setLocalInputs(prev => {
-            const next: Record<number, LocalInput> = {}
-
-            expensesList.forEach(e => {
-                next[e.id] = prev[e.id] ?? {
-                    name: e.name,
-                    amount: e.amount,
-                    userId: e.userId
-                }
-            })
-
-            return next
-        })
-    }, [expensesList])
+    const [includeTransferFee, setIncludeTransferFee] = useState(false)
 
     const debounceTimeouts = useRef<Record<string, NodeJS.Timeout>>({})
+
+    useEffect(() => {
+        // Synchronise toujours localInputs avec expensesList
+        const next: Record<number, LocalInput> = {}
+        expensesList.forEach(e => {
+            next[e.id] = {
+                name: e.name,
+                amount: e.amount,
+                userId: e.userId
+            }
+        })
+        setLocalInputs(next)
+    }, [expensesList])
 
     const debounceUpdate = (key: string, callback: () => void) => {
         if (debounceTimeouts.current[key]) {
@@ -106,9 +108,72 @@ export default function Expenses({
         })
     }
 
+    useEffect(() => {
+        if (!includeTransferFee) return;
+        const transferFeeIndex = expensesList.findIndex(e =>
+            e.name.toLowerCase().includes("transfer fee")
+        );
+        const expectedAmount = parseFloat((finalSellingPrice * (0.25 / 100)).toFixed(0));
+        if (transferFeeIndex !== -1) {
+            const current = expensesList[transferFeeIndex];
+            if (current.amount !== expectedAmount) {
+                const updatedExpense = {
+                    ...current,
+                    amount: expectedAmount
+                };
+                const newExpenses = [
+                    ...expensesList.slice(0, transferFeeIndex),
+                    updatedExpense,
+                    ...expensesList.slice(transferFeeIndex + 1)
+                ];
+                updateExpenseList(newExpenses);
+            }
+        }
+    }, [finalSellingPrice]);
+
+    const handleIncludeTransferFeeChange = (checked: boolean) => {
+        setIncludeTransferFee(checked)
+
+        const transferFeeIndex = expensesList.findIndex(e =>
+            e.name.toLowerCase().includes("transfer fee")
+        )
+
+        if (checked) {
+            if (transferFeeIndex === -1) {
+                const newExpense: Expense = {
+                    id:
+                        expensesList.length > 0
+                            ? Math.max(...expensesList.map(e => e.id)) + 1
+                            : 1,
+                    name: "Transfer fee",
+                    amount: parseFloat((finalSellingPrice * (0.25 / 100)).toFixed(0)),
+                    userId: usersList?.[0]?.id ?? 0
+                }
+                updateExpenseList([...expensesList, newExpense])
+            }
+        } else {
+            if (transferFeeIndex !== -1) {
+                updateExpenseList(
+                    expensesList.filter((_, index) => index !== transferFeeIndex)
+                )
+            }
+        }
+    }
+
     return (
         <div className="flex flex-col gap-4 border-t border-slate-800 pt-4">
             {/* ACTIONS */}
+            <div className="flex items-center gap-4">
+                <span className="text-sm text-slate-200">
+                    {t("workOrder.sellingSection.expenses.includeTransferFee")}
+                </span>
+                <Switch
+                    id="include-transfer-fee-switch"
+                    checked={includeTransferFee}
+                    onCheckedChange={handleIncludeTransferFeeChange}
+                    className="data-[state=checked]:bg-cyan-400 data-[state=unchecked]:bg-slate-700 border-slate-600"
+                />
+            </div>
             <div
                 className={`flex justify-between flex-col gap-4 ${expensesList.length >= 20
                     ? "md:flex-row-reverse"

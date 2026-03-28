@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 interface FinalSellingPriceProps {
     price: number,
@@ -9,6 +9,7 @@ interface FinalSellingPriceProps {
 export default function FinalSellingPrice({ price, updatePrice }: FinalSellingPriceProps) {
     const { t } = useTranslation()
     const [inputValue, setInputValue] = useState(price)
+    const debounceTimeout = useRef<NodeJS.Timeout | null>(null)
 
     // Reset input value when price prop changes
     useEffect(() => {
@@ -19,7 +20,12 @@ export default function FinalSellingPrice({ price, updatePrice }: FinalSellingPr
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = Number(e.target.value)
         setInputValue(newValue)
-        updatePrice(newValue)
+        if (debounceTimeout.current) {
+            clearTimeout(debounceTimeout.current)
+        }
+        debounceTimeout.current = setTimeout(() => {
+            updatePrice(newValue)
+        }, 600)
     }
 
     return (

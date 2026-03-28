@@ -105,7 +105,8 @@
         "amount": "Amount",
         "amountPlaceholder": "Expense amount...",
         "user": "User",
-        "userPlaceholder": "Select a user..."
+        "userPlaceholder": "Select a user...",
+        "includeTransferFee": "Include transfer fee"
       }
     }
   },

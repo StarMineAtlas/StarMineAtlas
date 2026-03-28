@@ -105,7 +105,8 @@
         "amount": "Montant",
         "amountPlaceholder": "Entrez le montant...",
         "user": "Utilisateur",
-        "userPlaceholder": "Sélectionnez un utilisateur..."
+        "userPlaceholder": "Sélectionnez un utilisateur...",
+        "includeTransferFee": "Inclure les frais de transfert"
       }
     }
   },

@@ -38,7 +38,7 @@ export default function WorkOrderPage() {
   const [finalPrice, setFinalPrice] = useState<number>(0)
 
   const [usersList, setUsersList] = useState<User[]>([{ id: 0, username: "You" }])
-  const [expensesList, setExpensesList] = useState<Expense[]>([{ id: 0, name: "Transfer fee", amount: 0, userId: 0 }])
+  const [expensesList, setExpensesList] = useState<Expense[]>([])
 
   useEffect(() => {
     Promise.all([
@@ -150,7 +150,7 @@ export default function WorkOrderPage() {
                   <SelectSellingLocation pricingAll={pricingAll} mineralsList={mineralsList} updateSelectedPrice={setSelectedPrice}></SelectSellingLocation>
                   <FinalSellingPrice price={selectedPrice} updatePrice={setFinalPrice}></FinalSellingPrice>
                   <ProfitShare usersList={usersList} expensesList={expensesList} finalPrice={finalPrice} updateUsersList={setUsersList}></ProfitShare>
-                  <Expenses expensesList={expensesList} usersList={usersList} updateExpenseList={setExpensesList}></Expenses>
+                  <Expenses expensesList={expensesList} usersList={usersList} finalSellingPrice={finalPrice} updateExpenseList={setExpensesList} ></Expenses>
                 </div>
               </div>
             </div>
