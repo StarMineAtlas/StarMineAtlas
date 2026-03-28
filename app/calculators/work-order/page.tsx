@@ -127,7 +127,7 @@ export default function WorkOrderPage() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
       <Header />
-      <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-center text-center">
           <div className="mb-6 flex items-center gap-3">
             <ClipboardList className="h-10 w-10 text-cyan-400" />
@@ -169,7 +169,7 @@ export default function WorkOrderPage() {
             </div>
           )}
         </div>
-      </main>
+      </div>
     </div>
   )
 }

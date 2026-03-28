@@ -1,7 +1,9 @@
 const GOOGLE_SHEET_ID = "1PNafLL179gh80ipoLP1AUhy47_bWTXVBOx2j1kJWd2I";
+const GOOGLE_SHEET_ID_RADAR = "1FUhdjPbSaNjKccBjTfcrY1QwiZ6_q3emv2AnmFhTLmk";
 const OPENSHEET_BASE_URL = 'https://opensheet.elk.sh/';
 
 export const API_BASE_URL = OPENSHEET_BASE_URL + GOOGLE_SHEET_ID + "/";
+export const API_RADAR_BASE_URL = OPENSHEET_BASE_URL + GOOGLE_SHEET_ID_RADAR + "/radar";
 export const API_UEX_BASE_URL = "https://api.uexcorp.space/2.0/";
 
 export const API_ENDPOINTS = {

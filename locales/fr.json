@@ -6,6 +6,7 @@
     "data": {
       "title": "Données",
       "refinery": "Raffinerie",
+      "radar": "Radar",
       "marketPrices": "Prix du Marché",
       "miningLasers": "Lasers de Minage",
       "modulesGadgets": "Modules et Gadgets"
@@ -297,6 +298,15 @@
       "uses": "Utilisations",
       "duration": "Durée (s)"
     }
+  },
+  "radar": {
+    "title": "Radar",
+    "description": "Découvrez les échos radars des minerais en fonction du nombre de roches, trouvez rapidement le minerai associé à un écho radar pour optimiser votre temps de minage grâce à la recherche.",
+    "loading": "Chargement des données radar",
+    "noData": "Aucune donnée radar disponible pour les filtres sélectionnés",
+    "mineral": "Minerai",
+    "searchEcho": "Rechercher par écho",
+    "searchEchoPlaceholder": "Rechercher par numéro d'écho..."
   },
   "utils": {
     "wip": "En cours de développement - Bientôt disponible"
