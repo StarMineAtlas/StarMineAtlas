@@ -1,6 +1,6 @@
 import { Expense, User } from "@/models/WorkOrder"
 import { PlusCircle, Trash } from "lucide-react"
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Button } from "../ui/button"
 
@@ -8,15 +8,23 @@ interface ProfitShareProps {
     usersList?: User[]
     expensesList?: Expense[]
     finalPrice?: number
+    updatedProfitShares?: { userId: number, part: number, share: number }[]
     updateUsersList?: (users: User[]) => void
+    updateProfitShares?: (profitShares: { userId: number, part: number, share: number }[]) => void
 }
 
-export default function ProfitShare({ usersList, expensesList, finalPrice, updateUsersList }: ProfitShareProps) {
+export default function ProfitShare({ usersList, expensesList, finalPrice, updatedProfitShares, updateUsersList, updateProfitShares }: ProfitShareProps) {
 
     const { t } = useTranslation()
 
-    const [profitShares, setProfitShares] = useState<{ userId: number, part: number, share: number }[]>([])
+    const [profitShares, setProfitShares] = useState<{ userId: number, part: number, share: number }[]>(updatedProfitShares ?? [])
     const [newUsername, setNewUsername] = useState("")
+
+    useEffect(() => {
+        if (updatedProfitShares) {
+            setProfitShares(updatedProfitShares)
+        }
+    }, [updatedProfitShares])
 
     useEffect(() => {
         if (usersList && usersList.length > 0) {
@@ -58,6 +66,9 @@ export default function ProfitShare({ usersList, expensesList, finalPrice, updat
             }
 
             setProfitShares(roundedShares);
+            if (updateProfitShares) {
+                updateProfitShares(roundedShares)
+            }
         }
     }, [usersList, finalPrice, expensesList])
 
@@ -78,15 +89,25 @@ export default function ProfitShare({ usersList, expensesList, finalPrice, updat
         if (updateUsersList) {
             updateUsersList(usersList ? [...usersList, newUser] : [newUser])
         }
+        if (updateProfitShares) {
+            updateProfitShares([...profitShares, newProfitShare])
+        }
         setNewUsername("")
     }
 
     const handleCleanAll = () => {
-        setProfitShares([])
         if (updateUsersList) {
             updateUsersList([usersList ? usersList[0] : { id: 0, username: "You" }])
         }
-
+        const resetProfitShares = [{
+            userId: usersList ? usersList[0].id : 0,
+            part: 1,
+            share: finalPrice ? finalPrice : 0
+        }]
+        setProfitShares(resetProfitShares)
+        if (updateProfitShares) {
+            updateProfitShares(resetProfitShares)
+        }
     }
 
     return (

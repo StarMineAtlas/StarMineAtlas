@@ -15,7 +15,7 @@ import { Mineral, MineralToSell, MineralType } from "@/models/Mineral"
 import { RefineryMethod, RefineryMethodsPourcentages, RefineryWithLocationAndBonuses, RefineryYield } from "@/models/Refinery"
 import { Expense, User } from "@/models/WorkOrder"
 import { ClipboardList } from "lucide-react"
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 export default function WorkOrderPage() {
@@ -39,6 +39,8 @@ export default function WorkOrderPage() {
 
   const [usersList, setUsersList] = useState<User[]>([{ id: 0, username: "You" }])
   const [expensesList, setExpensesList] = useState<Expense[]>([])
+
+  const [profitShares, setProfitShares] = useState<{ userId: number, part: number, share: number }[]>([])
 
   useEffect(() => {
     Promise.all([
@@ -118,6 +120,10 @@ export default function WorkOrderPage() {
     return commodities.filter(c => !excludedIds.includes(c.id_commodity))
   }
 
+  useEffect(() => {
+    console.log("ICI", profitShares)
+  }, [profitShares])
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
       <Header />
@@ -156,8 +162,8 @@ export default function WorkOrderPage() {
                 <div className="flex flex-col justify-start h-full gap-4 p-4">
                   <SelectSellingLocation pricingAll={pricingAll} mineralsList={mineralsList} updateSelectedPrice={setSelectedPrice}></SelectSellingLocation>
                   <FinalSellingPrice price={selectedPrice} updatePrice={setFinalPrice}></FinalSellingPrice>
-                  <ProfitShare usersList={usersList} expensesList={expensesList} finalPrice={finalPrice} updateUsersList={setUsersList}></ProfitShare>
-                  <Expenses expensesList={expensesList} usersList={usersList} finalSellingPrice={finalPrice} updateExpenseList={setExpensesList} ></Expenses>
+                  <ProfitShare usersList={usersList} expensesList={expensesList} finalPrice={finalPrice} updatedProfitShares={profitShares} updateUsersList={setUsersList} updateProfitShares={setProfitShares}></ProfitShare>
+                  <Expenses expensesList={expensesList} usersList={usersList} profitShares={profitShares} updateExpenseList={setExpensesList} ></Expenses>
                 </div>
               </div>
             </div>

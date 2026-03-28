@@ -15,7 +15,7 @@ import { Switch } from "../ui/switch"
 interface ExpensesProps {
     expensesList: Expense[]
     usersList?: User[]
-    finalSellingPrice: number
+    profitShares?: { userId: number, part: number, share: number }[]
     updateExpenseList: (expenses: Expense[]) => void
 }
 
@@ -28,7 +28,7 @@ type LocalInput = {
 export default function Expenses({
     expensesList,
     usersList,
-    finalSellingPrice,
+    profitShares,
     updateExpenseList
 }: ExpensesProps) {
     const { t } = useTranslation()
@@ -113,7 +113,7 @@ export default function Expenses({
         const transferFeeIndex = expensesList.findIndex(e =>
             e.name.toLowerCase().includes("transfer fee")
         );
-        const expectedAmount = parseFloat((finalSellingPrice * (0.25 / 100)).toFixed(0));
+        const expectedAmount = calculateTransferFee();
         if (transferFeeIndex !== -1) {
             const current = expensesList[transferFeeIndex];
             if (current.amount !== expectedAmount) {
@@ -129,7 +129,7 @@ export default function Expenses({
                 updateExpenseList(newExpenses);
             }
         }
-    }, [finalSellingPrice]);
+    }, [profitShares]);
 
     const handleIncludeTransferFeeChange = (checked: boolean) => {
         setIncludeTransferFee(checked)
@@ -146,7 +146,7 @@ export default function Expenses({
                             ? Math.max(...expensesList.map(e => e.id)) + 1
                             : 1,
                     name: "Transfer fee",
-                    amount: parseFloat((finalSellingPrice * (0.25 / 100)).toFixed(0)),
+                    amount: calculateTransferFee(),
                     userId: usersList?.[0]?.id ?? 0
                 }
                 updateExpenseList([...expensesList, newExpense])
@@ -158,6 +158,12 @@ export default function Expenses({
                 )
             }
         }
+    }
+
+    const calculateTransferFee = () => {
+        const totalTransferPrice = profitShares ? profitShares.filter(share => share.userId !== 0).reduce((sum, share) => sum + share.share, 0) : 0;
+        console.log("Total transfer price:", totalTransferPrice);
+        return parseFloat((totalTransferPrice * (0.5 / 100)).toFixed(0));
     }
 
     return (
