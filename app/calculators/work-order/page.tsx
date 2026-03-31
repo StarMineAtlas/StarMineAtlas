@@ -31,11 +31,13 @@ export default function WorkOrderPage() {
   const [selectedMethod, setSelectedMethod] = useState<RefineryMethod | null>(null)
 
   const [loading, setLoading] = useState(true)
+  const [hasRestoredLocalStorage, setHasRestoredLocalStorage] = useState(false)
 
   const [mineralsList, setMineralsList] = useState<MineralToSell[]>([])
   const [needToUpdateMineralsList, setNeedToUpdateMineralsList] = useState(false)
 
   const [pricingAll, setPricingAll] = useState<Commodity[]>([])
+  const [selectedSellingTerminalName, setSelectedSellingTerminalName] = useState<string | null>(null)
   const [selectedPrice, setSelectedPrice] = useState<number>(0)
   const [finalPrice, setFinalPrice] = useState<number>(0)
 
@@ -43,27 +45,37 @@ export default function WorkOrderPage() {
   const [expensesList, setExpensesList] = useState<Expense[]>([])
 
   const [profitShares, setProfitShares] = useState<{ userId: number, part: number, share: number }[]>([])
+  const [preserveRestoredSellingState, setPreserveRestoredSellingState] = useState(false)
 
   // Load from localStorage on mount
   useEffect(() => {
-    const saved = typeof window !== "undefined" ? localStorage.getItem(LOCAL_STORAGE_KEY) : null
-    if (saved) {
-      try {
-        const data = JSON.parse(saved)
-        if (data) {
-          setProfitShares(data.profitShares || [])
-          setExpensesList(data.expensesList || [])
-          setFinalPrice(data.finalPrice || 0)
-          setUsersList(data.usersList || [{ id: 0, username: "You" }])
-          setSelectedPrice(data.selectedPrice || 0)
-          setMineralsList(data.mineralsList || [])
-          setSelectedMethod(data.selectedMethod || null)
-          setSelectedRefinery(data.selectedRefinery || null)
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem(LOCAL_STORAGE_KEY)
+
+      if (saved) {
+        try {
+          const data = JSON.parse(saved)
+
+          if (data) {
+            setProfitShares(data.profitShares || [])
+            setExpensesList(data.expensesList || [])
+            setFinalPrice(data.finalPrice || 0)
+            setUsersList(data.usersList || [{ id: 0, username: "You" }])
+            setSelectedPrice(data.selectedPrice || 0)
+            setSelectedSellingTerminalName(data.selectedSellingTerminalName || null)
+            setMineralsList(data.mineralsList || [])
+            setSelectedMethod(data.selectedMethod || null)
+            setSelectedRefinery(data.selectedRefinery || null)
+            setPreserveRestoredSellingState(true)
+          }
+        } catch (error) {
+          console.error("Failed to parse saved work order data:", error)
         }
-      } catch (e) {
-        // ignore parse error
       }
     }
+
+    setHasRestoredLocalStorage(true)
+
     Promise.all([
       fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.refineriesYields)
         .then(response => response.json())
@@ -77,7 +89,9 @@ export default function WorkOrderPage() {
       fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.commoditiesPricesAll)
         .then(response => response.json())
         .then(json => setPricingAll(removeExcludedIdsFromPricing(json?.data)))
-    ]).finally(() => setLoading(false))
+    ]).finally(() => {
+      setLoading(false)
+    })
   }, [])
 
   useEffect(() => {
@@ -88,20 +102,67 @@ export default function WorkOrderPage() {
   }, [needToUpdateMineralsList])
 
   useEffect(() => {
+    if (!hasRestoredLocalStorage) {
+      return
+    }
+
     updateMineralsListYield()
-  }, [selectedMethod, selectedRefinery])
+  }, [hasRestoredLocalStorage, selectedMethod, selectedRefinery])
+
+  useEffect(() => {
+    if (!hasRestoredLocalStorage) {
+      return
+    }
+
+    if (preserveRestoredSellingState) {
+      return
+    }
+
+    setFinalPrice(selectedPrice)
+  }, [hasRestoredLocalStorage, preserveRestoredSellingState, selectedPrice])
 
   const handleRefineryMethodChange = (method: RefineryMethod | null) => {
+    setPreserveRestoredSellingState(false)
+    setSelectedMethod(method)
+  }
+
+  const handleRefineryMethodSelection = (method: RefineryMethod | null, isUserAction?: boolean) => {
+    if (isUserAction) {
+      setPreserveRestoredSellingState(false)
+    }
+
     setSelectedMethod(method)
   }
 
   const handleRefineryChange = (refinery: RefineryWithLocationAndBonuses | null) => {
+    setPreserveRestoredSellingState(false)
+    setSelectedRefinery(refinery)
+  }
+
+  const handleRefinerySelection = (refinery: RefineryWithLocationAndBonuses | null, isUserAction?: boolean) => {
+    if (isUserAction) {
+      setPreserveRestoredSellingState(false)
+    }
+
     setSelectedRefinery(refinery)
   }
 
   const handleUpdateMineralsList = (newList: MineralToSell[]) => {
+    setPreserveRestoredSellingState(false)
     setMineralsList(newList)
     setNeedToUpdateMineralsList(true)
+  }
+
+  const handleSelectedPriceChange = (price: number) => {
+    setSelectedPrice(price)
+  }
+
+  const handleSelectedTerminalChange = (terminalName: string | null, isUserAction?: boolean) => {
+    if (isUserAction) {
+      setPreserveRestoredSellingState(false)
+    }
+
+    setSelectedSellingTerminalName(terminalName)
   }
 
   const updateMineralsListYield = () => {
@@ -143,20 +204,24 @@ export default function WorkOrderPage() {
 
   // Save to localStorage on any relevant state change
   useEffect(() => {
+    if (!hasRestoredLocalStorage || typeof window === "undefined") {
+      return
+    }
+
     const allData = {
       profitShares,
       expensesList,
       finalPrice,
       usersList,
       selectedPrice,
+      selectedSellingTerminalName,
       mineralsList,
       selectedMethod,
       selectedRefinery
     }
-    if (typeof window !== "undefined") {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(allData))
-    }
-  }, [profitShares, expensesList, finalPrice, usersList, selectedPrice, mineralsList, selectedMethod, selectedRefinery])
+
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(allData))
+  }, [hasRestoredLocalStorage, profitShares, expensesList, finalPrice, usersList, selectedPrice, selectedSellingTerminalName, mineralsList, selectedMethod, selectedRefinery])
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
@@ -185,8 +250,10 @@ export default function WorkOrderPage() {
                   <RefinerySelectors
                     refineryYield={refineryYield}
                     refineryMethod={refineryMethod}
-                    updateSelectedRefinery={handleRefineryChange}
-                    updateSelectedMethod={handleRefineryMethodChange}
+                    selectedRefinery={selectedRefinery}
+                    selectedMethod={selectedMethod}
+                    updateSelectedRefinery={handleRefinerySelection}
+                    updateSelectedMethod={handleRefineryMethodSelection}
                   ></RefinerySelectors>
                   <Timer></Timer>
                 </div>
@@ -194,8 +261,15 @@ export default function WorkOrderPage() {
               <div className="rounded-xl flex flex-col border border-slate-800 bg-slate-900/50">
                 <h2 className="text-lg text-cyan-400 py-4 border-b w-full border-slate-800" suppressHydrationWarning>{t("workOrder.sellingSection.title")}</h2>
                 <div className="flex flex-col justify-start h-full gap-4 p-4">
-                  <SelectSellingLocation pricingAll={pricingAll} mineralsList={mineralsList} updateSelectedPrice={setSelectedPrice}></SelectSellingLocation>
-                  <FinalSellingPrice price={selectedPrice} updatePrice={setFinalPrice}></FinalSellingPrice>
+                  <SelectSellingLocation
+                    pricingAll={pricingAll}
+                    mineralsList={mineralsList}
+                    preserveRestoredSelection={preserveRestoredSellingState}
+                    selectedTerminalName={selectedSellingTerminalName}
+                    updateSelectedPrice={handleSelectedPriceChange}
+                    updateSelectedTerminalName={handleSelectedTerminalChange}
+                  ></SelectSellingLocation>
+                  <FinalSellingPrice price={finalPrice} updatePrice={setFinalPrice}></FinalSellingPrice>
                   <ProfitShare usersList={usersList} expensesList={expensesList} finalPrice={finalPrice} updatedProfitShares={profitShares} updateUsersList={setUsersList} updateProfitShares={setProfitShares}></ProfitShare>
                   <Expenses expensesList={expensesList} usersList={usersList} profitShares={profitShares} updateExpenseList={setExpensesList} ></Expenses>
                   <GlobalActions></GlobalActions>

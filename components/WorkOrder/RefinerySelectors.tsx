@@ -6,8 +6,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 interface RefinerySelectorsProps {
     refineryYield: RefineryYield[];
     refineryMethod: RefineryMethod[];
-    updateSelectedRefinery: (refinery: RefineryWithLocationAndBonuses | null) => void;
-    updateSelectedMethod: (method: RefineryMethod | null) => void;
+    selectedRefinery?: RefineryWithLocationAndBonuses | null;
+    selectedMethod?: RefineryMethod | null;
+    updateSelectedRefinery: (refinery: RefineryWithLocationAndBonuses | null, isUserAction?: boolean) => void;
+    updateSelectedMethod: (method: RefineryMethod | null, isUserAction?: boolean) => void;
 }
 
 const getSystemColor = (system: string): string => {
@@ -23,7 +25,14 @@ const getSystemColor = (system: string): string => {
     }
 }
 
-export default function RefinerySelectors({ refineryYield, refineryMethod, updateSelectedRefinery, updateSelectedMethod }: RefinerySelectorsProps) {
+export default function RefinerySelectors({
+    refineryYield,
+    refineryMethod,
+    selectedRefinery: restoredSelectedRefinery,
+    selectedMethod: restoredSelectedMethod,
+    updateSelectedRefinery,
+    updateSelectedMethod
+}: RefinerySelectorsProps) {
     const { t } = useTranslation()
 
     const [uniqueRefinery, setUniqueRefinery] = useState<RefineryWithLocationAndBonuses[]>([])
@@ -71,32 +80,48 @@ export default function RefinerySelectors({ refineryYield, refineryMethod, updat
         setUniqueRefinery(uniqueRefineries)
     }, [refineryYield])
 
-    // Set default selected refinery when uniqueRefinery changes and is not empty
     useEffect(() => {
-        if (uniqueRefinery.length > 0 && !selectedRefinery) {
-            setSelectedRefinery(uniqueRefinery[0]);
-            updateSelectedRefinery(uniqueRefinery[0]);
+        if (uniqueRefinery.length === 0) {
+            return
         }
-    }, [uniqueRefinery]);
 
-    // Set default selected method when refineryMethod changes and is not empty
-    useEffect(() => {
-        if (refineryMethod.length > 0 && !selectedMethod) {
-            setSelectedMethod(refineryMethod[0]);
-            updateSelectedMethod(refineryMethod[0]);
+        const nextRefinery = restoredSelectedRefinery
+            ? uniqueRefinery.find(r => r.terminal_name === restoredSelectedRefinery.terminal_name) || uniqueRefinery[0]
+            : uniqueRefinery[0]
+
+        setSelectedRefinery(nextRefinery)
+
+        if (!restoredSelectedRefinery) {
+            updateSelectedRefinery(nextRefinery)
         }
-    }, [refineryMethod]);
+    }, [restoredSelectedRefinery, uniqueRefinery, updateSelectedRefinery]);
+
+    useEffect(() => {
+        if (refineryMethod.length === 0) {
+            return
+        }
+
+        const nextMethod = restoredSelectedMethod
+            ? refineryMethod.find(m => m.name === restoredSelectedMethod.name) || refineryMethod[0]
+            : refineryMethod[0]
+
+        setSelectedMethod(nextMethod)
+
+        if (!restoredSelectedMethod) {
+            updateSelectedMethod(nextMethod)
+        }
+    }, [refineryMethod, restoredSelectedMethod, updateSelectedMethod]);
 
     const handleRefineryChange = (value: string) => {
         const refinery = uniqueRefinery.find(r => r.terminal_name === value)
         setSelectedRefinery(refinery || null)
-        updateSelectedRefinery(refinery || null)
+        updateSelectedRefinery(refinery || null, true)
     }
 
     const handleMethodChange = (value: string) => {
         const method = refineryMethod.find(m => m.name === value)
         setSelectedMethod(method || null)
-        updateSelectedMethod(method || null)
+        updateSelectedMethod(method || null, true)
     }
 
     return (

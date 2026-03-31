@@ -50,6 +50,12 @@ export default function Expenses({
             }
         })
         setLocalInputs(next)
+
+        if (expensesList.some(e => e.name.toLowerCase().includes("transfer fee"))) {
+            setIncludeTransferFee(true)
+        } else {
+            setIncludeTransferFee(false)
+        }
     }, [expensesList])
 
     const debounceUpdate = (key: string, callback: () => void) => {

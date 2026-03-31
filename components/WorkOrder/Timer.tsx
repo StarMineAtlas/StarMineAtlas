@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
+const LOCAL_STORAGE_KEY = "sma-current-work-order-timer"
+
 function formatTime(seconds: number) {
     const h = Math.floor(seconds / 3600)
     const m = Math.floor((seconds % 3600) / 60)
@@ -22,34 +24,92 @@ export default function Timer() {
     const [inputS, setInputS] = useState(0);
     const [wasStarted, setWasStarted] = useState(false); // For showing the complete text only if started
     const [showTimer, setShowTimer] = useState(true); // For hiding the timer when the complete text is shown
+    const [endTimestamp, setEndTimestamp] = useState<number | null>(null);
+    const [hasRestoredState, setHasRestoredState] = useState(false);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const inputRef = useRef<HTMLDivElement | null>(null);
     const minInputRef = useRef<HTMLInputElement | null>(null);
 
-    // Countdown management
     useEffect(() => {
-        if (running && remaining > 0) {
-            intervalRef.current = setInterval(() => {
-                setRemaining((prev) => {
-                    if (prev <= 1) {
-                        setRunning(false);
-                        setTimeout(() => setShowTimer(false), 100); // hide the timer to show COMPLETE
-                        return 0;
+        if (typeof window !== "undefined") {
+            const savedTimer = localStorage.getItem(LOCAL_STORAGE_KEY)
+
+            if (savedTimer) {
+                try {
+                    const data = JSON.parse(savedTimer)
+                    const savedEndTimestamp = typeof data?.endTimestamp === "number" ? data.endTimestamp : null
+                    const savedWasStarted = Boolean(data?.wasStarted)
+
+                    if (savedEndTimestamp) {
+                        const restoredRemaining = Math.max(0, Math.ceil((savedEndTimestamp - Date.now()) / 1000))
+
+                        setEndTimestamp(savedEndTimestamp)
+                        setRemaining(restoredRemaining)
+                        setWasStarted(savedWasStarted)
+
+                        if (restoredRemaining > 0) {
+                            setRunning(true)
+                            setShowTimer(true)
+                        } else if (savedWasStarted) {
+                            setRunning(false)
+                            setShowTimer(false)
+                        }
+                    } else if (savedWasStarted) {
+                        setWasStarted(true)
+                        setShowTimer(false)
                     }
-                    return prev - 1;
-                });
-            }, 1000);
+                } catch (error) {
+                    console.error("Failed to parse saved timer state:", error)
+                }
+            }
         }
+
+        setHasRestoredState(true)
+    }, [])
+
+    useEffect(() => {
+        if (!running || !endTimestamp) {
+            return () => {
+                if (intervalRef.current) clearInterval(intervalRef.current);
+            }
+        }
+
+        const syncRemaining = () => {
+            const nextRemaining = Math.max(0, Math.ceil((endTimestamp - Date.now()) / 1000))
+
+            setRemaining(nextRemaining)
+
+            if (nextRemaining === 0) {
+                setRunning(false)
+                setEndTimestamp(null)
+                setTimeout(() => setShowTimer(false), 100)
+            }
+        }
+
+        syncRemaining()
+        intervalRef.current = setInterval(syncRemaining, 1000)
+
         return () => {
             if (intervalRef.current) clearInterval(intervalRef.current);
         };
-    }, [running]);
+    }, [endTimestamp, running]);
 
     useEffect(() => {
         if (!running && intervalRef.current) {
             clearInterval(intervalRef.current);
         }
     }, [running]);
+
+    useEffect(() => {
+        if (!hasRestoredState || typeof window === "undefined") {
+            return
+        }
+
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
+            endTimestamp,
+            wasStarted
+        }))
+    }, [endTimestamp, hasRestoredState, wasStarted])
 
     // Click outside to validate
     useEffect(() => {
@@ -79,12 +139,20 @@ export default function Timer() {
 
     function startTimerFromInputs() {
         const total = inputH * 3600 + inputM * 60 + inputS;
-        setRemaining(total);
-        setRunning(true);
         setEditing(false);
+
         if (total > 0) {
+            const nextEndTimestamp = Date.now() + total * 1000
+
+            setRemaining(total);
+            setEndTimestamp(nextEndTimestamp)
+            setRunning(true);
             setWasStarted(true);
             setShowTimer(true);
+        } else {
+            setRemaining(0)
+            setEndTimestamp(null)
+            setRunning(false)
         }
     }
 
@@ -92,6 +160,7 @@ export default function Timer() {
         if (running) {
             // Pause and edit remaining time
             setRunning(false);
+            setEndTimestamp(null)
             // Fill inputs with remaining time
             const h = Math.floor(remaining / 3600);
             const m = Math.floor((remaining % 3600) / 60);
@@ -113,6 +182,8 @@ export default function Timer() {
         setInputS(0);
         setWasStarted(false);
         setRemaining(0);
+        setRunning(false)
+        setEndTimestamp(null)
     }
 
     // Show timer

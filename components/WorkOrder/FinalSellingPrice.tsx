@@ -11,11 +11,17 @@ export default function FinalSellingPrice({ price, updatePrice }: FinalSellingPr
     const [inputValue, setInputValue] = useState(price)
     const debounceTimeout = useRef<NodeJS.Timeout | null>(null)
 
-    // Reset input value when price prop changes
     useEffect(() => {
         setInputValue(price)
-        updatePrice(price)
     }, [price])
+
+    useEffect(() => {
+        return () => {
+            if (debounceTimeout.current) {
+                clearTimeout(debounceTimeout.current)
+            }
+        }
+    }, [])
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = Number(e.target.value)
