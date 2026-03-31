@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
 import { WorkOrderData } from "@/models/WorkOrder";
 import WorkOrderListModal from "./WorkOrderListModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast";
-import { prepareExportData } from "@/lib/utils";
-import { ClipboardList, Download, Save } from "lucide-react";
+import { encodeUrlParams, prepareExportData } from "@/lib/utils";
+import { ClipboardList, Download, Save, Share2 } from "lucide-react";
 
 interface GlobalActionsProps {
     allDatas: WorkOrderData | null
@@ -16,6 +16,12 @@ export default function GlobalActions({ allDatas }: GlobalActionsProps) {
     const { t } = useTranslation()
 
     const [openListModal, setOpenListModal] = useState(false)
+
+    useEffect(() => {
+        console.log("Exporting data:", allDatas)
+        const encodedData = encodeUrlParams(allDatas as WorkOrderData)
+        console.log("Encoded URL Params:", encodedData)
+    }, [])
 
     const handleExport = () => {
         // export the data as a JSON file
@@ -44,6 +50,7 @@ export default function GlobalActions({ allDatas }: GlobalActionsProps) {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedData))
         toast({
             variant: "success",
+            duration: 5000,
             title: t("workOrder.globalActions.saveSuccessTitle"),
             description: t("workOrder.globalActions.saveSuccessDescription"),
         })
@@ -53,9 +60,31 @@ export default function GlobalActions({ allDatas }: GlobalActionsProps) {
         setOpenListModal(true)
     }
 
+    const handleShare = () => {
+        if (!allDatas) {
+            return
+        }
+        const encodedData = encodeUrlParams(allDatas)
+        const shareableUrl = `${window.location.origin}${window.location.pathname}?preset=${encodedData}`
+        navigator.clipboard.writeText(shareableUrl)
+        toast({
+            variant: "success",
+            duration: 5000,
+            title: t("workOrder.globalActions.share"),
+            description: t("workOrder.globalActions.shareSuccessDescription"),
+        })
+    }
+
+
     return (
         <>
             <div className="w-full flex items-center justify-end gap-4 p-4 border-t border-slate-800 mt-4">
+                <button
+                    onClick={handleShare}
+                    className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded flex items-center">
+                    <Share2 className="inline-block w-4 h-4 me-2" />
+                    {t("workOrder.globalActions.share")}
+                </button>
                 <button
                     onClick={handleShowListModal}
                     className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded flex items-center">

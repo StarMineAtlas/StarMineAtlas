@@ -116,7 +116,9 @@
       "saveSuccessDescription": "Votre raffinage a bien ete sauvegarde en local.",
       "export": "Exporter",
       "list": "Liste",
-      "delete": "Supprimer"
+      "delete": "Supprimer",
+      "share": "Partager",
+      "shareSuccessDescription": "Lien de partage copié dans le presse-papiers. Vous pouvez le partager avec vos amis pour qu'ils puissent voir les détails de ce raffinage."
     },
     "listModal": {
       "title": "Liste des raffinages",

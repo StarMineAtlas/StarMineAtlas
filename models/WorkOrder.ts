@@ -19,6 +19,11 @@ export interface ProfitShare {
     share: number,
 }
 
+export interface WorkOrderTimerState {
+    endTimestamp: number | null;
+    wasStarted: boolean;
+}
+
 export interface WorkOrderData {
     profitShares: ProfitShare[];
     expensesList: Expense[];
@@ -29,6 +34,7 @@ export interface WorkOrderData {
     mineralsList: MineralToSell[];
     selectedMethod: RefineryMethod | null;
     selectedRefinery: RefineryWithLocationAndBonuses | null;
+    timer: WorkOrderTimerState;
     timestamp?: number; // Optional timestamp to identify when the data was saved
 }
 

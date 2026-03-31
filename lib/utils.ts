@@ -25,3 +25,17 @@ export const prepareExportData = (data: WorkOrderData, userList: User[]): WorkOr
     timestamp: data.timestamp ? data.timestamp : Date.now(),
   }
 }
+
+export const encodeUrlParams = (data: WorkOrderData): string => {
+  return encodeURIComponent(JSON.stringify(data))
+}
+
+export const decodeUrlParams = (encodedData: string): WorkOrderData | null => {
+  try {
+    const decodedString = decodeURIComponent(encodedData)
+    return JSON.parse(decodedString) as WorkOrderData
+  } catch (error) {
+    console.error("Failed to decode URL params:", error)
+    return null
+  }
+}

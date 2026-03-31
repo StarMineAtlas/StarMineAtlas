@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import type { WorkOrderTimerState } from "@/models/WorkOrder";
 import { useTranslation } from "react-i18next";
-
-const LOCAL_STORAGE_KEY = "sma-current-work-order-timer"
 
 function formatTime(seconds: number) {
     const h = Math.floor(seconds / 3600)
@@ -12,7 +11,12 @@ function formatTime(seconds: number) {
         .join(":");
 }
 
-export default function Timer() {
+interface TimerProps {
+    timerState: WorkOrderTimerState;
+    updateTimerState: React.Dispatch<React.SetStateAction<WorkOrderTimerState>>;
+}
+
+export default function Timer({ timerState, updateTimerState }: TimerProps) {
 
     const { t } = useTranslation()
 
@@ -31,37 +35,26 @@ export default function Timer() {
     const minInputRef = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => {
-        if (typeof window !== "undefined") {
-            const savedTimer = localStorage.getItem(LOCAL_STORAGE_KEY)
+        const savedEndTimestamp = typeof timerState?.endTimestamp === "number" ? timerState.endTimestamp : null
+        const savedWasStarted = Boolean(timerState?.wasStarted)
 
-            if (savedTimer) {
-                try {
-                    const data = JSON.parse(savedTimer)
-                    const savedEndTimestamp = typeof data?.endTimestamp === "number" ? data.endTimestamp : null
-                    const savedWasStarted = Boolean(data?.wasStarted)
+        if (savedEndTimestamp) {
+            const restoredRemaining = Math.max(0, Math.ceil((savedEndTimestamp - Date.now()) / 1000))
 
-                    if (savedEndTimestamp) {
-                        const restoredRemaining = Math.max(0, Math.ceil((savedEndTimestamp - Date.now()) / 1000))
+            setEndTimestamp(savedEndTimestamp)
+            setRemaining(restoredRemaining)
+            setWasStarted(savedWasStarted)
 
-                        setEndTimestamp(savedEndTimestamp)
-                        setRemaining(restoredRemaining)
-                        setWasStarted(savedWasStarted)
-
-                        if (restoredRemaining > 0) {
-                            setRunning(true)
-                            setShowTimer(true)
-                        } else if (savedWasStarted) {
-                            setRunning(false)
-                            setShowTimer(false)
-                        }
-                    } else if (savedWasStarted) {
-                        setWasStarted(true)
-                        setShowTimer(false)
-                    }
-                } catch (error) {
-                    console.error("Failed to parse saved timer state:", error)
-                }
+            if (restoredRemaining > 0) {
+                setRunning(true)
+                setShowTimer(true)
+            } else if (savedWasStarted) {
+                setRunning(false)
+                setShowTimer(false)
             }
+        } else if (savedWasStarted) {
+            setWasStarted(true)
+            setShowTimer(false)
         }
 
         setHasRestoredState(true)
@@ -101,15 +94,21 @@ export default function Timer() {
     }, [running]);
 
     useEffect(() => {
-        if (!hasRestoredState || typeof window === "undefined") {
+        if (!hasRestoredState) {
             return
         }
 
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
-            endTimestamp,
-            wasStarted
-        }))
-    }, [endTimestamp, hasRestoredState, wasStarted])
+        updateTimerState(previousState => {
+            if (previousState.endTimestamp === endTimestamp && previousState.wasStarted === wasStarted) {
+                return previousState
+            }
+
+            return {
+                endTimestamp,
+                wasStarted
+            }
+        })
+    }, [endTimestamp, hasRestoredState, updateTimerState, wasStarted])
 
     // Click outside to validate
     useEffect(() => {

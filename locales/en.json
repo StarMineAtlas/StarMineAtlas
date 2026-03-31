@@ -116,7 +116,9 @@
       "saveSuccessDescription": "Your work order has been saved locally.",
       "export": "Export",
       "list": "List",
-      "delete": "Delete"
+      "delete": "Delete",
+      "share": "Share",
+      "shareSuccessDescription": "Share link copied to clipboard. You can share it with your friends so they can view the details of this work order."
     },
     "listModal": {
       "title": "Work Orders List",

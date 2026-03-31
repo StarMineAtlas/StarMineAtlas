@@ -14,13 +14,14 @@ import { API_BASE_URL, API_ENDPOINTS, API_UEX_BASE_URL, UEX_API_ENDPOINTS } from
 import { Commodity, excludedIds } from "@/models/Commodity"
 import { Mineral, MineralToSell, MineralType } from "@/models/Mineral"
 import { RefineryMethod, RefineryMethodsPourcentages, RefineryWithLocationAndBonuses, RefineryYield } from "@/models/Refinery"
-import { type Expense, type ProfitShare as WorkOrderProfitShare, type User, type WorkOrderData } from "@/models/WorkOrder"
+import { type Expense, type ProfitShare as WorkOrderProfitShare, type User, type WorkOrderData, type WorkOrderTimerState } from "@/models/WorkOrder"
 import { ClipboardList } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 export default function WorkOrderPage() {
   const LOCAL_STORAGE_KEY = "sma-current-work-order"
+  const LEGACY_TIMER_LOCAL_STORAGE_KEY = "sma-current-work-order-timer"
   const { t } = useTranslation()
 
   const [minerals, setMinerals] = useState<Mineral[]>([])
@@ -46,17 +47,50 @@ export default function WorkOrderPage() {
 
   const [profitShares, setProfitShares] = useState<WorkOrderProfitShare[]>([])
   const [preserveRestoredSellingState, setPreserveRestoredSellingState] = useState(false)
+  const [timer, setTimer] = useState<WorkOrderTimerState>({ endTimestamp: null, wasStarted: false })
 
   const [allDatas, setAllDatas] = useState<WorkOrderData | null>(null)
 
   // Load from localStorage on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
+
+      const urlParams = new URLSearchParams(window.location.search)
+      const preset = urlParams.get("preset")
+      if (preset) {
+        localStorage.setItem(LOCAL_STORAGE_KEY, decodeURIComponent(preset))
+        const newUrl = window.location.origin + window.location.pathname
+        window.history.replaceState({}, document.title, newUrl)
+      }
+
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY)
 
       if (saved) {
         try {
           const data = JSON.parse(saved)
+          let restoredTimer: WorkOrderTimerState = { endTimestamp: null, wasStarted: false }
+
+          if (data?.timer) {
+            restoredTimer = {
+              endTimestamp: typeof data.timer.endTimestamp === "number" ? data.timer.endTimestamp : null,
+              wasStarted: Boolean(data.timer.wasStarted)
+            }
+          } else {
+            const savedLegacyTimer = localStorage.getItem(LEGACY_TIMER_LOCAL_STORAGE_KEY)
+
+            if (savedLegacyTimer) {
+              try {
+                const legacyTimer = JSON.parse(savedLegacyTimer)
+                restoredTimer = {
+                  endTimestamp: typeof legacyTimer?.endTimestamp === "number" ? legacyTimer.endTimestamp : null,
+                  wasStarted: Boolean(legacyTimer?.wasStarted)
+                }
+                localStorage.removeItem(LEGACY_TIMER_LOCAL_STORAGE_KEY)
+              } catch (error) {
+                console.error("Failed to parse saved timer state:", error)
+              }
+            }
+          }
 
           if (data) {
             setProfitShares(data.profitShares || [])
@@ -68,6 +102,7 @@ export default function WorkOrderPage() {
             setMineralsList(data.mineralsList || [])
             setSelectedMethod(data.selectedMethod || null)
             setSelectedRefinery(data.selectedRefinery || null)
+            setTimer(restoredTimer)
             setPreserveRestoredSellingState(true)
           }
         } catch (error) {
@@ -219,12 +254,13 @@ export default function WorkOrderPage() {
       selectedSellingTerminalName,
       mineralsList,
       selectedMethod,
-      selectedRefinery
+      selectedRefinery,
+      timer
     }
 
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(allData))
     setAllDatas(allData)
-  }, [hasRestoredLocalStorage, profitShares, expensesList, finalPrice, usersList, selectedPrice, selectedSellingTerminalName, mineralsList, selectedMethod, selectedRefinery])
+  }, [hasRestoredLocalStorage, profitShares, expensesList, finalPrice, usersList, selectedPrice, selectedSellingTerminalName, mineralsList, selectedMethod, selectedRefinery, timer])
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
@@ -258,7 +294,7 @@ export default function WorkOrderPage() {
                     updateSelectedRefinery={handleRefinerySelection}
                     updateSelectedMethod={handleRefineryMethodSelection}
                   ></RefinerySelectors>
-                  <Timer></Timer>
+                  <Timer timerState={timer} updateTimerState={setTimer}></Timer>
                 </div>
               </div>
               <div className="rounded-xl flex flex-col border border-slate-800 bg-slate-900/50">
