@@ -50,7 +50,7 @@ export default function GlobalActions({ allDatas }: GlobalActionsProps) {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedData))
         toast({
             variant: "success",
-            duration: 5000,
+            duration: 4000,
             title: t("workOrder.globalActions.saveSuccessTitle"),
             description: t("workOrder.globalActions.saveSuccessDescription"),
         })
@@ -69,7 +69,7 @@ export default function GlobalActions({ allDatas }: GlobalActionsProps) {
         navigator.clipboard.writeText(shareableUrl)
         toast({
             variant: "success",
-            duration: 5000,
+            duration: 4000,
             title: t("workOrder.globalActions.share"),
             description: t("workOrder.globalActions.shareSuccessDescription"),
         })
