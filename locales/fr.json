@@ -113,7 +113,8 @@
     "globalActions": {
       "save": "Sauvegarder",
       "export": "Exporter",
-      "list": "Liste"
+      "list": "Liste",
+      "delete": "Supprimer"
     },
     "listModal": {
       "title": "Liste des raffinages",

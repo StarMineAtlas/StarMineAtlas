@@ -1,8 +1,9 @@
 import { useTranslation } from "react-i18next";
-import { WorkOrderData, WorkOrderExportData } from "@/models/WorkOrder";
+import { WorkOrderData } from "@/models/WorkOrder";
 import WorkOrderListModal from "./WorkOrderListModal";
 import { useState } from "react";
 import { prepareExportData } from "@/lib/utils";
+import { ClipboardList, Download, Save } from "lucide-react";
 
 interface GlobalActionsProps {
     allDatas: WorkOrderData | null
@@ -51,17 +52,20 @@ export default function GlobalActions({ allDatas }: GlobalActionsProps) {
             <div className="w-full flex items-center justify-end gap-4 p-4 border-t border-slate-800 mt-4">
                 <button
                     onClick={handleShowListModal}
-                    className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
+                    className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded flex items-center">
+                    <ClipboardList className="inline-block w-4 h-4 me-2" />
                     {t("workOrder.globalActions.list")}
                 </button>
                 <button
                     onClick={handleExport}
-                    className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded">
+                    className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded flex items-center">
+                    <Download className="inline-block w-4 h-4 me-2" />
                     {t("workOrder.globalActions.export")}
                 </button>
                 <button
                     onClick={handleSave}
-                    className="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded">
+                    className="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded flex items-center">
+                    <Save className="inline-block w-4 h-4 me-2" />
                     {t("workOrder.globalActions.save")}
                 </button>
             </div>

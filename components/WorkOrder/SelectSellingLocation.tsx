@@ -2,7 +2,7 @@ import { API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
 import { Commodity, ComodityPriceSum } from "@/models/Commodity"
 import { MineralToSell } from "@/models/Mineral"
 import { Terminal } from "@/models/Terminal"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useEffectEvent, useRef, useState } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { useTranslation } from "react-i18next"
 
@@ -29,6 +29,15 @@ export default function SelectSellingLocation({
     const [comodityPriceSums, setComodityPriceSums] = useState<ComodityPriceSum[]>([])
     const [selectedComodity, setSelectedComodity] = useState<ComodityPriceSum | null>(null)
     const hasAppliedSavedSelection = useRef(false)
+    const computeRunId = useRef(0)
+
+    const emitSelectedPriceChange = useEffectEvent((price: number) => {
+        updateSelectedPrice?.(price)
+    })
+
+    const emitSelectedTerminalChange = useEffectEvent((terminalName: string | null, isUserAction?: boolean) => {
+        updateSelectedTerminalName?.(terminalName, isUserAction)
+    })
 
     useEffect(() => {
         filterLocations()
@@ -45,6 +54,9 @@ export default function SelectSellingLocation({
     }
 
     useEffect(() => {
+        const currentRunId = ++computeRunId.current
+        let cancelled = false
+
         const computeSums = async () => {
             const sums: ComodityPriceSum[] = []
             await Promise.all(filteredLocations.map(async location => {
@@ -68,14 +80,21 @@ export default function SelectSellingLocation({
                     })
                 }
             }))
+
+            if (cancelled || currentRunId !== computeRunId.current) {
+                return
+            }
+
             const sortedSums = sums.sort((a, b) => b.price_sell_sum - a.price_sell_sum)
             setComodityPriceSums(sortedSums)
 
             if (sortedSums.length === 0) {
                 setSelectedComodity(null)
-                updateSelectedTerminalName?.(null)
-                if (!preserveRestoredSelection && updateSelectedPrice) {
-                    updateSelectedPrice(0)
+                if (selectedTerminalName !== null) {
+                    emitSelectedTerminalChange(null)
+                }
+                if (!preserveRestoredSelection) {
+                    emitSelectedPriceChange(0)
                 }
                 hasAppliedSavedSelection.current = true
                 return
@@ -87,17 +106,34 @@ export default function SelectSellingLocation({
             const restoredSelection = !hasAppliedSavedSelection.current ? matchingSelection : null
             const nextSelection = matchingSelection || sortedSums[0]
 
-            setSelectedComodity(nextSelection)
-            updateSelectedTerminalName?.(nextSelection.terminal_name)
+            setSelectedComodity(currentSelection => {
+                if (
+                    currentSelection?.terminal_name === nextSelection.terminal_name
+                    && currentSelection.price_sell_sum === nextSelection.price_sell_sum
+                    && currentSelection.full_name === nextSelection.full_name
+                ) {
+                    return currentSelection
+                }
 
-            if (!preserveRestoredSelection && !restoredSelection && updateSelectedPrice) {
-                updateSelectedPrice(nextSelection.price_sell_sum)
+                return nextSelection
+            })
+
+            if (selectedTerminalName !== nextSelection.terminal_name) {
+                emitSelectedTerminalChange(nextSelection.terminal_name)
+            }
+
+            if (!preserveRestoredSelection && !restoredSelection) {
+                emitSelectedPriceChange(nextSelection.price_sell_sum)
             }
 
             hasAppliedSavedSelection.current = true
         }
         computeSums()
-    }, [filteredLocations, mineralsList, preserveRestoredSelection, selectedTerminalName, updateSelectedPrice, updateSelectedTerminalName])
+
+        return () => {
+            cancelled = true
+        }
+    }, [filteredLocations, mineralsList, preserveRestoredSelection, selectedTerminalName])
 
     const getFullName = async (terminal: Terminal) => {
         return `${terminal.star_system_name ? terminal.star_system_name + ' - ' : ''} ${terminal.planet_name ? terminal.planet_name + ' - ' : ''} ${terminal.moon_name ? terminal.moon_name + ' - ' : ''} ${terminal.space_station_name || terminal.outpost_name || terminal.poi_name || terminal.city_name || terminal.faction_name || terminal.company_name || terminal.name}`

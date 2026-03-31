@@ -113,7 +113,8 @@
     "globalActions": {
       "save": "Save",
       "export": "Export",
-      "list": "List"
+      "list": "List",
+      "delete": "Delete"
     },
     "listModal": {
       "title": "Work Orders List",

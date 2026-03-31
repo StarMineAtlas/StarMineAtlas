@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { WorkOrderData } from "@/models/WorkOrder";
 import { prepareExportData } from "@/lib/utils";
-import { Trash } from "lucide-react";
+import { Download, Trash } from "lucide-react";
 
 interface WorkOrderListModalProps {
     open: boolean;
@@ -125,13 +125,15 @@ export default function WorkOrderListModal({ open, onClose }: WorkOrderListModal
                                         <div className="relative md:absolute md:top-4 md:right-4 flex flex-row gap-4 mt-8 md:mt-0">
                                             <button
                                                 onClick={handleExport}
-                                                className="bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold py-2 px-4 rounded">
+                                                className="bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold py-2 px-4 rounded flex items-center">
+                                                <Download className="inline-block w-4 h-4 me-2" />
                                                 {t("workOrder.globalActions.export")}
                                             </button>
                                             <button
                                                 onClick={handleDelete}
-                                                className="bg-red-500 hover:bg-red-600 text-white text-xs font-semibold py-2 px-4 rounded">
-                                                <Trash className="w-4 h-4" />
+                                                className="bg-red-500 hover:bg-red-600 text-white text-xs font-semibold py-2 px-4 rounded flex items-center">
+                                                <Trash className="w-4 h-4 me-2" />
+                                                {t("workOrder.globalActions.delete")}
                                             </button>
                                         </div>
                                     </div>
