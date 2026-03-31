@@ -1,4 +1,5 @@
 import { I18nProvider } from '@/components/I18nProvider'
+import { Toaster } from '@/components/ui/toaster'
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
@@ -73,6 +74,7 @@ export default function RootLayout({
       <body className="font-sans antialiased" suppressHydrationWarning>
         <I18nProvider>
           {children}
+          <Toaster />
         </I18nProvider>
         <Footer />
         <Analytics />

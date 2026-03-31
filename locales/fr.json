@@ -112,6 +112,8 @@
     },
     "globalActions": {
       "save": "Sauvegarder",
+      "saveSuccessTitle": "Raffinage sauvegarde",
+      "saveSuccessDescription": "Votre raffinage a bien ete sauvegarde en local.",
       "export": "Exporter",
       "list": "Liste",
       "delete": "Supprimer"

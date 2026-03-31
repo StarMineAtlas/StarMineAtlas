@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { WorkOrderData } from "@/models/WorkOrder";
 import WorkOrderListModal from "./WorkOrderListModal";
 import { useState } from "react";
+import { toast } from "@/hooks/use-toast";
 import { prepareExportData } from "@/lib/utils";
 import { ClipboardList, Download, Save } from "lucide-react";
 
@@ -41,6 +42,11 @@ export default function GlobalActions({ allDatas }: GlobalActionsProps) {
         newData.timestamp = Date.now() // Add a timestamp to identify when the data was saved
         const updatedData = existingData ? [...JSON.parse(existingData), newData] : [newData]
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedData))
+        toast({
+            variant: "success",
+            title: t("workOrder.globalActions.saveSuccessTitle"),
+            description: t("workOrder.globalActions.saveSuccessDescription"),
+        })
     }
 
     const handleShowListModal = () => {

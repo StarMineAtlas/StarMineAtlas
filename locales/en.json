@@ -112,6 +112,8 @@
     },
     "globalActions": {
       "save": "Save",
+      "saveSuccessTitle": "Work order saved",
+      "saveSuccessDescription": "Your work order has been saved locally.",
       "export": "Export",
       "list": "List",
       "delete": "Delete"
