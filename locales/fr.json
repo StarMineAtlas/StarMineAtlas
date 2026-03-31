@@ -109,6 +109,10 @@
         "userPlaceholder": "Sélectionnez un utilisateur...",
         "includeTransferFee": "Inclure les frais de transfert"
       }
+    },
+    "globalActions": {
+      "save": "Sauvegarder",
+      "export": "Exporter"
     }
   },
   "loadout": {

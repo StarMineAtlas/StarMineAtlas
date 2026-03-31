@@ -4,6 +4,7 @@ import { Header } from "@/components/Header/Header"
 import { Loader } from "@/components/Loader"
 import Expenses from "@/components/WorkOrder/Expenses"
 import FinalSellingPrice from "@/components/WorkOrder/FinalSellingPrice"
+import GlobalActions from "@/components/WorkOrder/GlobalActions"
 import MineralsListing from "@/components/WorkOrder/MineralsListing"
 import ProfitShare from "@/components/WorkOrder/ProfitShare"
 import RefinerySelectors from "@/components/WorkOrder/RefinerySelectors"
@@ -15,10 +16,11 @@ import { Mineral, MineralToSell, MineralType } from "@/models/Mineral"
 import { RefineryMethod, RefineryMethodsPourcentages, RefineryWithLocationAndBonuses, RefineryYield } from "@/models/Refinery"
 import { Expense, User } from "@/models/WorkOrder"
 import { ClipboardList } from "lucide-react"
-import { use, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 export default function WorkOrderPage() {
+  const LOCAL_STORAGE_KEY = "sma-current-work-order"
   const { t } = useTranslation()
 
   const [minerals, setMinerals] = useState<Mineral[]>([])
@@ -42,7 +44,26 @@ export default function WorkOrderPage() {
 
   const [profitShares, setProfitShares] = useState<{ userId: number, part: number, share: number }[]>([])
 
+  // Load from localStorage on mount
   useEffect(() => {
+    const saved = typeof window !== "undefined" ? localStorage.getItem(LOCAL_STORAGE_KEY) : null
+    if (saved) {
+      try {
+        const data = JSON.parse(saved)
+        if (data) {
+          setProfitShares(data.profitShares || [])
+          setExpensesList(data.expensesList || [])
+          setFinalPrice(data.finalPrice || 0)
+          setUsersList(data.usersList || [{ id: 0, username: "You" }])
+          setSelectedPrice(data.selectedPrice || 0)
+          setMineralsList(data.mineralsList || [])
+          setSelectedMethod(data.selectedMethod || null)
+          setSelectedRefinery(data.selectedRefinery || null)
+        }
+      } catch (e) {
+        // ignore parse error
+      }
+    }
     Promise.all([
       fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.refineriesYields)
         .then(response => response.json())
@@ -120,9 +141,22 @@ export default function WorkOrderPage() {
     return commodities.filter(c => !excludedIds.includes(c.id_commodity))
   }
 
+  // Save to localStorage on any relevant state change
   useEffect(() => {
-    console.log("ICI", profitShares)
-  }, [profitShares])
+    const allData = {
+      profitShares,
+      expensesList,
+      finalPrice,
+      usersList,
+      selectedPrice,
+      mineralsList,
+      selectedMethod,
+      selectedRefinery
+    }
+    if (typeof window !== "undefined") {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(allData))
+    }
+  }, [profitShares, expensesList, finalPrice, usersList, selectedPrice, mineralsList, selectedMethod, selectedRefinery])
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
@@ -164,6 +198,7 @@ export default function WorkOrderPage() {
                   <FinalSellingPrice price={selectedPrice} updatePrice={setFinalPrice}></FinalSellingPrice>
                   <ProfitShare usersList={usersList} expensesList={expensesList} finalPrice={finalPrice} updatedProfitShares={profitShares} updateUsersList={setUsersList} updateProfitShares={setProfitShares}></ProfitShare>
                   <Expenses expensesList={expensesList} usersList={usersList} profitShares={profitShares} updateExpenseList={setExpensesList} ></Expenses>
+                  <GlobalActions></GlobalActions>
                 </div>
               </div>
             </div>
