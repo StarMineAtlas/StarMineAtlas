@@ -222,40 +222,43 @@ export default function Expenses({
                                 key={expense.id}
                                 className="flex flex-col md:flex-row md:items-center justify-between gap-2 border border-slate-700 rounded-lg px-4 py-2"
                             >
-                                <div className="flex flex-row flex-wrap md:flex-nowrap items-center gap-2 flex-1">
+                                <div className="grid grid-cols-4 md:grid-cols-6 items-center gap-2 flex-1">
                                     {/* USER SELECT */}
-                                    <Select
-                                        value={String(local.userId)}
-                                        onValueChange={val =>
-                                            handleUpdateExpense(
-                                                expense.id,
-                                                "userId",
-                                                Number(val)
-                                            )
-                                        }
-                                    >
-                                        <SelectTrigger className="w-32 bg-slate-900/50 text-cyan-50">
-                                            <SelectValue>
-                                                {user?.username ?? ""}
-                                            </SelectValue>
-                                        </SelectTrigger>
+                                    <div className="col-span-2">
+                                        <Select
+                                            value={String(local.userId)}
+                                            onValueChange={val =>
+                                                handleUpdateExpense(
+                                                    expense.id,
+                                                    "userId",
+                                                    Number(val)
+                                                )
+                                            }
+                                        >
+                                            <SelectTrigger className="bg-slate-900/50 text-cyan-50 w-full">
+                                                <SelectValue>
+                                                    {user?.username ?? ""}
+                                                </SelectValue>
+                                            </SelectTrigger>
 
-                                        <SelectContent className="bg-slate-900">
-                                            {usersList?.map(u => (
-                                                <SelectItem
-                                                    key={u.id}
-                                                    value={String(u.id)}
-                                                    className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
-                                                >
-                                                    {u.username}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                                            <SelectContent className="bg-slate-900">
+                                                {usersList?.map(u => (
+                                                    <SelectItem
+                                                        key={u.id}
+                                                        value={String(u.id)}
+                                                        className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300"
+                                                    >
+                                                        {u.username}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
 
                                     {/* NAME */}
                                     <input
                                         type="text"
+                                        name="name"
                                         value={local.name}
                                         onChange={e =>
                                             handleUpdateExpense(
@@ -267,35 +270,38 @@ export default function Expenses({
                                         placeholder={t(
                                             "workOrder.sellingSection.expenses.namePlaceholder"
                                         )}
-                                        className="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm w-20 md:w-32"
+                                        className="col-span-2 md:col-span-1 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm"
                                     />
 
                                     {/* AMOUNT */}
-                                    <input
-                                        type="number"
-                                        value={local.amount}
-                                        onChange={e =>
-                                            handleUpdateExpense(
-                                                expense.id,
-                                                "amount",
-                                                Number(e.target.value)
-                                            )
-                                        }
-                                        min={0}
-                                        step={1}
-                                        placeholder={t(
-                                            "workOrder.sellingSection.expenses.amountPlaceholder"
-                                        )}
-                                        className="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm w-18 md:w-24 text-end"
-                                    />
+                                    <div className="flex flex-row col-span-3 md:col-span-1 ">
+                                        <input
+                                            type="number"
+                                            name="amount"
+                                            value={local.amount}
+                                            onChange={e =>
+                                                handleUpdateExpense(
+                                                    expense.id,
+                                                    "amount",
+                                                    Number(e.target.value)
+                                                )
+                                            }
+                                            min={0}
+                                            step={1}
+                                            placeholder={t(
+                                                "workOrder.sellingSection.expenses.amountPlaceholder"
+                                            )}
+                                            className="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm text-end w-full"
+                                        />
 
-                                    <span className="text-slate-400 device-font">
-                                        aUEC
-                                    </span>
+                                        <span className="text-slate-400 self-center ms-2 device-font">
+                                            aUEC
+                                        </span>
+                                    </div>
 
                                     {/* DELETE */}
                                     <div
-                                        className="text-red-500 hover:text-red-700 p-1 w-1/2 flex items-center justify-end"
+                                        className="col-span-1 md:col-span-2 text-red-500 hover:text-red-700 p-1 flex items-center justify-end"
                                     >
                                         <Trash
                                             onClick={() =>

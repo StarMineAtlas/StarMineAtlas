@@ -100,7 +100,7 @@ export default function RefinerySelectors({ refineryYield, refineryMethod, updat
     }
 
     return (
-        <div className="flex flex-col w-full border-t border-slate-800 pt-4 gap-4">
+        <div className="flex flex-col lg:flex-row w-full border-t border-slate-800 pt-4 gap-4">
             <Select
                 value={selectedRefinery?.terminal_name || ""}
                 onValueChange={handleRefineryChange}

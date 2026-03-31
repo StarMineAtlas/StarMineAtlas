@@ -143,7 +143,7 @@ export default function WorkOrderPage() {
           {loading ? (
             <Loader loaderText={"Loading Data"} />
           ) : (
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 mx-4 md:mx-0">
+            <div className="w-full grid grid-cols-1 gap-4 mx-4 md:mx-0">
               <div className="rounded-xl flex flex-col border border-slate-800 bg-slate-900/50">
                 <h2 className="text-lg text-cyan-400 py-4 border-b w-full border-slate-800" suppressHydrationWarning>{t("workOrder.refinerySection.title")}</h2>
                 <div className="flex flex-col justify-start h-full gap-4 p-4">
