@@ -112,7 +112,34 @@
     },
     "globalActions": {
       "save": "Save",
-      "export": "Export"
+      "export": "Export",
+      "list": "List"
+    },
+    "listModal": {
+      "title": "Work Orders List",
+      "closeButton": "Close",
+      "workOrder": "Work Order",
+      "noWorkOrders": "No work orders found",
+      "noProfitShares": "No profit shares recorded for this work order",
+      "noExpenses": "No expenses recorded for this work order",
+      "deleteConfirmation": "Are you sure you want to delete this work order? This action cannot be undone.",
+      "mineralsTable": {
+        "title": "Minerals",
+        "name": "Name",
+        "quality": "Quality",
+        "quantity": "Quantity (mSCU)",
+        "yield": "Yield (mSCU)"
+      },
+      "profitSharesTable": {
+        "title": "Profit Shares",
+        "user": "User",
+        "payment": "Payment"
+      },
+      "expensesTable": {
+        "title": "Expenses",
+        "user": "User",
+        "amount": "Amount"
+      }
     }
   },
   "loadout": {

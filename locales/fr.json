@@ -112,7 +112,34 @@
     },
     "globalActions": {
       "save": "Sauvegarder",
-      "export": "Exporter"
+      "export": "Exporter",
+      "list": "Liste"
+    },
+    "listModal": {
+      "title": "Liste des raffinages",
+      "closeButton": "Fermer",
+      "workOrder": "Raffinage",
+      "noWorkOrders": "Aucun ordre de travail trouvé",
+      "noProfitShares": "Aucun partage de profit enregistré pour cet ordre de travail",
+      "noExpenses": "Aucune dépense enregistrée pour cet ordre de travail",
+      "deleteConfirmation": "Êtes-vous sûr de vouloir supprimer ce raffinage ? Cette action est irréversible.",
+      "mineralsTable": {
+        "title": "Minerais",
+        "name": "Minerai",
+        "quality": "Qualité",
+        "quantity": "Quantité (mSCU)",
+        "yield": "Rendement (mSCU)"
+      },
+      "profitSharesTable": {
+        "title": "Partage des profits",
+        "user": "Utilisateur",
+        "payment": "Paiement"
+      },
+      "expensesTable": {
+        "title": "Dépenses",
+        "user": "Utilisateur",
+        "amount": "Montant"
+      }
     }
   },
   "loadout": {

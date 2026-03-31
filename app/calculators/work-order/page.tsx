@@ -14,7 +14,7 @@ import { API_BASE_URL, API_ENDPOINTS, API_UEX_BASE_URL, UEX_API_ENDPOINTS } from
 import { Commodity, excludedIds } from "@/models/Commodity"
 import { Mineral, MineralToSell, MineralType } from "@/models/Mineral"
 import { RefineryMethod, RefineryMethodsPourcentages, RefineryWithLocationAndBonuses, RefineryYield } from "@/models/Refinery"
-import { Expense, User } from "@/models/WorkOrder"
+import { type Expense, type ProfitShare as WorkOrderProfitShare, type User, type WorkOrderData } from "@/models/WorkOrder"
 import { ClipboardList } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -44,8 +44,10 @@ export default function WorkOrderPage() {
   const [usersList, setUsersList] = useState<User[]>([{ id: 0, username: "You" }])
   const [expensesList, setExpensesList] = useState<Expense[]>([])
 
-  const [profitShares, setProfitShares] = useState<{ userId: number, part: number, share: number }[]>([])
+  const [profitShares, setProfitShares] = useState<WorkOrderProfitShare[]>([])
   const [preserveRestoredSellingState, setPreserveRestoredSellingState] = useState(false)
+
+  const [allDatas, setAllDatas] = useState<WorkOrderData | null>(null)
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -221,6 +223,7 @@ export default function WorkOrderPage() {
     }
 
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(allData))
+    setAllDatas(allData)
   }, [hasRestoredLocalStorage, profitShares, expensesList, finalPrice, usersList, selectedPrice, selectedSellingTerminalName, mineralsList, selectedMethod, selectedRefinery])
 
   return (
@@ -272,7 +275,7 @@ export default function WorkOrderPage() {
                   <FinalSellingPrice price={finalPrice} updatePrice={setFinalPrice}></FinalSellingPrice>
                   <ProfitShare usersList={usersList} expensesList={expensesList} finalPrice={finalPrice} updatedProfitShares={profitShares} updateUsersList={setUsersList} updateProfitShares={setProfitShares}></ProfitShare>
                   <Expenses expensesList={expensesList} usersList={usersList} profitShares={profitShares} updateExpenseList={setExpensesList} ></Expenses>
-                  <GlobalActions></GlobalActions>
+                  <GlobalActions allDatas={allDatas}></GlobalActions>
                 </div>
               </div>
             </div>
