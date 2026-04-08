@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { WorkOrderData } from "@/models/WorkOrder";
 import WorkOrderListModal from "./WorkOrderListModal";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import { encodeUrlParams, prepareExportData } from "@/lib/utils";
 import { ClipboardList, Download, Save, Share2 } from "lucide-react";
@@ -16,12 +16,6 @@ export default function GlobalActions({ allDatas }: GlobalActionsProps) {
     const { t } = useTranslation()
 
     const [openListModal, setOpenListModal] = useState(false)
-
-    useEffect(() => {
-        console.log("Exporting data:", allDatas)
-        const encodedData = encodeUrlParams(allDatas as WorkOrderData)
-        console.log("Encoded URL Params:", encodedData)
-    }, [])
 
     const handleExport = () => {
         // export the data as a JSON file

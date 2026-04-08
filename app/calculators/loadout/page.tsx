@@ -8,13 +8,59 @@ import { LoadoutResume } from "@/components/Loadout/LoadoutResume"
 import { LoadoutSaveModal } from "@/components/Loadout/LoadoutSaveModal"
 import { LoadoutShopModal } from "@/components/Loadout/LoadoutShopModal"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { toast } from "@/components/ui/use-toast"
 import { API_UEX_BASE_URL, UEX_API_ENDPOINTS, UEX_API_ITEM_CATEGORIES } from "@/lib/api-endpoints"
+import { decodeUrlParams, encodeUrlParams, isLoadoutSharePreset, type LoadoutSharePreset } from "@/lib/utils"
 import { Loadout, LoadoutBlocConfig, ModuleGadgetWithActive, ShipConfiguration } from "@/models/Loadout"
 import { miningLaserAttributeType, MiningLaserRawData, MiningLaserWithPrices } from "@/models/MiningLaser"
 import { gadgetAttributeType, moduleAttributeType, ModuleGadgetRawData, ModuleGadgetWithPrices } from "@/models/ModuleGadget"
-import { RotateCcw, Save, Store, Toolbox, Trash } from "lucide-react"
-import { useEffect, useState } from "react"
+import { RotateCcw, Save, Share2, Store, Toolbox, Trash } from "lucide-react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
+
+const SHIPS: ShipConfiguration[] = [
+  {
+    name: "Prospector",
+    baseLaser: 'Arbor MH1',
+    numberOfLasers: 1,
+    canChangeLasers: true,
+    laserSizes: ["1", "S0"],
+    isLaserEditable: true,
+  },
+  {
+    name: "Golem",
+    baseLaser: 'Pitman',
+    numberOfLasers: 1,
+    canChangeLasers: false,
+    laserSizes: ["S0"],
+    isLaserEditable: false,
+  },
+  {
+    name: "Mole",
+    baseLaser: 'Arbor MH2',
+    numberOfLasers: 3,
+    canChangeLasers: true,
+    laserSizes: ["2", "1", "S0"],
+    isLaserEditable: true,
+  }
+]
+
+const SAVED_LOADOUTS_STORAGE_KEY = "mining-atlas-loadout-saved"
+
+const getStoredLoadouts = (): Loadout[] => {
+  try {
+    const existing = localStorage.getItem(SAVED_LOADOUTS_STORAGE_KEY)
+
+    if (!existing) {
+      return []
+    }
+
+    const parsed = JSON.parse(existing)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
 
 export default function LoadoutPage() {
   const { t } = useTranslation()
@@ -28,35 +74,10 @@ export default function LoadoutPage() {
   const [formattedModules, setFormattedModules] = useState<ModuleGadgetWithPrices[]>([]);
 
   // Ship configuration
-  const ships: ShipConfiguration[] = [
-    {
-      name: "Prospector",
-      baseLaser: 'Arbor MH1',
-      numberOfLasers: 1,
-      canChangeLasers: true,
-      laserSizes: ["1", "S0"],
-      isLaserEditable: true,
-    },
-    {
-      name: "Golem",
-      baseLaser: 'Pitman',
-      numberOfLasers: 1,
-      canChangeLasers: false,
-      laserSizes: ["S0"],
-      isLaserEditable: false,
-    },
-    {
-      name: "Mole",
-      baseLaser: 'Arbor MH2',
-      numberOfLasers: 3,
-      canChangeLasers: true,
-      laserSizes: ["2", "1", "S0"],
-      isLaserEditable: true,
-    }
-  ]
-
-  const [selectedShip, setSelectedShip] = useState<ShipConfiguration>(ships[0]);
+  const [selectedShip, setSelectedShip] = useState<ShipConfiguration>(SHIPS[0]);
   const [loadout, setLoadout] = useState<Loadout | null>(null);
+  const [pendingPresetLoadout, setPendingPresetLoadout] = useState<Loadout | LoadoutSharePreset | null>(null);
+  const isApplyingPresetRef = useRef(false);
 
   // Modal state
   const [saveModalOpen, setSaveModalOpen] = useState(false);
@@ -66,23 +87,105 @@ export default function LoadoutPage() {
   const [savedLoadouts, setSavedLoadouts] = useState<Loadout[]>([]);
   const [selectedSavedLoadout, setSelectedSavedLoadout] = useState<string>("");
 
+  const shipsByName = useMemo(() => new Map(SHIPS.map((ship) => [ship.name, ship])), []);
+  const lasersById = useMemo(() => new Map(formattedLasers.map((laser) => [laser.id, laser])), [formattedLasers]);
+  const modulesById = useMemo(() => new Map(formattedModules.map((module) => [module.id, module])), [formattedModules]);
+  const gadgetsById = useMemo(() => new Map(formattedGadgets.map((gadget) => [gadget.id, gadget])), [formattedGadgets]);
+
+  const createInitialLoadout = (ship: ShipConfiguration): Loadout => {
+    const baseLaser = formattedLasers.find(laser => laser.name === ship.baseLaser) || null;
+
+    return {
+      ship,
+      bloc: Array.from({ length: ship.numberOfLasers }).map(() => ({
+        miningLaser: baseLaser,
+        isLaserActive: !!baseLaser,
+        modules: Array.from({ length: parseInt(baseLaser?.slots || "0") }).map(() => null) as (ModuleGadgetWithActive | null)[]
+      })),
+      gadgets: [null],
+      isSaved: false,
+      name: ""
+    };
+  };
+
+  const rebuildLoadoutFromSharePreset = (preset: LoadoutSharePreset): Loadout => {
+    const ship = shipsByName.get(preset.s) || SHIPS[0];
+    const initialLoadout = createInitialLoadout(ship);
+
+    const rebuiltBloc = initialLoadout.bloc.map((defaultBloc, blocIndex) => {
+      const presetBloc = preset.b[blocIndex];
+
+      if (!presetBloc) {
+        return defaultBloc;
+      }
+
+      const miningLaser = presetBloc[0] === null
+        ? null
+        : lasersById.get(presetBloc[0]) || null;
+
+      return {
+        miningLaser,
+        isLaserActive: Boolean(presetBloc[1]) && !!miningLaser,
+        modules: presetBloc[2].map(([moduleId, isActive]) => {
+          if (moduleId === null) {
+            return null;
+          }
+
+          const module = modulesById.get(moduleId);
+
+          if (!module) {
+            return null;
+          }
+
+          return {
+            ...module,
+            isActive: Boolean(isActive),
+          };
+        })
+      };
+    });
+
+    const rebuiltGadgets = preset.g.map((gadgetEntry) => {
+      if (!gadgetEntry || gadgetEntry[0] === null) {
+        return null;
+      }
+
+      const gadget = gadgetsById.get(gadgetEntry[0]);
+
+      if (!gadget) {
+        return null;
+      }
+
+      return {
+        ...gadget,
+        isActive: Boolean(gadgetEntry[1]),
+      };
+    });
+
+    if (rebuiltGadgets.length === 0 || rebuiltGadgets.every(gadget => gadget !== null)) {
+      rebuiltGadgets.push(null);
+    }
+
+    return {
+      ship,
+      bloc: rebuiltBloc,
+      gadgets: rebuiltGadgets,
+      isSaved: false,
+      name: preset.n || "",
+    };
+  };
+
   useEffect(() => {
     setLoading(true);
-    try {
-      const existing = localStorage.getItem("mining-atlas-loadout-saved");
-      if (existing) {
-        const arr = JSON.parse(existing);
-        if (Array.isArray(arr)) {
-          setSavedLoadouts(arr);
-        } else {
-          setSavedLoadouts([]);
-        }
-      } else {
-        setSavedLoadouts([]);
+    const urlParams = new URLSearchParams(window.location.search)
+    const preset = urlParams.get("preset")
+    if (preset) {
+      const decodedPreset = decodeUrlParams<Loadout | LoadoutSharePreset>(preset)
+      if (decodedPreset) {
+        setPendingPresetLoadout(decodedPreset)
       }
-    } catch {
-      setSavedLoadouts([]);
     }
+    setSavedLoadouts(getStoredLoadouts())
     Promise.all([
       fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.itemsCategory + UEX_API_ITEM_CATEGORIES.miningLasers),
       fetch(API_UEX_BASE_URL + UEX_API_ENDPOINTS.itemsCategory + UEX_API_ITEM_CATEGORIES.gadgets),
@@ -196,30 +299,43 @@ export default function LoadoutPage() {
 
   useEffect(() => {
     if (selectedShip) {
-      const baseLaser = formattedLasers.find(laser => laser.name === selectedShip.baseLaser) || null;
-      const initialLoadout: Loadout = {
-        ship: selectedShip,
-        bloc: Array.from({ length: selectedShip.numberOfLasers }).map(() => ({
-          miningLaser: baseLaser,
-          isLaserActive: !!baseLaser,
-          modules: Array.from({ length: parseInt(baseLaser?.slots || "0") }).map(() => ({})) as ModuleGadgetWithActive[]
-        })),
-        gadgets: Array.from({ length: 1 }).map(() => null) as (ModuleGadgetWithActive | null)[],
-        isSaved: false,
-        name: ""
-      };
-      setLoadout(initialLoadout);
+      if (pendingPresetLoadout) {
+        return;
+      }
+
+      if (isApplyingPresetRef.current) {
+        isApplyingPresetRef.current = false;
+        return;
+      }
+
+      setLoadout(createInitialLoadout(selectedShip));
     }
-  }, [selectedShip, formattedLasers, formattedModules, formattedGadgets]);
+  }, [selectedShip, formattedLasers, pendingPresetLoadout]);
+
+  useEffect(() => {
+    if (!pendingPresetLoadout || loading) {
+      return;
+    }
+
+    const resolvedLoadout = isLoadoutSharePreset(pendingPresetLoadout)
+      ? rebuildLoadoutFromSharePreset(pendingPresetLoadout)
+      : pendingPresetLoadout;
+
+    isApplyingPresetRef.current = true;
+    setSelectedSavedLoadout("");
+    setSelectedShip(resolvedLoadout.ship);
+    setLoadout(resolvedLoadout);
+    setPendingPresetLoadout(null);
+  }, [gadgetsById, lasersById, loading, modulesById, pendingPresetLoadout, shipsByName]);
 
   const getMinMaxPower = (miningLaser: MiningLaserWithPrices) => {
-    const sliptedValue = miningLaser?.min_power?.split('-');
-    const minPower = sliptedValue ? sliptedValue[0] : "";
-    const maxPower = sliptedValue ? sliptedValue[1] : "";
+    const splitValue = miningLaser?.min_power?.split('-');
+    const minPower = splitValue ? splitValue[0] : "";
+    const maxPower = splitValue ? splitValue[1] : "";
     return { newMin: minPower, newMax: maxPower };
   };
 
-  const handleBlocChange = (updatedBloc: any, index: number) => {
+  const handleBlocChange = (updatedBloc: LoadoutBlocConfig, index: number) => {
     if (!loadout) return;
     const newLoadout = { ...loadout, bloc: [...loadout.bloc] };
     newLoadout.bloc[index] = updatedBloc;
@@ -235,20 +351,8 @@ export default function LoadoutPage() {
 
   const resetActualLoadout = () => {
     if (!loadout) return;
-    const baseLaser = formattedLasers.find(laser => laser.name === loadout.ship.baseLaser) || null;
-    const resetedLoadout: Loadout = {
-      ship: loadout.ship,
-      bloc: Array.from({ length: loadout.ship.numberOfLasers }).map(() => ({
-        miningLaser: baseLaser,
-        isLaserActive: !!baseLaser,
-        modules: Array.from({ length: parseInt(baseLaser?.slots || "0") }).map(() => ({})) as ModuleGadgetWithActive[]
-      })),
-      gadgets: Array.from({ length: 1 }).map(() => null) as (ModuleGadgetWithActive | null)[],
-      isSaved: false,
-      name: ""
-    };
     setSelectedSavedLoadout("");
-    setLoadout(resetedLoadout);
+    setLoadout(createInitialLoadout(loadout.ship));
   }
 
 
@@ -256,35 +360,24 @@ export default function LoadoutPage() {
     if (!loadout) return;
     const toSave = { ...loadout, name, isSaved: true };
     try {
-      const existing = localStorage.getItem("mining-atlas-loadout-saved");
-      let arr = [];
-      if (existing) {
-        arr = JSON.parse(existing);
-        if (!Array.isArray(arr)) arr = [];
-      }
+      const arr = getStoredLoadouts();
       const existingIndex = arr.findIndex((l: Loadout) => l.name === name);
       if (existingIndex !== -1) {
         arr[existingIndex] = toSave;
       } else {
         arr.push(toSave);
       }
-      localStorage.setItem("mining-atlas-loadout-saved", JSON.stringify(arr));
+      localStorage.setItem(SAVED_LOADOUTS_STORAGE_KEY, JSON.stringify(arr));
     } catch (e) {
       // Optionally handle error
     }
     setSaveModalOpen(false);
     // Refresh saved loadouts from localStorage
     setTimeout(() => {
-      try {
-        const existing = localStorage.getItem("mining-atlas-loadout-saved");
-        if (existing) {
-          const arr = JSON.parse(existing);
-          if (Array.isArray(arr)) {
-            setSavedLoadouts(arr);
-            setSelectedSavedLoadout(arr.findIndex((l: Loadout) => l.name === name).toString() || "");
-          }
-        }
-      } catch { }
+      const storedLoadouts = getStoredLoadouts();
+      setSavedLoadouts(storedLoadouts);
+      const selectedIndex = storedLoadouts.findIndex((l: Loadout) => l.name === name);
+      setSelectedSavedLoadout(selectedIndex >= 0 ? selectedIndex.toString() : "");
     }, 1000);
   };
 
@@ -311,16 +404,11 @@ export default function LoadoutPage() {
     // alert for confirmation
     if (!confirm(t("loadout.confirmRemove"))) return;
     try {
-      const existing = localStorage.getItem("mining-atlas-loadout-saved");
-      let arr = [];
-      if (existing) {
-        arr = JSON.parse(existing);
-        if (!Array.isArray(arr)) arr = [];
-      }
+      const arr = getStoredLoadouts();
       const indexToRemove = parseInt(idx);
       if (isNaN(indexToRemove) || indexToRemove < 0 || indexToRemove >= arr.length) return;
       arr.splice(indexToRemove, 1);
-      localStorage.setItem("mining-atlas-loadout-saved", JSON.stringify(arr));
+      localStorage.setItem(SAVED_LOADOUTS_STORAGE_KEY, JSON.stringify(arr));
       setSavedLoadouts(arr);
       setSelectedSavedLoadout("");
     } catch (e) {
@@ -329,12 +417,40 @@ export default function LoadoutPage() {
   };
 
   const handleSelectShip = (shipName: string) => {
-    const ship = ships.find(s => s.name === shipName);
+    const ship = shipsByName.get(shipName);
     if (ship) {
       setSelectedShip(ship);
       setSelectedSavedLoadout("");
     }
   };
+
+  const handleShare = async () => {
+    if (!loadout) {
+      return
+    }
+
+    const copyLoadout = { ...loadout };
+    copyLoadout.isSaved = false;
+    const encodedData = encodeUrlParams(copyLoadout);
+    const shareableUrl = `${window.location.origin}${window.location.pathname}?preset=${encodedData}`
+
+    try {
+      await navigator.clipboard.writeText(shareableUrl)
+      toast({
+        variant: "success",
+        duration: 4000,
+        title: t("loadout.share.shareButton"),
+        description: t("loadout.share.shareSuccessDescription"),
+      })
+    } catch {
+      toast({
+        variant: "error",
+        duration: 4000,
+        title: t("loadout.share.shareButton"),
+        description: t("loadout.share.shareErrorDescription"),
+      })
+    }
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
@@ -391,7 +507,7 @@ export default function LoadoutPage() {
                       <SelectValue placeholder={t("loadout.selectShip", "Select your ship")} />
                     </SelectTrigger>
                     <SelectContent className="border-slate-800 bg-slate-900">
-                      {ships.map((ship) => (
+                      {SHIPS.map((ship) => (
                         <SelectItem key={ship.name} value={ship.name} className="text-cyan-50 focus:bg-slate-800 focus:text-cyan-300">
                           {ship.name}
                         </SelectItem>
@@ -401,7 +517,7 @@ export default function LoadoutPage() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 w-full">
                   {loadout && Array.from({ length: selectedShip.numberOfLasers }).map((_, idx) => (
-                    <LoadoutBloc key={idx} index={idx} shipConfig={ships.find(ship => ship.name === selectedShip.name)!} bloc={loadout.bloc[idx]} lasers={formattedLasers} modules={formattedModules} onChange={(updatedBloc: LoadoutBlocConfig) => handleBlocChange(updatedBloc, idx)} />
+                    <LoadoutBloc key={idx} index={idx} shipConfig={selectedShip} bloc={loadout.bloc[idx]} lasers={formattedLasers} modules={formattedModules} onChange={(updatedBloc: LoadoutBlocConfig) => handleBlocChange(updatedBloc, idx)} />
                   ))}
                   <LoadoutInventory gadgetList={loadout?.gadgets || []} gadgets={formattedGadgets} onChange={(updatedGadgetList: (ModuleGadgetWithActive | null)[]) => handleGadgetChange(updatedGadgetList)} />
                   <LoadoutResume loadout={loadout!} />
@@ -413,7 +529,14 @@ export default function LoadoutPage() {
                   </button>
                   <div className="mt-6 flex gap-3">
                     <button
-                      className="inline-flex items-center gap-2 rounded bg-cyan-700 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-cyan-700/30"
+                      className="inline-flex items-center gap-2 rounded bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-blue-700/30"
+                      onClick={handleShare}
+                    >
+                      <Share2 className="h-4 w-4" />
+                      {t("loadout.share.shareButton", "Share")}
+                    </button>
+                    <button
+                      className="inline-flex items-center gap-2 rounded bg-cyan-500 px-4 py-2 text-sm font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-cyan-700/30"
                       onClick={() => setSaveModalOpen(true)}
                       disabled={!loadout}
                     >
@@ -421,7 +544,7 @@ export default function LoadoutPage() {
                       {t("loadout.saveButton", "Save")}
                     </button>
                     <button
-                      className="inline-flex items-center gap-2 rounded bg-emerald-700/50 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-emerald-700/30"
+                      className="inline-flex items-center gap-2 rounded bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-emerald-700/30"
                       onClick={() => setShopModalOpen(true)}
                       disabled={!loadout}
                     >

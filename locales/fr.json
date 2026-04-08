@@ -182,6 +182,11 @@
     },
     "loadLoadout": "Charger un loadout sauvegardé",
     "loadLoadoutPlaceholder": "Sélectionnez un loadout sauvegardé",
+    "share": {
+      "shareButton": "Partager",
+      "shareErrorDescription": "Impossible de copier le lien de partage dans le presse-papiers.",
+      "shareSuccessDescription": "Lien de partage copié dans le presse-papiers. Vous pouvez le partager avec vos amis pour qu'ils puissent voir les détails de ce loadout."
+    },
     "saveLoadout": {
       "title": "Sauvegarder le Loadout",
       "nameLabel": "Nom du Loadout",

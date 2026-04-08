@@ -182,6 +182,11 @@
     },
     "loadLoadout": "Load Loadout",
     "loadLoadoutPlaceholder": "Select a saved loadout",
+    "share": {
+      "shareButton": "Share",
+      "shareErrorDescription": "Failed to copy the share link to the clipboard.",
+      "shareSuccessDescription": "Share link copied to clipboard. You can share it with your friends so they can view the details of this loadout."
+    },
     "saveLoadout": {
       "title": "Save Loadout",
       "nameLabel": "Loadout Name",

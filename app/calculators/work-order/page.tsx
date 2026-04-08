@@ -11,6 +11,7 @@ import RefinerySelectors from "@/components/WorkOrder/RefinerySelectors"
 import SelectSellingLocation from "@/components/WorkOrder/SelectSellingLocation"
 import Timer from "@/components/WorkOrder/Timer"
 import { API_BASE_URL, API_ENDPOINTS, API_UEX_BASE_URL, UEX_API_ENDPOINTS } from "@/lib/api-endpoints"
+import { decodeUrlParams } from "@/lib/utils"
 import { Commodity, excludedIds } from "@/models/Commodity"
 import { Mineral, MineralToSell, MineralType } from "@/models/Mineral"
 import { RefineryMethod, RefineryMethodsPourcentages, RefineryWithLocationAndBonuses, RefineryYield } from "@/models/Refinery"
@@ -58,7 +59,10 @@ export default function WorkOrderPage() {
       const urlParams = new URLSearchParams(window.location.search)
       const preset = urlParams.get("preset")
       if (preset) {
-        localStorage.setItem(LOCAL_STORAGE_KEY, decodeURIComponent(preset))
+        const decodedPreset = decodeUrlParams<WorkOrderData>(preset)
+        if (decodedPreset) {
+          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(decodedPreset))
+        }
         const newUrl = window.location.origin + window.location.pathname
         window.history.replaceState({}, document.title, newUrl)
       }
