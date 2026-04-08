@@ -3,8 +3,9 @@ import { WorkOrderData } from "@/models/WorkOrder";
 import WorkOrderListModal from "./WorkOrderListModal";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
-import { encodeUrlParams, prepareExportData } from "@/lib/utils";
+import { encodeUrlParams } from "@/lib/utils";
 import { ClipboardList, Download, Save, Share2 } from "lucide-react";
+import WorkOrderExportModal from "./WorkOrderExportModal";
 
 interface GlobalActionsProps {
     allDatas: WorkOrderData | null
@@ -16,21 +17,14 @@ export default function GlobalActions({ allDatas }: GlobalActionsProps) {
     const { t } = useTranslation()
 
     const [openListModal, setOpenListModal] = useState(false)
+    const [openExportModal, setOpenExportModal] = useState(false)
 
     const handleExport = () => {
-        // export the data as a JSON file
         if (!allDatas) {
             return
-        } else {
-            const exportData = prepareExportData(allDatas, allDatas.usersList)
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData))
-            const downloadAnchorNode = document.createElement('a')
-            downloadAnchorNode.setAttribute("href", dataStr)
-            downloadAnchorNode.setAttribute("download", "work_order_data.json")
-            document.body.appendChild(downloadAnchorNode) // required for firefox
-            downloadAnchorNode.click()
-            downloadAnchorNode.remove()
         }
+
+        setOpenExportModal(true)
     }
 
     const handleSave = () => {
@@ -99,6 +93,7 @@ export default function GlobalActions({ allDatas }: GlobalActionsProps) {
                 </button>
             </div>
             <WorkOrderListModal open={openListModal} onClose={() => setOpenListModal(false)} />
+            <WorkOrderExportModal open={openExportModal} allDatas={allDatas} onClose={() => setOpenExportModal(false)} />
         </>
     )
 }

@@ -1,7 +1,7 @@
 import { Loadout } from '@/models/Loadout'
 import { MiningLaserWithPrices } from '@/models/MiningLaser'
 import { ModuleGadgetWithPrices } from '@/models/ModuleGadget'
-import { User, WorkOrderData, WorkOrderExportData } from '@/models/WorkOrder'
+import { User, WackastoreWorkOrderImportData, WorkOrderData, WorkOrderExportData, WorkOrderExportFormat } from '@/models/WorkOrder'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -11,7 +11,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const prepareExportData = (data: WorkOrderData, userList: User[]): WorkOrderExportData => {
+const buildDefaultWorkOrderExportData = (data: WorkOrderData, userList: User[]): WorkOrderExportData => {
   return {
     profitShares: data.profitShares.map(share => {
       return { username: userList.find(user => user.id === share.userId)?.username || "Unknown", share: share.share }
@@ -29,6 +29,38 @@ export const prepareExportData = (data: WorkOrderData, userList: User[]): WorkOr
     selectedRefinery: data.selectedRefinery?.terminal_name || '',
     timestamp: data.timestamp ? data.timestamp : Date.now(),
   }
+}
+
+const buildWackastorWorkOrderExportData = (data: WorkOrderData): WackastoreWorkOrderImportData => {
+  return {
+    mineralsList: data.mineralsList.map(mineral => {
+      return { name: mineral.name, quantity: mineral.quantity, yield: mineral.yield, quality: mineral.quality }
+    })
+  }
+}
+
+export const prepareExportData = (
+  data: WorkOrderData,
+  userList: User[],
+  format: WorkOrderExportFormat = 'all'
+): WorkOrderExportData | WackastoreWorkOrderImportData => {
+  switch (format) {
+    case 'wackastor':
+      return buildWackastorWorkOrderExportData(data)
+    case 'all':
+    default:
+      return buildDefaultWorkOrderExportData(data, userList)
+  }
+}
+
+export const downloadJsonFile = (data: unknown, fileName: string) => {
+  const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data, null, 2))
+  const downloadAnchorNode = document.createElement('a')
+  downloadAnchorNode.setAttribute('href', dataStr)
+  downloadAnchorNode.setAttribute('download', fileName)
+  document.body.appendChild(downloadAnchorNode)
+  downloadAnchorNode.click()
+  downloadAnchorNode.remove()
 }
 
 type CompactLocation = [string, number]

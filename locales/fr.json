@@ -120,6 +120,17 @@
       "share": "Partager",
       "shareSuccessDescription": "Lien de partage copié dans le presse-papiers. Vous pouvez le partager avec vos amis pour qu'ils puissent voir les détails de ce raffinage."
     },
+    "exportModal": {
+      "title": "Exporter le raffinage",
+      "description": "Choisissez le format JSON a utiliser pour cet export.",
+      "formatLabel": "Format d'export",
+      "formatPlaceholder": "Selectionnez un format...",
+      "cancel": "Annuler",
+      "formats": {
+        "all": "Toutes les données",
+        "wackastor": "Wackastor"
+      }
+    },
     "listModal": {
       "title": "Liste des raffinages",
       "closeButton": "Fermer",

@@ -38,6 +38,10 @@ export interface WorkOrderData {
     timestamp?: number; // Optional timestamp to identify when the data was saved
 }
 
+export const WORK_ORDER_EXPORT_FORMATS = ["all", "wackastor"] as const;
+
+export type WorkOrderExportFormat = typeof WORK_ORDER_EXPORT_FORMATS[number];
+
 export interface WorkOrderExportData {
     profitShares: Partial<ProfitShare>[];
     expensesList: Partial<Expense>[];
@@ -48,4 +52,8 @@ export interface WorkOrderExportData {
     selectedMethod: string;
     selectedRefinery: string;
     timestamp?: number; // Optional timestamp to identify when the data was saved
+}
+
+export interface WackastoreWorkOrderImportData {
+    mineralsList: Partial<MineralToSell>[];
 }

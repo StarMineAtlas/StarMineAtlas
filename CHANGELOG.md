@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Manual save action to add the current work order to a saved work order list.
 - Saved work order list modal with detailed summaries.
 - JSON export for work orders.
-- Shareable links for the current work order using URL presets.
+- JSON export modal to select format.
+- Shareable links for the current work order and loadout using URL presets.
 
 [1.1.0]: https://github.com/StarMineAtlas/StarMineAtlas/releases/tag/1.1.0
 

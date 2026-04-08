@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { WorkOrderData } from "@/models/WorkOrder";
-import { prepareExportData } from "@/lib/utils";
 import { Download, Trash } from "lucide-react";
+import WorkOrderExportModal from "./WorkOrderExportModal";
 
 interface WorkOrderListModalProps {
     open: boolean;
@@ -15,6 +15,8 @@ export default function WorkOrderListModal({ open, onClose }: WorkOrderListModal
     const { t } = useTranslation()
 
     const [savedWorkOrders, setSavedWorkOrders] = useState<WorkOrderData[]>([])
+    const [selectedWorkOrderForExport, setSelectedWorkOrderForExport] = useState<WorkOrderData | null>(null)
+    const [openExportModal, setOpenExportModal] = useState(false)
 
     const formatTimestamp = (timestamp?: number) => {
         if (timestamp === undefined) {
@@ -41,47 +43,37 @@ export default function WorkOrderListModal({ open, onClose }: WorkOrderListModal
         }
     }
 
-    const getUserNameById = (userId: number): string => {
-        for (const workOrder of savedWorkOrders) {
-            const user = workOrder.usersList.find(user => user.id === userId)
-            if (user) {
-                return user.username
-            } else {
-                return "Unknown"
-            }
-        }
-        return "Unknown"
+    const getUserNameById = (workOrder: WorkOrderData, userId: number): string => {
+        return workOrder.usersList.find(user => user.id === userId)?.username || "Unknown"
     }
 
-    const handleExport = () => {
-        // export the data as a JSON file
-        if (!savedWorkOrders || savedWorkOrders.length === 0) {
+    const handleExport = (workOrder: WorkOrderData) => {
+        if (!workOrder) {
             return
-        } else {
-            const exportData = prepareExportData(savedWorkOrders[0], savedWorkOrders[0].usersList)
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData))
-            const downloadAnchorNode = document.createElement('a')
-            downloadAnchorNode.setAttribute("href", dataStr)
-            downloadAnchorNode.setAttribute("download", "work_order_data.json")
-            document.body.appendChild(downloadAnchorNode) // required for firefox
-            downloadAnchorNode.click()
-            downloadAnchorNode.remove()
         }
+
+        setSelectedWorkOrderForExport(workOrder)
+        setOpenExportModal(true)
     }
 
-    const handleDelete = () => {
+    const handleDelete = (indexToDelete: number) => {
         if (!savedWorkOrders || savedWorkOrders.length === 0) {
             return
         } else {
             const existingData = localStorage.getItem("sma-work-orders")
             if (confirm(t("workOrder.listModal.deleteConfirmation"))) {
                 if (existingData) {
-                    const updatedData = JSON.parse(existingData).filter((_: any, i: number) => i !== 0)
+                    const updatedData = JSON.parse(existingData).filter((_: WorkOrderData, i: number) => i !== indexToDelete)
                     localStorage.setItem("sma-work-orders", JSON.stringify(updatedData))
                     setSavedWorkOrders(updatedData)
                 }
             }
         }
+    }
+
+    const handleCloseExportModal = () => {
+        setOpenExportModal(false)
+        setSelectedWorkOrderForExport(null)
     }
 
 
@@ -124,13 +116,13 @@ export default function WorkOrderListModal({ open, onClose }: WorkOrderListModal
                                         {/* Actions */}
                                         <div className="relative md:absolute md:top-4 md:right-4 flex flex-row gap-4 mt-8 md:mt-0">
                                             <button
-                                                onClick={handleExport}
+                                                onClick={() => handleExport(workOrder)}
                                                 className="bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold py-2 px-4 rounded flex items-center">
                                                 <Download className="inline-block w-4 h-4 me-2" />
                                                 {t("workOrder.globalActions.export")}
                                             </button>
                                             <button
-                                                onClick={handleDelete}
+                                                onClick={() => handleDelete(index)}
                                                 className="bg-red-500 hover:bg-red-600 text-white text-xs font-semibold py-2 px-4 rounded flex items-center">
                                                 <Trash className="w-4 h-4 me-2" />
                                                 {t("workOrder.globalActions.delete")}
@@ -218,7 +210,7 @@ export default function WorkOrderListModal({ open, onClose }: WorkOrderListModal
                                                                     className={profitShareIndex % 2 === 0 ? "bg-slate-950/70" : "bg-slate-900/40"}
                                                                 >
                                                                     <td className="border-b border-slate-800/80 px-4 py-3 text-xs font-medium text-cyan-50">
-                                                                        {getUserNameById(profitShare.userId)}
+                                                                        {getUserNameById(workOrder, profitShare.userId)}
                                                                     </td>
                                                                     <td className="border-b border-slate-800/80 px-4 py-3 text-center text-xs font-semibold text-slate-200">
                                                                         {profitShare.share}
@@ -260,7 +252,7 @@ export default function WorkOrderListModal({ open, onClose }: WorkOrderListModal
                                                                     className={expenseIndex % 2 === 0 ? "bg-slate-950/70" : "bg-slate-900/40"}
                                                                 >
                                                                     <td className="border-b border-slate-800/80 px-4 py-3 text-xs font-medium text-cyan-50">
-                                                                        {getUserNameById(expense.userId)}
+                                                                        {getUserNameById(workOrder, expense.userId)}
                                                                     </td>
                                                                     <td className="border-b border-slate-800/80 px-4 py-3 text-center text-xs font-semibold text-slate-200">
                                                                         {expense.amount}
@@ -288,6 +280,7 @@ export default function WorkOrderListModal({ open, onClose }: WorkOrderListModal
                     <Button variant="secondary" onClick={handleClose} className="bg-slate-800 text-slate-200 hover:bg-slate-700 focus:ring-cyan-700/30 rounded-md px-4 py-2">{t("workOrder.listModal.closeButton")}</Button>
                 </DialogFooter>
             </DialogContent>
+            <WorkOrderExportModal open={openExportModal} allDatas={selectedWorkOrderForExport} onClose={handleCloseExportModal} />
         </Dialog >
     );
 }

@@ -120,6 +120,17 @@
       "share": "Share",
       "shareSuccessDescription": "Share link copied to clipboard. You can share it with your friends so they can view the details of this work order."
     },
+    "exportModal": {
+      "title": "Export work order",
+      "description": "Choose which JSON format should be used for this export.",
+      "formatLabel": "Export format",
+      "formatPlaceholder": "Select a format...",
+      "cancel": "Cancel",
+      "formats": {
+        "all": "All details",
+        "wackastor": "Wackastor"
+      }
+    },
     "listModal": {
       "title": "Work Orders List",
       "closeButton": "Close",
