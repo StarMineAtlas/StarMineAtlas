@@ -15,7 +15,7 @@ export function LanguageSelector() {
 
   const handleLanguageChange = (langCode: LanguageCode) => {
     i18n.changeLanguage(langCode)
-    localStorage.setItem("mining-atlas-language", langCode)
+    localStorage.setItem("sma-language", langCode)
   }
 
   const currentLanguage = languages.find((l) => l.code === i18n.language) || languages[0]

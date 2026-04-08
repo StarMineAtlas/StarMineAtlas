@@ -1,6 +1,6 @@
-import { Expense, User } from "@/models/WorkOrder"
+import { type Expense, type User, type ProfitShare } from "@/models/WorkOrder"
 import { PlusCircle, Trash } from "lucide-react"
-import { use, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Button } from "../ui/button"
 
@@ -8,16 +8,16 @@ interface ProfitShareProps {
     usersList?: User[]
     expensesList?: Expense[]
     finalPrice?: number
-    updatedProfitShares?: { userId: number, part: number, share: number }[]
+    updatedProfitShares?: ProfitShare[]
     updateUsersList?: (users: User[]) => void
-    updateProfitShares?: (profitShares: { userId: number, part: number, share: number }[]) => void
+    updateProfitShares?: (profitShares: ProfitShare[]) => void
 }
 
 export default function ProfitShare({ usersList, expensesList, finalPrice, updatedProfitShares, updateUsersList, updateProfitShares }: ProfitShareProps) {
 
     const { t } = useTranslation()
 
-    const [profitShares, setProfitShares] = useState<{ userId: number, part: number, share: number }[]>(updatedProfitShares ?? [])
+    const [profitShares, setProfitShares] = useState<ProfitShare[]>(updatedProfitShares ?? [])
     const [newUsername, setNewUsername] = useState("")
 
     useEffect(() => {

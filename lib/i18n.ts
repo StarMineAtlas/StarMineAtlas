@@ -28,7 +28,7 @@ i18n
     },
     detection: {
       order: ["localStorage"],
-      lookupLocalStorage: "mining-atlas-language",
+      lookupLocalStorage: "sma-language",
       caches: ["localStorage"],
     },
   })

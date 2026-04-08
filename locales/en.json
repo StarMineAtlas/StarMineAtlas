@@ -109,6 +109,53 @@
         "userPlaceholder": "Select a user...",
         "includeTransferFee": "Include transfer fee"
       }
+    },
+    "globalActions": {
+      "save": "Save",
+      "saveSuccessTitle": "Work order saved",
+      "saveSuccessDescription": "Your work order has been saved locally.",
+      "export": "Export",
+      "list": "List",
+      "delete": "Delete",
+      "share": "Share",
+      "shareSuccessDescription": "Share link copied to clipboard. You can share it with your friends so they can view the details of this work order."
+    },
+    "exportModal": {
+      "title": "Export work order",
+      "description": "Choose which JSON format should be used for this export.",
+      "formatLabel": "Export format",
+      "formatPlaceholder": "Select a format...",
+      "cancel": "Cancel",
+      "formats": {
+        "all": "All details",
+        "wackastor": "Wackastor"
+      }
+    },
+    "listModal": {
+      "title": "Work Orders List",
+      "closeButton": "Close",
+      "workOrder": "Work Order",
+      "noWorkOrders": "No work orders found",
+      "noProfitShares": "No profit shares recorded for this work order",
+      "noExpenses": "No expenses recorded for this work order",
+      "deleteConfirmation": "Are you sure you want to delete this work order? This action cannot be undone.",
+      "mineralsTable": {
+        "title": "Minerals",
+        "name": "Name",
+        "quality": "Quality",
+        "quantity": "Quantity (mSCU)",
+        "yield": "Yield (mSCU)"
+      },
+      "profitSharesTable": {
+        "title": "Profit Shares",
+        "user": "User",
+        "payment": "Payment"
+      },
+      "expensesTable": {
+        "title": "Expenses",
+        "user": "User",
+        "amount": "Amount"
+      }
     }
   },
   "loadout": {
@@ -146,6 +193,11 @@
     },
     "loadLoadout": "Load Loadout",
     "loadLoadoutPlaceholder": "Select a saved loadout",
+    "share": {
+      "shareButton": "Share",
+      "shareErrorDescription": "Failed to copy the share link to the clipboard.",
+      "shareSuccessDescription": "Share link copied to clipboard. You can share it with your friends so they can view the details of this loadout."
+    },
     "saveLoadout": {
       "title": "Save Loadout",
       "nameLabel": "Loadout Name",

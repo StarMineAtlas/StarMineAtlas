@@ -162,10 +162,10 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
                 return (
                     <div
                         key={index}
-                        className="flex items-end flex-wrap relative gap-4 p-4 border border-slate-800 rounded-lg bg-slate-900/70 shadow-md"
+                        className="grid grid-cols-3 md:grid-cols-6 items-end relative gap-4 p-4 border border-slate-800 rounded-lg bg-slate-900/70 shadow-md"
                     >
                         {/* Mineral selector */}
-                        <div className="flex flex-col items-start w-3/4 lg:w-3/12 xl:w-4/12">
+                        <div className="flex flex-col items-start col-span-2">
                             <label className="text-xs text-slate-400 mb-1" htmlFor={`mineral-${index}`}>{t("workOrder.refinerySection.mineralsListing.mineral")}</label>
                             <Select
                                 value={mineral.name}
@@ -200,12 +200,12 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
                         </div>
 
                         {/* Remove mineral - mobile */}
-                        <div className="flex lg:hidden justify-end items-end self-center absolute top-4 right-4 w-6">
+                        <div className="flex lg:hidden justify-end items-end self-center absolute top-4 right-4">
                             <Trash className="text-red-500 hover:text-red-600 hover:cursor-pointer" onClick={() => handleRemoveMineral(index)}></Trash>
                         </div>
 
                         {/* Quality input - Hidden until quality have an impact on price */}
-                        {/* <div className="flex flex-col items-start w-1/4 lg:w-2/12">
+                        <div className="flex flex-col items-start col-start-1 md:col-start-auto">
                             <label className="text-xs text-slate-400 mb-1" htmlFor={`quality-${index}`}>{t("workOrder.refinerySection.mineralsListing.quality")}</label>
                             <input
                                 id={`quality-${index}`}
@@ -219,10 +219,10 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
                                     handleMineralQualityChange(index, value)
                                 }}
                             />
-                        </div> */}
+                        </div>
 
                         {/* Quantity input */}
-                        <div className="flex flex-col items-start w-1/3 lg:w-3/12">
+                        <div className="flex flex-col items-start">
                             <label className="text-xs text-slate-400 mb-1" htmlFor={`quantity-${index}`}>{t("workOrder.refinerySection.mineralsListing.quantity")}</label>
                             <input
                                 id={`quantity-${index}`}
@@ -238,7 +238,7 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
                         </div>
 
                         {/* Yield display */}
-                        <div className="flex flex-col items-start w-1/3 lg:w-3/12">
+                        <div className="flex flex-col items-start">
                             <span className="text-xs text-slate-400 mb-1">{t("workOrder.refinerySection.mineralsListing.yield")}</span>
                             <span className="px-3 py-1 w-full rounded bg-cyan-600/20 text-cyan-400 font-semibold border border-cyan-700">
                                 {mineral.yield}
@@ -246,7 +246,7 @@ export default function MineralsListing({ minerals, mineralsList = [], updateMin
                         </div>
 
                         {/* Remove mineral - desktop */}
-                        <div className="hidden lg:flex justify-center items-center self-center w-6">
+                        <div className="hidden lg:flex justify-end items-center self-center">
                             <Trash className="text-red-500 hover:text-red-600 hover:cursor-pointer" onClick={() => handleRemoveMineral(index)}></Trash>
                         </div>
                     </div>

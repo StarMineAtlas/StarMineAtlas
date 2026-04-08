@@ -69,7 +69,7 @@ export default function Home() {
   useEffect(() => {
     setIsLoading(true);
     // get localstorage config to know if we need to show data or not
-    const configStr = localStorage.getItem("star-mine-atlas-config");
+    const configStr = localStorage.getItem("sma-config");
     if (configStr) {
       const config: { showData: string } = JSON.parse(configStr);
       const showDataValue = config.showData.toLowerCase() === "true";

@@ -11,7 +11,7 @@ import { LanguageSelector } from "./LanguageSelector"
 
 const getConfig = async () => {
   if (typeof window === "undefined") return null;
-  const config = localStorage.getItem("star-mine-atlas-config");
+  const config = localStorage.getItem("sma-config");
   // need to update config after this time (in minutes)
   const needToUpdateAfter = 30;
   let parsedConfig = null;
@@ -24,7 +24,7 @@ const getConfig = async () => {
       .then((data) => {
         const formattedData = data.map((item: { name: string; value: string }) => ({ [item.name]: item.value })).reduce((acc: any, curr: any) => ({ ...acc, ...curr }), {});
         const newConfig = { ...parsedConfig, ...formattedData, lastUpdate: Date.now() };
-        localStorage.setItem("star-mine-atlas-config", JSON.stringify(newConfig));
+        localStorage.setItem("sma-config", JSON.stringify(newConfig));
       })
       .catch((err) => {
         console.error("Error fetching config:", err);
@@ -61,7 +61,7 @@ export function Header() {
 
   useEffect(() => {
     getConfig().then(() => {
-      const configStr = localStorage.getItem("star-mine-atlas-config");
+      const configStr = localStorage.getItem("sma-config");
       if (configStr) {
         const config: { showData: string } = JSON.parse(configStr);
         const showDataValue = config.showData.toLowerCase() === "true";
